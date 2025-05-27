@@ -1,0 +1,340 @@
+2025-05-26 13:23:52 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-26 13:23:52 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-26 13:23:52 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-26 13:23:52 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-26 13:23:52 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-26 13:23:52 | ERROR    | html_parser:test_parser:617 - Test file not found: data/raw_html/Quantconnect-Writing-Algorithms.html
+2025-05-26 13:24:51 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-26 13:24:51 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-26 13:24:51 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-26 13:24:51 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-26 13:24:51 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-26 13:24:51 | ERROR    | html_parser:test_parser:617 - Test file not found: data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-26 13:25:12 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-26 13:25:12 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-26 13:25:12 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-26 13:25:12 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-26 13:25:12 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-26 13:25:12 | ERROR    | html_parser:test_parser:617 - Test file not found: data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-26 13:25:23 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-26 13:25:23 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-26 13:25:23 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-26 13:25:23 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-26 13:25:23 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-26 13:26:49 | INFO     | html_parser:__init__:122 - Initializing parser for: Quantconnect-Lean-Engine.html
+2025-05-26 13:27:06 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-26 13:27:06 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-26 13:27:06 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-26 13:27:06 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-26 13:27:06 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-26 13:27:13 | INFO     | html_parser:__init__:122 - Initializing parser for: Quantconnect-Lean-Engine.html
+2025-05-26 13:27:27 | INFO     | html_parser:__init__:122 - Initializing parser for: Quantconnect-Lean-Engine.html
+2025-05-26 13:28:02 | INFO     | html_parser:__init__:122 - Initializing parser for: Quantconnect-Lean-Engine.html
+2025-05-26 13:28:02 | INFO     | html_parser:parse:132 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-26 13:28:02 | INFO     | html_parser:_load_html:161 - Loading HTML file: data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-26 13:28:02 | ERROR    | html_parser:parse:153 - Error parsing Quantconnect-Lean-Engine.html: HTML file not found: data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-26 13:28:26 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-26 13:28:26 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-26 13:28:26 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-26 13:28:26 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-26 13:28:26 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-26 13:29:09 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-26 13:29:09 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-26 13:29:09 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-26 13:29:09 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-26 13:29:09 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-26 13:29:58 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-26 13:29:58 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-26 13:29:58 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-26 13:29:58 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-26 13:29:58 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-26 13:30:20 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-26 13:30:20 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-26 13:30:20 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-26 13:30:20 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-26 13:30:20 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-26 13:30:44 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-26 13:30:44 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-26 13:30:44 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-26 13:30:44 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-26 13:30:44 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:15:51 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:15:51 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:15:51 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:15:51 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:15:51 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:15:51 | INFO     | html_parser:__init__:122 - Initializing parser for: test_sample.html
+2025-05-27 13:15:51 | INFO     | html_parser:parse:132 - Starting to parse test_sample.html
+2025-05-27 13:15:51 | INFO     | html_parser:_load_html:164 - Loading HTML file: data/raw_html/test_sample.html
+2025-05-27 13:15:51 | INFO     | html_parser:_load_html:186 - Loaded HTML file, size: 0.00 MB
+2025-05-27 13:15:51 | INFO     | html_parser:_parse_table_of_contents:199 - Parsing Table of Contents...
+2025-05-27 13:15:51 | WARNING  | html_parser:_parse_table_of_contents:209 - Table of Contents heading not found, will parse sections directly
+2025-05-27 13:15:51 | INFO     | html_parser:_clean_html:282 - Cleaning HTML content...
+2025-05-27 13:15:51 | INFO     | html_parser:_clean_html:342 - HTML cleaned successfully
+2025-05-27 13:15:51 | INFO     | html_parser:_parse_content_sections:349 - Parsing content sections...
+2025-05-27 13:15:51 | WARNING  | html_parser:_parse_content_sections:355 - No <section> elements found, falling back to heading-based parsing
+2025-05-27 13:15:51 | INFO     | html_parser:_parse_sections_from_headings:416 - Parsing sections from heading elements...
+2025-05-27 13:15:51 | INFO     | html_parser:_build_section_hierarchy:674 - Building section hierarchy...
+2025-05-27 13:15:51 | INFO     | html_parser:_build_section_hierarchy:689 - Section hierarchy built successfully
+2025-05-27 13:15:51 | INFO     | html_parser:_post_process:717 - Post-processing parsed sections...
+2025-05-27 13:15:51 | INFO     | html_parser:_post_process:739 - Post-processing complete. Final section count: 0
+2025-05-27 13:15:51 | INFO     | html_parser:parse:152 - Successfully parsed 0 sections from test_sample.html
+2025-05-27 13:16:54 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:16:54 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:16:54 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:16:54 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:16:54 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:16:54 | INFO     | html_parser:__init__:122 - Initializing parser for: test_sample.html
+2025-05-27 13:16:54 | INFO     | html_parser:parse:132 - Starting to parse test_sample.html
+2025-05-27 13:16:54 | INFO     | html_parser:_load_html:164 - Loading HTML file: data/raw_html/test_sample.html
+2025-05-27 13:16:54 | INFO     | html_parser:_load_html:186 - Loaded HTML file, size: 0.00 MB
+2025-05-27 13:16:54 | INFO     | html_parser:_parse_table_of_contents:199 - Parsing Table of Contents...
+2025-05-27 13:16:54 | WARNING  | html_parser:_parse_table_of_contents:209 - Table of Contents heading not found, will parse sections directly
+2025-05-27 13:16:54 | INFO     | html_parser:_clean_html:282 - Cleaning HTML content...
+2025-05-27 13:16:54 | INFO     | html_parser:_clean_html:342 - HTML cleaned successfully
+2025-05-27 13:16:54 | INFO     | html_parser:_parse_content_sections:349 - Parsing content sections...
+2025-05-27 13:16:59 | WARNING  | html_parser:_parse_content_sections:355 - No <section> elements found, falling back to heading-based parsing
+2025-05-27 13:16:59 | INFO     | html_parser:_parse_sections_from_headings:416 - Parsing sections from heading elements...
+2025-05-27 13:16:59 | INFO     | html_parser:_build_section_hierarchy:674 - Building section hierarchy...
+2025-05-27 13:16:59 | INFO     | html_parser:_build_section_hierarchy:689 - Section hierarchy built successfully
+2025-05-27 13:16:59 | INFO     | html_parser:_post_process:717 - Post-processing parsed sections...
+2025-05-27 13:16:59 | INFO     | html_parser:_post_process:739 - Post-processing complete. Final section count: 0
+2025-05-27 13:16:59 | INFO     | html_parser:parse:152 - Successfully parsed 0 sections from test_sample.html
+2025-05-27 13:17:35 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:17:35 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:17:35 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:17:35 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:17:35 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:17:35 | INFO     | html_parser:__init__:122 - Initializing parser for: test_sample.html
+2025-05-27 13:17:55 | INFO     | html_parser:parse:132 - Starting to parse test_sample.html
+2025-05-27 13:17:55 | INFO     | html_parser:_load_html:164 - Loading HTML file: data/raw_html/test_sample.html
+2025-05-27 13:17:55 | INFO     | html_parser:_load_html:186 - Loaded HTML file, size: 0.00 MB
+2025-05-27 13:18:03 | INFO     | html_parser:_parse_table_of_contents:199 - Parsing Table of Contents...
+2025-05-27 13:19:31 | WARNING  | html_parser:_parse_table_of_contents:209 - Table of Contents heading not found, will parse sections directly
+2025-05-27 13:19:31 | INFO     | html_parser:_clean_html:282 - Cleaning HTML content...
+2025-05-27 13:19:31 | INFO     | html_parser:_clean_html:342 - HTML cleaned successfully
+2025-05-27 13:19:31 | INFO     | html_parser:_parse_content_sections:349 - Parsing content sections...
+2025-05-27 13:19:31 | WARNING  | html_parser:_parse_content_sections:355 - No <section> elements found, falling back to heading-based parsing
+2025-05-27 13:19:31 | INFO     | html_parser:_parse_sections_from_headings:416 - Parsing sections from heading elements...
+2025-05-27 13:19:31 | INFO     | html_parser:_build_section_hierarchy:674 - Building section hierarchy...
+2025-05-27 13:19:31 | INFO     | html_parser:_build_section_hierarchy:689 - Section hierarchy built successfully
+2025-05-27 13:19:31 | INFO     | html_parser:_post_process:717 - Post-processing parsed sections...
+2025-05-27 13:19:31 | INFO     | html_parser:_post_process:739 - Post-processing complete. Final section count: 0
+2025-05-27 13:19:31 | INFO     | html_parser:parse:152 - Successfully parsed 0 sections from test_sample.html
+2025-05-27 13:21:36 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:21:36 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:21:36 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:21:36 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:21:36 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:21:36 | INFO     | html_parser:__init__:122 - Initializing parser for: test_sample.html
+2025-05-27 13:21:36 | INFO     | html_parser:parse:132 - Starting to parse test_sample.html
+2025-05-27 13:21:36 | INFO     | html_parser:_load_html:164 - Loading HTML file: data/raw_html/test_sample.html
+2025-05-27 13:21:36 | INFO     | html_parser:_load_html:186 - Loaded HTML file, size: 0.00 MB
+2025-05-27 13:21:36 | INFO     | html_parser:_parse_table_of_contents:199 - Parsing Table of Contents...
+2025-05-27 13:21:36 | WARNING  | html_parser:_parse_table_of_contents:209 - Table of Contents heading not found, will parse sections directly
+2025-05-27 13:21:36 | INFO     | html_parser:_clean_html:282 - Cleaning HTML content...
+2025-05-27 13:21:36 | INFO     | html_parser:_clean_html:342 - HTML cleaned successfully
+2025-05-27 13:21:36 | INFO     | html_parser:_parse_content_sections:349 - Parsing content sections...
+2025-05-27 13:21:36 | WARNING  | html_parser:_parse_content_sections:355 - No <section> elements found, falling back to heading-based parsing
+2025-05-27 13:21:36 | INFO     | html_parser:_parse_sections_from_headings:416 - Parsing sections from heading elements...
+2025-05-27 13:21:36 | INFO     | html_parser:_build_section_hierarchy:674 - Building section hierarchy...
+2025-05-27 13:21:36 | INFO     | html_parser:_build_section_hierarchy:689 - Section hierarchy built successfully
+2025-05-27 13:21:36 | INFO     | html_parser:_post_process:717 - Post-processing parsed sections...
+2025-05-27 13:21:36 | INFO     | html_parser:_post_process:739 - Post-processing complete. Final section count: 0
+2025-05-27 13:21:36 | INFO     | html_parser:parse:152 - Successfully parsed 0 sections from test_sample.html
+2025-05-27 13:21:43 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:21:43 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:21:43 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:21:43 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:21:43 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:21:43 | INFO     | html_parser:__init__:122 - Initializing parser for: test_sample.html
+2025-05-27 13:21:43 | INFO     | html_parser:parse:132 - Starting to parse test_sample.html
+2025-05-27 13:21:43 | INFO     | html_parser:_load_html:164 - Loading HTML file: data/raw_html/test_sample.html
+2025-05-27 13:21:43 | INFO     | html_parser:_load_html:186 - Loaded HTML file, size: 0.00 MB
+2025-05-27 13:21:43 | INFO     | html_parser:_parse_table_of_contents:199 - Parsing Table of Contents...
+2025-05-27 13:21:43 | WARNING  | html_parser:_parse_table_of_contents:209 - Table of Contents heading not found, will parse sections directly
+2025-05-27 13:21:43 | INFO     | html_parser:_clean_html:282 - Cleaning HTML content...
+2025-05-27 13:21:43 | INFO     | html_parser:_clean_html:342 - HTML cleaned successfully
+2025-05-27 13:21:43 | INFO     | html_parser:_parse_content_sections:349 - Parsing content sections...
+2025-05-27 13:21:43 | WARNING  | html_parser:_parse_content_sections:355 - No <section> elements found, falling back to heading-based parsing
+2025-05-27 13:21:43 | INFO     | html_parser:_parse_sections_from_headings:416 - Parsing sections from heading elements...
+2025-05-27 13:21:43 | INFO     | html_parser:_build_section_hierarchy:674 - Building section hierarchy...
+2025-05-27 13:21:43 | INFO     | html_parser:_build_section_hierarchy:689 - Section hierarchy built successfully
+2025-05-27 13:21:43 | INFO     | html_parser:_post_process:717 - Post-processing parsed sections...
+2025-05-27 13:21:43 | INFO     | html_parser:_post_process:739 - Post-processing complete. Final section count: 0
+2025-05-27 13:21:43 | INFO     | html_parser:parse:152 - Successfully parsed 0 sections from test_sample.html
+2025-05-27 13:21:50 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:21:50 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:21:50 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:21:50 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:21:50 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:21:50 | INFO     | html_parser:__init__:122 - Initializing parser for: test_sample.html
+2025-05-27 13:24:28 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:24:28 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:24:28 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:24:28 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:24:28 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:24:28 | INFO     | html_parser:__init__:122 - Initializing parser for: test_sample.html
+2025-05-27 13:25:54 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:25:54 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:25:54 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:25:54 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:25:54 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:25:54 | INFO     | html_parser:__init__:122 - Initializing parser for: test_sample.html
+2025-05-27 13:25:54 | INFO     | html_parser:parse:132 - Starting to parse test_sample.html
+2025-05-27 13:25:54 | INFO     | html_parser:_load_html:164 - Loading HTML file: data/raw_html/test_sample.html
+2025-05-27 13:25:54 | INFO     | html_parser:_load_html:186 - Loaded HTML file, size: 0.00 MB
+2025-05-27 13:25:54 | INFO     | html_parser:_parse_table_of_contents:199 - Parsing Table of Contents...
+2025-05-27 13:25:54 | WARNING  | html_parser:_parse_table_of_contents:209 - Table of Contents heading not found, will parse sections directly
+2025-05-27 13:25:54 | INFO     | html_parser:_clean_html:282 - Cleaning HTML content...
+2025-05-27 13:25:54 | INFO     | html_parser:_clean_html:342 - HTML cleaned successfully
+2025-05-27 13:25:54 | INFO     | html_parser:_parse_content_sections:349 - Parsing content sections...
+2025-05-27 13:25:54 | WARNING  | html_parser:_parse_content_sections:355 - No <section> elements found, falling back to heading-based parsing
+2025-05-27 13:25:54 | INFO     | html_parser:_parse_sections_from_headings:416 - Parsing sections from heading elements...
+2025-05-27 13:25:54 | INFO     | html_parser:_build_section_hierarchy:674 - Building section hierarchy...
+2025-05-27 13:25:54 | INFO     | html_parser:_build_section_hierarchy:689 - Section hierarchy built successfully
+2025-05-27 13:25:54 | INFO     | html_parser:_post_process:717 - Post-processing parsed sections...
+2025-05-27 13:25:54 | INFO     | html_parser:_post_process:739 - Post-processing complete. Final section count: 0
+2025-05-27 13:25:54 | INFO     | html_parser:parse:152 - Successfully parsed 0 sections from test_sample.html
+2025-05-27 13:28:15 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:28:15 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:28:15 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:28:15 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:28:15 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:28:15 | INFO     | html_parser:__init__:122 - Initializing parser for: test_sample.html
+2025-05-27 13:28:15 | INFO     | html_parser:parse:132 - Starting to parse test_sample.html
+2025-05-27 13:28:15 | INFO     | html_parser:_load_html:164 - Loading HTML file: data/raw_html/test_sample.html
+2025-05-27 13:28:15 | INFO     | html_parser:_load_html:186 - Loaded HTML file, size: 0.00 MB
+2025-05-27 13:28:15 | INFO     | html_parser:_parse_table_of_contents:199 - Parsing Table of Contents...
+2025-05-27 13:28:15 | WARNING  | html_parser:_parse_table_of_contents:209 - Table of Contents heading not found, will parse sections directly
+2025-05-27 13:28:15 | INFO     | html_parser:_clean_html:282 - Cleaning HTML content...
+2025-05-27 13:28:15 | INFO     | html_parser:_clean_html:342 - HTML cleaned successfully
+2025-05-27 13:28:15 | INFO     | html_parser:_parse_content_sections:349 - Parsing content sections...
+2025-05-27 13:28:15 | WARNING  | html_parser:_parse_content_sections:355 - No <section> elements found, falling back to heading-based parsing
+2025-05-27 13:28:15 | INFO     | html_parser:_parse_sections_from_headings:416 - Parsing sections from heading elements...
+2025-05-27 13:28:15 | INFO     | html_parser:_build_section_hierarchy:674 - Building section hierarchy...
+2025-05-27 13:28:15 | INFO     | html_parser:_build_section_hierarchy:689 - Section hierarchy built successfully
+2025-05-27 13:28:15 | INFO     | html_parser:_post_process:717 - Post-processing parsed sections...
+2025-05-27 13:28:15 | INFO     | html_parser:_post_process:739 - Post-processing complete. Final section count: 0
+2025-05-27 13:28:15 | INFO     | html_parser:parse:152 - Successfully parsed 0 sections from test_sample.html
+2025-05-27 13:28:44 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:28:44 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:28:44 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:28:44 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:28:44 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:30:11 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:30:11 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:30:11 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:30:11 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:30:11 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:30:14 | ERROR    | html_parser:test_parser:781 - Test file not found: data/raw_html/test_sample.html
+2025-05-27 13:30:55 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:30:55 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:30:55 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:30:55 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:30:55 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:31:05 | ERROR    | html_parser:test_parser:781 - Test file not found: data/raw_html/test_sample.html
+2025-05-27 13:31:13 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:31:13 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:31:13 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:31:13 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:31:13 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:31:19 | ERROR    | html_parser:test_parser:781 - Test file not found: data/raw_html/Quantconnect-Writing-Algorithms.html
+2025-05-27 13:32:51 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:32:51 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:32:51 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:32:51 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:32:51 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:32:51 | ERROR    | html_parser:test_parser:781 - Test file not found: data/raw_html/Quantconnect-Writing-Algorithms.html
+2025-05-27 13:44:23 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:44:23 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:44:23 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:44:23 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:44:23 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:44:23 | INFO     | html_parser:__init__:122 - Initializing parser for: test_sample.html
+2025-05-27 13:44:23 | INFO     | html_parser:parse:132 - Starting to parse test_sample.html
+2025-05-27 13:44:23 | INFO     | html_parser:_load_html:164 - Loading HTML file: data/raw_html/test_sample.html
+2025-05-27 13:44:23 | INFO     | html_parser:_load_html:186 - Loaded HTML file, size: 0.00 MB
+2025-05-27 13:44:23 | INFO     | html_parser:_parse_table_of_contents:199 - Parsing Table of Contents...
+2025-05-27 13:44:23 | WARNING  | html_parser:_parse_table_of_contents:209 - Table of Contents heading not found, will parse sections directly
+2025-05-27 13:44:23 | INFO     | html_parser:_clean_html:282 - Cleaning HTML content...
+2025-05-27 13:44:23 | INFO     | html_parser:_clean_html:342 - HTML cleaned successfully
+2025-05-27 13:44:23 | INFO     | html_parser:_parse_content_sections:349 - Parsing content sections...
+2025-05-27 13:44:23 | WARNING  | html_parser:_parse_content_sections:355 - No <section> elements found, falling back to heading-based parsing
+2025-05-27 13:44:23 | INFO     | html_parser:_parse_sections_from_headings:416 - Parsing sections from heading elements...
+2025-05-27 13:44:23 | INFO     | html_parser:_build_section_hierarchy:674 - Building section hierarchy...
+2025-05-27 13:44:23 | INFO     | html_parser:_build_section_hierarchy:689 - Section hierarchy built successfully
+2025-05-27 13:44:23 | INFO     | html_parser:_post_process:717 - Post-processing parsed sections...
+2025-05-27 13:44:23 | INFO     | html_parser:_post_process:739 - Post-processing complete. Final section count: 0
+2025-05-27 13:44:23 | INFO     | html_parser:parse:152 - Successfully parsed 0 sections from test_sample.html
+2025-05-27 13:45:19 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:45:19 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:45:19 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:45:19 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:45:19 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:45:19 | INFO     | html_parser:__init__:122 - Initializing parser for: test_sample.html
+2025-05-27 13:45:19 | INFO     | html_parser:parse:132 - Starting to parse test_sample.html
+2025-05-27 13:45:19 | INFO     | html_parser:_load_html:164 - Loading HTML file: data/raw_html/test_sample.html
+2025-05-27 13:45:19 | INFO     | html_parser:_load_html:186 - Loaded HTML file, size: 0.00 MB
+2025-05-27 13:45:19 | INFO     | html_parser:_parse_table_of_contents:199 - Parsing Table of Contents...
+2025-05-27 13:45:19 | WARNING  | html_parser:_parse_table_of_contents:209 - Table of Contents heading not found, will parse sections directly
+2025-05-27 13:45:19 | INFO     | html_parser:_clean_html:282 - Cleaning HTML content...
+2025-05-27 13:45:19 | INFO     | html_parser:_clean_html:342 - HTML cleaned successfully
+2025-05-27 13:45:19 | INFO     | html_parser:_parse_content_sections:349 - Parsing content sections...
+2025-05-27 13:45:19 | WARNING  | html_parser:_parse_content_sections:355 - No <section> elements found, falling back to heading-based parsing
+2025-05-27 13:45:19 | INFO     | html_parser:_parse_sections_from_headings:416 - Parsing sections from heading elements...
+2025-05-27 13:45:19 | INFO     | html_parser:_build_section_hierarchy:674 - Building section hierarchy...
+2025-05-27 13:45:19 | INFO     | html_parser:_build_section_hierarchy:689 - Section hierarchy built successfully
+2025-05-27 13:45:19 | INFO     | html_parser:_post_process:717 - Post-processing parsed sections...
+2025-05-27 13:45:19 | INFO     | html_parser:_post_process:739 - Post-processing complete. Final section count: 0
+2025-05-27 13:45:19 | INFO     | html_parser:parse:152 - Successfully parsed 0 sections from test_sample.html
+2025-05-27 13:45:28 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:45:28 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:45:28 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:45:28 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:45:28 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:45:28 | ERROR    | html_parser:test_parser:781 - Test file not found: data/raw_html/Quantconnect-Writing-Algorithms.html
+2025-05-27 13:46:33 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:46:33 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:46:33 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:46:33 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:46:33 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:46:33 | ERROR    | html_parser:test_parser:781 - Test file not found: data/raw_html/Quantconnect-Writing-Algorithms.html
+2025-05-27 13:46:33 | INFO     | html_parser:__init__:122 - Initializing parser for: test_sample.html
+2025-05-27 13:46:33 | INFO     | html_parser:parse:132 - Starting to parse test_sample.html
+2025-05-27 13:46:33 | INFO     | html_parser:_load_html:164 - Loading HTML file: data/raw_html/test_sample.html
+2025-05-27 13:46:33 | INFO     | html_parser:_load_html:186 - Loaded HTML file, size: 0.00 MB
+2025-05-27 13:46:33 | INFO     | html_parser:_parse_table_of_contents:199 - Parsing Table of Contents...
+2025-05-27 13:46:33 | WARNING  | html_parser:_parse_table_of_contents:209 - Table of Contents heading not found, will parse sections directly
+2025-05-27 13:46:33 | INFO     | html_parser:_clean_html:282 - Cleaning HTML content...
+2025-05-27 13:46:33 | INFO     | html_parser:_clean_html:342 - HTML cleaned successfully
+2025-05-27 13:46:33 | INFO     | html_parser:_parse_content_sections:349 - Parsing content sections...
+2025-05-27 13:46:33 | WARNING  | html_parser:_parse_content_sections:355 - No <section> elements found, falling back to heading-based parsing
+2025-05-27 13:46:33 | INFO     | html_parser:_parse_sections_from_headings:416 - Parsing sections from heading elements...
+2025-05-27 13:46:33 | INFO     | html_parser:_build_section_hierarchy:674 - Building section hierarchy...
+2025-05-27 13:46:33 | INFO     | html_parser:_build_section_hierarchy:689 - Section hierarchy built successfully
+2025-05-27 13:46:33 | INFO     | html_parser:_post_process:717 - Post-processing parsed sections...
+2025-05-27 13:46:33 | INFO     | html_parser:_post_process:739 - Post-processing complete. Final section count: 0
+2025-05-27 13:46:33 | INFO     | html_parser:parse:152 - Successfully parsed 0 sections from test_sample.html
+2025-05-27 13:47:07 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-27 13:47:07 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-27 13:47:07 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-27 13:47:07 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-27 13:47:07 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-27 13:47:07 | ERROR    | html_parser:test_parser:781 - Test file not found: data/raw_html/Quantconnect-Writing-Algorithms.html
+2025-05-27 13:47:07 | INFO     | html_parser:__init__:122 - Initializing parser for: test_sample.html
+2025-05-27 13:47:07 | INFO     | html_parser:parse:132 - Starting to parse test_sample.html
+2025-05-27 13:47:07 | INFO     | html_parser:_load_html:164 - Loading HTML file: data/raw_html/test_sample.html
+2025-05-27 13:47:07 | INFO     | html_parser:_load_html:186 - Loaded HTML file, size: 0.00 MB
+2025-05-27 13:47:07 | INFO     | html_parser:_parse_table_of_contents:199 - Parsing Table of Contents...
+2025-05-27 13:47:07 | WARNING  | html_parser:_parse_table_of_contents:209 - Table of Contents heading not found, will parse sections directly
+2025-05-27 13:47:07 | INFO     | html_parser:_clean_html:282 - Cleaning HTML content...
+2025-05-27 13:47:07 | INFO     | html_parser:_clean_html:342 - HTML cleaned successfully
+2025-05-27 13:47:07 | INFO     | html_parser:_parse_content_sections:349 - Parsing content sections...
+2025-05-27 13:47:07 | WARNING  | html_parser:_parse_content_sections:355 - No <section> elements found, falling back to heading-based parsing
+2025-05-27 13:47:07 | INFO     | html_parser:_parse_sections_from_headings:416 - Parsing sections from heading elements...
+2025-05-27 13:47:07 | INFO     | html_parser:_build_section_hierarchy:674 - Building section hierarchy...
+2025-05-27 13:47:07 | INFO     | html_parser:_build_section_hierarchy:689 - Section hierarchy built successfully
+2025-05-27 13:47:07 | INFO     | html_parser:_post_process:717 - Post-processing parsed sections...
+2025-05-27 13:47:07 | INFO     | html_parser:_post_process:739 - Post-processing complete. Final section count: 0
+2025-05-27 13:47:07 | INFO     | html_parser:parse:152 - Successfully parsed 0 sections from test_sample.html

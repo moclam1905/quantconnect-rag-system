@@ -1,0 +1,69 @@
+{
+  "processed_files": 4,
+  "total_documents": 4,
+  "successful_documents": 4,
+  "failed_documents": 0,
+  "skipped_documents": 4,
+  "total_sections": 1394,
+  "total_code_blocks": 0,
+  "total_tables": 2587,
+  "details": [
+    {
+      "file": "Quantconnect-Lean-Cli.html",
+      "document_count": 2,
+      "documents_processed": 1,
+      "documents": [
+        {
+          "document_index": 1,
+          "sections": 141,
+          "code_blocks": 0,
+          "tables": 157,
+          "status": "success"
+        }
+      ]
+    },
+    {
+      "file": "Quantconnect-Lean-Engine.html",
+      "document_count": 2,
+      "documents_processed": 1,
+      "documents": [
+        {
+          "document_index": 1,
+          "sections": 29,
+          "code_blocks": 0,
+          "tables": 16,
+          "status": "success"
+        }
+      ]
+    },
+    {
+      "file": "Quantconnect-Research-Environment.html",
+      "document_count": 2,
+      "documents_processed": 1,
+      "documents": [
+        {
+          "document_index": 1,
+          "sections": 76,
+          "code_blocks": 0,
+          "tables": 35,
+          "status": "success"
+        }
+      ]
+    },
+    {
+      "file": "Quantconnect-Writing-Algorithms.html",
+      "document_count": 2,
+      "documents_processed": 1,
+      "documents": [
+        {
+          "document_index": 1,
+          "sections": 1148,
+          "code_blocks": 0,
+          "tables": 2379,
+          "status": "success"
+        }
+      ]
+    }
+  ],
+  "processing_time_seconds": 56.031733
+}

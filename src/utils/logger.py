@@ -6,7 +6,7 @@ Sử dụng loguru để có logging đẹp và dễ debug
 from loguru import logger
 import sys
 from pathlib import Path
-from config import settings
+from config.config import settings
 
 def setup_logger():
     """
