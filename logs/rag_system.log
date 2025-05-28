@@ -1037,3 +1037,122 @@
 2025-05-27 22:56:04 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
 2025-05-27 22:56:04 | INFO     | src.data_processing.html_parser:_post_process:767 - Post-processing complete. Final section count: 29
 2025-05-27 22:56:04 | INFO     | src.data_processing.html_parser:parse:152 - Successfully parsed 29 sections from Quantconnect-Lean-Engine.html
+2025-05-28 10:55:01 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 10:55:01 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 10:55:01 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 10:55:01 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 10:55:01 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 10:55:01 | INFO     | src.data_processing.text_chunker:<module>:23 - Downloading NLTK punkt tokenizer...
+2025-05-28 10:56:02 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 10:56:02 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 10:56:02 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 10:56:02 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 10:56:02 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 10:57:46 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 10:57:46 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 10:57:46 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 10:57:46 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 10:57:46 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 10:57:46 | INFO     | __main__:process_parsed_file:54 - Processing Quantconnect-Writing-Algorithms_parsed.json
+2025-05-28 10:57:47 | INFO     | __main__:_save_chunks:269 - Saved 10966 chunks to data/processed/Quantconnect-Writing-Algorithms_chunks.json
+2025-05-28 10:57:47 | INFO     | __main__:process_parsed_file:122 - Chunking complete: 10966 chunks created
+2025-05-28 10:58:00 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 10:58:00 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 10:58:00 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 10:58:00 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 10:58:00 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 10:58:26 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 10:58:26 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 10:58:26 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 10:58:26 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 10:58:26 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 11:02:24 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 11:02:24 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 11:02:24 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 11:02:24 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 11:02:24 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 11:02:48 | INFO     | src.data_processing.html_parser:__init__:122 - Initializing parser for: Quantconnect-Lean-Engine.html
+2025-05-28 11:02:48 | INFO     | src.data_processing.html_parser:parse:132 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-28 11:02:48 | INFO     | src.data_processing.html_parser:_load_html:165 - Initializing parser for: Quantconnect-Lean-Engine.html
+2025-05-28 11:02:48 | INFO     | src.data_processing.html_parser:_load_html:166 - Attempting to load document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-28 11:02:48 | INFO     | src.data_processing.html_parser:_load_html:212 - Loaded HTML for document index 1, effective content size after DOCTYPE removal: 0.31 MB
+2025-05-28 11:02:48 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:227 - Parsing Table of Contents...
+2025-05-28 11:02:48 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:297 - Found 29 entries in Table of Contents
+2025-05-28 11:02:48 | INFO     | src.data_processing.html_parser:_clean_html:310 - Cleaning HTML content...
+2025-05-28 11:02:48 | INFO     | src.data_processing.html_parser:_clean_html:370 - HTML cleaned successfully
+2025-05-28 11:02:48 | INFO     | src.data_processing.html_parser:_parse_content_sections:377 - Parsing content sections...
+2025-05-28 11:02:48 | INFO     | src.data_processing.html_parser:_parse_content_sections:438 - Parsed 29 content sections
+2025-05-28 11:02:48 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:702 - Building section hierarchy...
+2025-05-28 11:02:48 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:717 - Section hierarchy built successfully
+2025-05-28 11:02:48 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
+2025-05-28 11:02:48 | INFO     | src.data_processing.html_parser:_post_process:767 - Post-processing complete. Final section count: 29
+2025-05-28 11:02:48 | INFO     | src.data_processing.html_parser:parse:152 - Successfully parsed 29 sections from Quantconnect-Lean-Engine.html
+2025-05-28 11:02:48 | INFO     | src.data_processing.parser_utils:export_sections_for_rag:519 - Exported 29 documents for RAG to data/processed/batch_20250528_110248/Quantconnect-Lean-Engine_rag.json
+2025-05-28 11:03:07 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 11:03:07 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 11:03:07 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 11:03:07 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 11:03:07 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 11:03:07 | INFO     | __main__:process_parsed_file:54 - Processing Quantconnect-Lean-Engine_parsed.json
+2025-05-28 11:03:07 | INFO     | __main__:_save_chunks:269 - Saved 83 chunks to data/processed/batch_20250528_110248/Quantconnect-Lean-Engine_chunks.json
+2025-05-28 11:03:07 | INFO     | __main__:process_parsed_file:122 - Chunking complete: 83 chunks created
+2025-05-28 11:03:24 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 11:03:24 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 11:03:24 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 11:03:24 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 11:03:24 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 11:10:41 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 11:10:41 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 11:10:41 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 11:10:41 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 11:10:41 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 11:13:44 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 11:13:44 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 11:13:44 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 11:13:44 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 11:13:44 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 11:14:36 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 11:14:36 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 11:14:36 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 11:14:36 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 11:14:36 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 11:17:44 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 11:17:44 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 11:17:44 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 11:17:44 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 11:17:44 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 11:25:39 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 11:25:39 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 11:25:39 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 11:25:39 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 11:25:39 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 11:27:39 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 11:27:39 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 11:27:39 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 11:27:39 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 11:27:39 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 11:35:05 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 11:35:05 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 11:35:05 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 11:35:05 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 11:35:05 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 11:35:16 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 11:35:16 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 11:35:16 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 11:35:16 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 11:35:16 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 11:37:50 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 11:37:50 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 11:37:50 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 11:37:50 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 11:37:50 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 11:38:47 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 11:38:47 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 11:38:47 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 11:38:47 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 11:38:47 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 12:22:15 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 12:22:15 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 12:22:15 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 12:22:15 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 12:22:15 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
