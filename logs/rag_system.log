@@ -1156,3 +1156,569 @@
 2025-05-28 12:22:15 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
 2025-05-28 12:22:15 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
 2025-05-28 12:22:15 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 23:36:12 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 23:36:12 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 23:36:12 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 23:36:12 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 23:36:12 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 23:36:38 | INFO     | src.data_processing.html_parser:__init__:122 - Initializing parser for: Quantconnect-Lean-Engine_Test.html
+2025-05-28 23:36:38 | INFO     | src.data_processing.html_parser:parse:132 - Starting to parse Quantconnect-Lean-Engine_Test.html
+2025-05-28 23:36:38 | INFO     | src.data_processing.html_parser:_load_html:165 - Initializing parser for: Quantconnect-Lean-Engine_Test.html
+2025-05-28 23:36:38 | INFO     | src.data_processing.html_parser:_load_html:166 - Attempting to load document at index 1 from data/raw_html/Quantconnect-Lean-Engine_Test.html
+2025-05-28 23:36:38 | INFO     | src.data_processing.html_parser:_load_html:212 - Loaded HTML for document index 1, effective content size after DOCTYPE removal: 0.00 MB
+2025-05-28 23:36:38 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:227 - Parsing Table of Contents...
+2025-05-28 23:36:38 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:297 - Found 2 entries in Table of Contents
+2025-05-28 23:36:38 | INFO     | src.data_processing.html_parser:_clean_html:310 - Cleaning HTML content...
+2025-05-28 23:36:38 | INFO     | src.data_processing.html_parser:_clean_html:370 - HTML cleaned successfully
+2025-05-28 23:36:38 | INFO     | src.data_processing.html_parser:_parse_content_sections:377 - Parsing content sections...
+2025-05-28 23:36:38 | INFO     | src.data_processing.html_parser:_parse_content_sections:438 - Parsed 2 content sections
+2025-05-28 23:36:38 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:702 - Building section hierarchy...
+2025-05-28 23:36:38 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:717 - Section hierarchy built successfully
+2025-05-28 23:36:38 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
+2025-05-28 23:36:38 | INFO     | src.data_processing.html_parser:_post_process:767 - Post-processing complete. Final section count: 2
+2025-05-28 23:36:38 | INFO     | src.data_processing.html_parser:parse:152 - Successfully parsed 2 sections from Quantconnect-Lean-Engine_Test.html
+2025-05-28 23:53:58 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 23:53:58 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 23:53:58 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 23:53:58 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 23:53:58 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 23:54:06 | INFO     | src.data_processing.html_parser:__init__:122 - Initializing parser for: Quantconnect-Lean-Engine_Test.html
+2025-05-28 23:54:06 | INFO     | src.data_processing.html_parser:parse:132 - Starting to parse Quantconnect-Lean-Engine_Test.html
+2025-05-28 23:54:06 | INFO     | src.data_processing.html_parser:_load_html:165 - Initializing parser for: Quantconnect-Lean-Engine_Test.html
+2025-05-28 23:54:06 | INFO     | src.data_processing.html_parser:_load_html:166 - Attempting to load document at index 1 from data/raw_html/Quantconnect-Lean-Engine_Test.html
+2025-05-28 23:54:06 | INFO     | src.data_processing.html_parser:_load_html:212 - Loaded HTML for document index 1, effective content size after DOCTYPE removal: 0.00 MB
+2025-05-28 23:54:06 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:227 - Parsing Table of Contents...
+2025-05-28 23:54:06 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:297 - Found 2 entries in Table of Contents
+2025-05-28 23:54:06 | INFO     | src.data_processing.html_parser:_clean_html:310 - Cleaning HTML content...
+2025-05-28 23:54:06 | INFO     | src.data_processing.html_parser:_clean_html:370 - HTML cleaned successfully
+2025-05-28 23:54:06 | INFO     | src.data_processing.html_parser:_parse_content_sections:377 - Parsing content sections...
+2025-05-28 23:54:06 | INFO     | src.data_processing.html_parser:_parse_content_sections:438 - Parsed 2 content sections
+2025-05-28 23:54:06 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:702 - Building section hierarchy...
+2025-05-28 23:54:06 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:717 - Section hierarchy built successfully
+2025-05-28 23:54:06 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
+2025-05-28 23:54:06 | INFO     | src.data_processing.html_parser:_post_process:767 - Post-processing complete. Final section count: 2
+2025-05-28 23:54:06 | INFO     | src.data_processing.html_parser:parse:152 - Successfully parsed 2 sections from Quantconnect-Lean-Engine_Test.html
+2025-05-28 23:55:50 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 23:55:50 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 23:55:50 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 23:55:50 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 23:55:50 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-28 23:56:12 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-28 23:56:12 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-28 23:56:12 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-28 23:56:12 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-28 23:56:12 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 00:01:15 | INFO     | src.data_processing.html_parser:__init__:122 - Initializing parser for: Quantconnect-Lean-Engine_Test.html
+2025-05-29 00:01:15 | INFO     | src.data_processing.html_parser:parse:132 - Starting to parse Quantconnect-Lean-Engine_Test.html
+2025-05-29 00:01:15 | INFO     | src.data_processing.html_parser:_load_html:165 - Initializing parser for: Quantconnect-Lean-Engine_Test.html
+2025-05-29 00:01:15 | INFO     | src.data_processing.html_parser:_load_html:166 - Attempting to load document at index 1 from data/raw_html/Quantconnect-Lean-Engine_Test.html
+2025-05-29 00:01:15 | INFO     | src.data_processing.html_parser:_load_html:212 - Loaded HTML for document index 1, effective content size after DOCTYPE removal: 0.00 MB
+2025-05-29 00:01:15 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:227 - Parsing Table of Contents...
+2025-05-29 00:01:15 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:297 - Found 2 entries in Table of Contents
+2025-05-29 00:01:15 | INFO     | src.data_processing.html_parser:_clean_html:310 - Cleaning HTML content...
+2025-05-29 00:01:15 | INFO     | src.data_processing.html_parser:_clean_html:370 - HTML cleaned successfully
+2025-05-29 00:01:15 | INFO     | src.data_processing.html_parser:_parse_content_sections:377 - Parsing content sections...
+2025-05-29 00:01:15 | INFO     | src.data_processing.html_parser:_parse_content_sections:438 - Parsed 2 content sections
+2025-05-29 00:01:15 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:702 - Building section hierarchy...
+2025-05-29 00:01:15 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:717 - Section hierarchy built successfully
+2025-05-29 00:01:15 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
+2025-05-29 00:01:15 | INFO     | src.data_processing.html_parser:_post_process:767 - Post-processing complete. Final section count: 2
+2025-05-29 00:01:15 | INFO     | src.data_processing.html_parser:parse:152 - Successfully parsed 2 sections from Quantconnect-Lean-Engine_Test.html
+2025-05-29 00:06:57 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 00:06:57 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 00:06:57 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 00:06:57 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 00:06:57 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 00:07:01 | INFO     | src.data_processing.html_parser:__init__:122 - Initializing parser for: Quantconnect-Lean-Engine_Test.html
+2025-05-29 00:07:01 | INFO     | src.data_processing.html_parser:parse:132 - Starting to parse Quantconnect-Lean-Engine_Test.html
+2025-05-29 00:07:01 | INFO     | src.data_processing.html_parser:_load_html:165 - Initializing parser for: Quantconnect-Lean-Engine_Test.html
+2025-05-29 00:07:01 | INFO     | src.data_processing.html_parser:_load_html:166 - Attempting to load document at index 1 from data/raw_html/Quantconnect-Lean-Engine_Test.html
+2025-05-29 00:07:11 | INFO     | src.data_processing.html_parser:_load_html:212 - Loaded HTML for document index 1, effective content size after DOCTYPE removal: 0.00 MB
+2025-05-29 00:07:11 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:227 - Parsing Table of Contents...
+2025-05-29 00:07:22 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:297 - Found 2 entries in Table of Contents
+2025-05-29 00:07:22 | INFO     | src.data_processing.html_parser:_clean_html:310 - Cleaning HTML content...
+2025-05-29 00:07:22 | INFO     | src.data_processing.html_parser:_clean_html:370 - HTML cleaned successfully
+2025-05-29 00:07:22 | INFO     | src.data_processing.html_parser:_parse_content_sections:377 - Parsing content sections...
+2025-05-29 00:07:22 | INFO     | src.data_processing.html_parser:_parse_content_sections:438 - Parsed 2 content sections
+2025-05-29 00:07:22 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:702 - Building section hierarchy...
+2025-05-29 00:07:22 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:717 - Section hierarchy built successfully
+2025-05-29 00:07:22 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
+2025-05-29 00:07:32 | INFO     | src.data_processing.html_parser:_post_process:767 - Post-processing complete. Final section count: 2
+2025-05-29 00:07:32 | INFO     | src.data_processing.html_parser:parse:152 - Successfully parsed 2 sections from Quantconnect-Lean-Engine_Test.html
+2025-05-29 00:21:17 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 00:21:17 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 00:21:17 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 00:21:17 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 00:21:17 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 00:21:26 | INFO     | src.data_processing.html_parser:__init__:122 - Initializing parser for: Quantconnect-Lean-Engine_Test.html
+2025-05-29 00:21:26 | INFO     | src.data_processing.html_parser:parse:132 - Starting to parse Quantconnect-Lean-Engine_Test.html
+2025-05-29 00:21:26 | INFO     | src.data_processing.html_parser:_load_html:165 - Initializing parser for: Quantconnect-Lean-Engine_Test.html
+2025-05-29 00:21:26 | INFO     | src.data_processing.html_parser:_load_html:166 - Attempting to load document at index 1 from data/raw_html/Quantconnect-Lean-Engine_Test.html
+2025-05-29 00:22:33 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 00:22:33 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 00:22:33 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 00:22:33 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 00:22:33 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 09:39:32 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 09:39:32 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 09:39:32 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 09:39:32 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 09:39:32 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 09:39:34 | INFO     | src.data_processing.html_parser:__init__:122 - Initializing parser for: Quantconnect-Lean-Engine.html
+2025-05-29 09:39:34 | INFO     | src.data_processing.html_parser:parse:132 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 09:39:34 | INFO     | src.data_processing.html_parser:_load_html:165 - Initializing parser for: Quantconnect-Lean-Engine.html
+2025-05-29 09:39:34 | INFO     | src.data_processing.html_parser:_load_html:166 - Attempting to load document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 09:39:34 | INFO     | src.data_processing.html_parser:_load_html:212 - Loaded HTML for document index 1, effective content size after DOCTYPE removal: 0.31 MB
+2025-05-29 09:39:34 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:227 - Parsing Table of Contents...
+2025-05-29 09:39:34 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:297 - Found 29 entries in Table of Contents
+2025-05-29 09:39:34 | INFO     | src.data_processing.html_parser:_clean_html:310 - Cleaning HTML content...
+2025-05-29 09:39:34 | INFO     | src.data_processing.html_parser:_clean_html:370 - HTML cleaned successfully
+2025-05-29 09:39:34 | INFO     | src.data_processing.html_parser:_parse_content_sections:377 - Parsing content sections...
+2025-05-29 09:39:34 | INFO     | src.data_processing.html_parser:_parse_content_sections:438 - Parsed 29 content sections
+2025-05-29 09:39:34 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:702 - Building section hierarchy...
+2025-05-29 09:39:34 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:717 - Section hierarchy built successfully
+2025-05-29 09:39:34 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
+2025-05-29 09:39:34 | INFO     | src.data_processing.html_parser:_post_process:767 - Post-processing complete. Final section count: 29
+2025-05-29 09:39:34 | INFO     | src.data_processing.html_parser:parse:152 - Successfully parsed 29 sections from Quantconnect-Lean-Engine.html
+2025-05-29 09:45:02 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 09:45:02 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 09:45:02 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 09:45:02 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 09:45:02 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 09:45:02 | INFO     | src.data_processing.html_parser:__init__:122 - Initializing parser for: Quantconnect-Lean-Engine.html
+2025-05-29 09:45:02 | INFO     | src.data_processing.html_parser:parse:132 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 09:45:02 | INFO     | src.data_processing.html_parser:_load_html:165 - Initializing parser for: Quantconnect-Lean-Engine.html
+2025-05-29 09:45:02 | INFO     | src.data_processing.html_parser:_load_html:166 - Attempting to load document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 09:45:02 | INFO     | src.data_processing.html_parser:_load_html:212 - Loaded HTML for document index 1, effective content size after DOCTYPE removal: 0.31 MB
+2025-05-29 09:45:02 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:227 - Parsing Table of Contents...
+2025-05-29 09:45:02 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:297 - Found 29 entries in Table of Contents
+2025-05-29 09:45:02 | INFO     | src.data_processing.html_parser:_clean_html:310 - Cleaning HTML content...
+2025-05-29 09:45:02 | INFO     | src.data_processing.html_parser:_clean_html:370 - HTML cleaned successfully
+2025-05-29 09:45:02 | INFO     | src.data_processing.html_parser:_parse_content_sections:377 - Parsing content sections...
+2025-05-29 09:45:02 | INFO     | src.data_processing.html_parser:_parse_content_sections:438 - Parsed 29 content sections
+2025-05-29 09:45:02 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:702 - Building section hierarchy...
+2025-05-29 09:45:02 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:717 - Section hierarchy built successfully
+2025-05-29 09:45:02 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
+2025-05-29 09:45:02 | INFO     | src.data_processing.html_parser:_post_process:767 - Post-processing complete. Final section count: 29
+2025-05-29 09:45:02 | INFO     | src.data_processing.html_parser:parse:152 - Successfully parsed 29 sections from Quantconnect-Lean-Engine.html
+2025-05-29 09:45:02 | WARNING  | src.data_processing.hybrid_chunker:_chunk_with_strategy:614 - Strategy ChunkingStrategy.HYBRID not available, using fixed size
+2025-05-29 09:59:42 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 09:59:42 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 09:59:42 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 09:59:42 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 09:59:42 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 09:59:45 | INFO     | src.data_processing.html_parser:__init__:122 - Initializing parser for: Quantconnect-Lean-Engine.html
+2025-05-29 09:59:45 | INFO     | src.data_processing.html_parser:parse:132 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 09:59:45 | INFO     | src.data_processing.html_parser:_load_html:165 - Initializing parser for: Quantconnect-Lean-Engine.html
+2025-05-29 09:59:45 | INFO     | src.data_processing.html_parser:_load_html:166 - Attempting to load document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 09:59:52 | INFO     | src.data_processing.html_parser:_load_html:212 - Loaded HTML for document index 1, effective content size after DOCTYPE removal: 0.31 MB
+2025-05-29 09:59:52 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:227 - Parsing Table of Contents...
+2025-05-29 09:59:52 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:297 - Found 29 entries in Table of Contents
+2025-05-29 09:59:52 | INFO     | src.data_processing.html_parser:_clean_html:310 - Cleaning HTML content...
+2025-05-29 09:59:53 | INFO     | src.data_processing.html_parser:_clean_html:370 - HTML cleaned successfully
+2025-05-29 09:59:53 | INFO     | src.data_processing.html_parser:_parse_content_sections:377 - Parsing content sections...
+2025-05-29 10:04:52 | INFO     | src.data_processing.html_parser:_parse_content_sections:438 - Parsed 29 content sections
+2025-05-29 10:04:52 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:702 - Building section hierarchy...
+2025-05-29 10:04:52 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:717 - Section hierarchy built successfully
+2025-05-29 10:04:52 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
+2025-05-29 10:04:52 | INFO     | src.data_processing.html_parser:_post_process:767 - Post-processing complete. Final section count: 29
+2025-05-29 10:04:52 | INFO     | src.data_processing.html_parser:parse:152 - Successfully parsed 29 sections from Quantconnect-Lean-Engine.html
+2025-05-29 10:06:01 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 10:06:01 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 10:06:01 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 10:06:01 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 10:06:01 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 10:06:54 | INFO     | src.data_processing.html_parser:__init__:122 - Initializing parser for: Quantconnect-Lean-Engine.html
+2025-05-29 10:06:54 | INFO     | src.data_processing.html_parser:parse:132 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 10:06:54 | INFO     | src.data_processing.html_parser:_load_html:165 - Initializing parser for: Quantconnect-Lean-Engine.html
+2025-05-29 10:06:54 | INFO     | src.data_processing.html_parser:_load_html:166 - Attempting to load document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 10:06:54 | INFO     | src.data_processing.html_parser:_load_html:212 - Loaded HTML for document index 1, effective content size after DOCTYPE removal: 0.31 MB
+2025-05-29 10:06:54 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:227 - Parsing Table of Contents...
+2025-05-29 10:06:54 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:297 - Found 29 entries in Table of Contents
+2025-05-29 10:06:54 | INFO     | src.data_processing.html_parser:_clean_html:310 - Cleaning HTML content...
+2025-05-29 10:06:54 | INFO     | src.data_processing.html_parser:_clean_html:370 - HTML cleaned successfully
+2025-05-29 10:06:54 | INFO     | src.data_processing.html_parser:_parse_content_sections:377 - Parsing content sections...
+2025-05-29 10:06:54 | INFO     | src.data_processing.html_parser:_parse_content_sections:438 - Parsed 29 content sections
+2025-05-29 10:06:54 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:702 - Building section hierarchy...
+2025-05-29 10:06:54 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:717 - Section hierarchy built successfully
+2025-05-29 10:06:54 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
+2025-05-29 10:06:54 | INFO     | src.data_processing.html_parser:_post_process:767 - Post-processing complete. Final section count: 29
+2025-05-29 10:06:54 | INFO     | src.data_processing.html_parser:parse:152 - Successfully parsed 29 sections from Quantconnect-Lean-Engine.html
+2025-05-29 10:06:54 | INFO     | src.data_processing.parser_utils:export_sections_for_rag:519 - Exported 29 documents for RAG to data/processed/batch_20250529_100654/Quantconnect-Lean-Engine_rag.json
+2025-05-29 13:21:53 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 13:21:53 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 13:21:53 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 13:21:53 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 13:21:53 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 13:21:53 | INFO     | src.data_processing.html_parser:__init__:119 - Initializing FIXED parser for: Quantconnect-Lean-Engine.html
+2025-05-29 13:21:53 | INFO     | src.data_processing.html_parser:parse:126 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 13:21:53 | INFO     | src.data_processing.html_parser:_load_html:157 - Loading document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 13:21:53 | INFO     | src.data_processing.html_parser:_load_html:188 - Loaded HTML for document index 1
+2025-05-29 13:21:53 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:224 - Parsing Table of Contents...
+2025-05-29 13:21:53 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:285 - Found 29 entries in Table of Contents
+2025-05-29 13:21:53 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:194 - Cleaning HTML while preserving code structures...
+2025-05-29 13:21:53 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:220 - HTML cleaned while preserving code structures
+2025-05-29 13:21:53 | INFO     | src.data_processing.html_parser:_parse_content_sections:289 - Parsing content sections with improved code detection...
+2025-05-29 13:21:53 | INFO     | src.data_processing.html_parser:_parse_content_sections:343 - Parsed 29 content sections
+2025-05-29 13:21:53 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:721 - Building section hierarchy...
+2025-05-29 13:21:53 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:733 - Section hierarchy built successfully
+2025-05-29 13:21:53 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
+2025-05-29 13:21:53 | INFO     | src.data_processing.html_parser:_post_process:763 - Post-processing complete. Final: 28 sections, 125 code blocks
+2025-05-29 13:21:53 | INFO     | src.data_processing.html_parser:parse:146 - Successfully parsed 28 sections from Quantconnect-Lean-Engine.html
+2025-05-29 13:21:53 | INFO     | src.data_processing.html_parser:parse:147 - Found 125 total code blocks
+2025-05-29 13:24:20 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 13:24:20 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 13:24:20 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 13:24:20 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 13:24:20 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 13:24:45 | INFO     | src.data_processing.html_parser:__init__:119 - Initializing FIXED parser for: Quantconnect-Lean-Engine.html
+2025-05-29 13:24:45 | INFO     | src.data_processing.html_parser:parse:126 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 13:24:45 | INFO     | src.data_processing.html_parser:_load_html:157 - Loading document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 13:24:46 | INFO     | src.data_processing.html_parser:_load_html:188 - Loaded HTML for document index 1
+2025-05-29 13:24:46 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:224 - Parsing Table of Contents...
+2025-05-29 13:24:46 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:285 - Found 29 entries in Table of Contents
+2025-05-29 13:24:46 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:194 - Cleaning HTML while preserving code structures...
+2025-05-29 13:24:46 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:220 - HTML cleaned while preserving code structures
+2025-05-29 13:24:46 | INFO     | src.data_processing.html_parser:_parse_content_sections:289 - Parsing content sections with improved code detection...
+2025-05-29 13:24:46 | INFO     | src.data_processing.html_parser:_parse_content_sections:343 - Parsed 29 content sections
+2025-05-29 13:24:46 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:721 - Building section hierarchy...
+2025-05-29 13:24:46 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:733 - Section hierarchy built successfully
+2025-05-29 13:24:46 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
+2025-05-29 13:24:46 | INFO     | src.data_processing.html_parser:_post_process:763 - Post-processing complete. Final: 28 sections, 125 code blocks
+2025-05-29 13:24:46 | INFO     | src.data_processing.html_parser:parse:146 - Successfully parsed 28 sections from Quantconnect-Lean-Engine.html
+2025-05-29 13:24:46 | INFO     | src.data_processing.html_parser:parse:147 - Found 125 total code blocks
+2025-05-29 13:24:46 | INFO     | src.data_processing.parser_utils:export_sections_for_rag:519 - Exported 28 documents for RAG to data/processed/batch_20250529_132445/Quantconnect-Lean-Engine_rag.json
+2025-05-29 13:49:53 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 13:49:53 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 13:49:53 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 13:49:53 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 13:49:53 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 13:50:12 | INFO     | src.data_processing.html_parser:__init__:119 - Initializing FIXED parser for: Quantconnect-Lean-Engine.html
+2025-05-29 13:50:12 | INFO     | src.data_processing.html_parser:parse:126 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 13:50:12 | INFO     | src.data_processing.html_parser:_load_html:157 - Loading document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 13:50:12 | INFO     | src.data_processing.html_parser:_load_html:188 - Loaded HTML for document index 1
+2025-05-29 13:50:12 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:224 - Parsing Table of Contents...
+2025-05-29 13:50:12 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:285 - Found 29 entries in Table of Contents
+2025-05-29 13:50:12 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:194 - Cleaning HTML while preserving code structures...
+2025-05-29 13:50:12 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:220 - HTML cleaned while preserving code structures
+2025-05-29 13:50:12 | INFO     | src.data_processing.html_parser:_parse_content_sections:289 - Parsing content sections with improved code detection...
+2025-05-29 13:50:12 | INFO     | src.data_processing.html_parser:_parse_content_sections:343 - Parsed 29 content sections
+2025-05-29 13:50:12 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:721 - Building section hierarchy...
+2025-05-29 13:50:12 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:733 - Section hierarchy built successfully
+2025-05-29 13:50:12 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
+2025-05-29 13:50:12 | INFO     | src.data_processing.html_parser:_post_process:763 - Post-processing complete. Final: 28 sections, 125 code blocks
+2025-05-29 13:50:12 | INFO     | src.data_processing.html_parser:parse:146 - Successfully parsed 28 sections from Quantconnect-Lean-Engine.html
+2025-05-29 13:50:12 | INFO     | src.data_processing.html_parser:parse:147 - Found 125 total code blocks
+2025-05-29 13:50:12 | INFO     | src.data_processing.parser_utils:export_sections_for_rag:519 - Exported 28 documents for RAG to data/processed/batch_20250529_135012/Quantconnect-Lean-Engine_rag.json
+2025-05-29 13:55:33 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 13:55:33 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 13:55:33 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 13:55:33 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 13:55:33 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 13:55:48 | INFO     | src.data_processing.html_parser:__init__:119 - Initializing FIXED parser for: Quantconnect-Lean-Engine.html
+2025-05-29 13:55:48 | INFO     | src.data_processing.html_parser:parse:126 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 13:55:48 | INFO     | src.data_processing.html_parser:_load_html:157 - Loading document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 13:55:48 | INFO     | src.data_processing.html_parser:_load_html:188 - Loaded HTML for document index 1
+2025-05-29 13:55:48 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:224 - Parsing Table of Contents...
+2025-05-29 13:55:48 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:285 - Found 29 entries in Table of Contents
+2025-05-29 13:55:48 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:194 - Cleaning HTML while preserving code structures...
+2025-05-29 13:55:48 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:220 - HTML cleaned while preserving code structures
+2025-05-29 13:55:48 | INFO     | src.data_processing.html_parser:_parse_content_sections:289 - Parsing content sections with improved code detection...
+2025-05-29 13:55:48 | INFO     | src.data_processing.html_parser:_parse_content_sections:343 - Parsed 29 content sections
+2025-05-29 13:55:48 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:721 - Building section hierarchy...
+2025-05-29 13:55:48 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:733 - Section hierarchy built successfully
+2025-05-29 13:55:48 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
+2025-05-29 13:55:48 | INFO     | src.data_processing.html_parser:_post_process:763 - Post-processing complete. Final: 28 sections, 125 code blocks
+2025-05-29 13:55:48 | INFO     | src.data_processing.html_parser:parse:146 - Successfully parsed 28 sections from Quantconnect-Lean-Engine.html
+2025-05-29 13:55:48 | INFO     | src.data_processing.html_parser:parse:147 - Found 125 total code blocks
+2025-05-29 13:55:48 | INFO     | src.data_processing.parser_utils:export_sections_for_rag:519 - Exported 28 documents for RAG to data/processed/batch_20250529_135548/Quantconnect-Lean-Engine_rag.json
+2025-05-29 13:59:31 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 13:59:31 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 13:59:31 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 13:59:31 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 13:59:31 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 13:59:31 | INFO     | src.data_processing.html_parser:__init__:119 - Initializing FIXED parser for: specific_test_cases.html
+2025-05-29 13:59:31 | INFO     | src.data_processing.html_parser:parse:126 - Starting to parse specific_test_cases.html
+2025-05-29 13:59:31 | INFO     | src.data_processing.html_parser:_load_html:157 - Loading document at index 1 from data/raw_html/specific_test_cases.html
+2025-05-29 13:59:31 | INFO     | src.data_processing.html_parser:_load_html:188 - Loaded HTML for document index 1
+2025-05-29 13:59:31 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:224 - Parsing Table of Contents...
+2025-05-29 13:59:31 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:285 - Found 2 entries in Table of Contents
+2025-05-29 13:59:31 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:194 - Cleaning HTML while preserving code structures...
+2025-05-29 13:59:31 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:220 - HTML cleaned while preserving code structures
+2025-05-29 13:59:31 | INFO     | src.data_processing.html_parser:_parse_content_sections:289 - Parsing content sections with improved code detection...
+2025-05-29 13:59:31 | INFO     | src.data_processing.html_parser:_parse_content_sections:343 - Parsed 2 content sections
+2025-05-29 13:59:31 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:721 - Building section hierarchy...
+2025-05-29 13:59:31 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:733 - Section hierarchy built successfully
+2025-05-29 13:59:31 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
+2025-05-29 13:59:31 | INFO     | src.data_processing.html_parser:_post_process:763 - Post-processing complete. Final: 2 sections, 6 code blocks
+2025-05-29 13:59:31 | INFO     | src.data_processing.html_parser:parse:146 - Successfully parsed 2 sections from specific_test_cases.html
+2025-05-29 13:59:31 | INFO     | src.data_processing.html_parser:parse:147 - Found 6 total code blocks
+2025-05-29 14:01:15 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 14:01:15 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 14:01:15 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 14:01:15 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 14:01:15 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 14:01:15 | INFO     | src.data_processing.html_parser:__init__:119 - Initializing FIXED parser for: specific_test_cases.html
+2025-05-29 14:01:15 | INFO     | src.data_processing.html_parser:parse:126 - Starting to parse specific_test_cases.html
+2025-05-29 14:01:15 | INFO     | src.data_processing.html_parser:_load_html:157 - Loading document at index 1 from data/raw_html/specific_test_cases.html
+2025-05-29 14:01:15 | INFO     | src.data_processing.html_parser:_load_html:188 - Loaded HTML for document index 1
+2025-05-29 14:01:15 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:224 - Parsing Table of Contents...
+2025-05-29 14:01:15 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:285 - Found 2 entries in Table of Contents
+2025-05-29 14:01:15 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:194 - Cleaning HTML while preserving code structures...
+2025-05-29 14:01:15 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:220 - HTML cleaned while preserving code structures
+2025-05-29 14:01:15 | INFO     | src.data_processing.html_parser:_parse_content_sections:289 - Parsing content sections with improved code detection...
+2025-05-29 14:01:15 | INFO     | src.data_processing.html_parser:_parse_content_sections:343 - Parsed 2 content sections
+2025-05-29 14:01:15 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:721 - Building section hierarchy...
+2025-05-29 14:01:15 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:733 - Section hierarchy built successfully
+2025-05-29 14:01:15 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
+2025-05-29 14:01:15 | INFO     | src.data_processing.html_parser:_post_process:763 - Post-processing complete. Final: 2 sections, 6 code blocks
+2025-05-29 14:01:15 | INFO     | src.data_processing.html_parser:parse:146 - Successfully parsed 2 sections from specific_test_cases.html
+2025-05-29 14:01:15 | INFO     | src.data_processing.html_parser:parse:147 - Found 6 total code blocks
+2025-05-29 14:08:37 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 14:08:37 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 14:08:37 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 14:08:37 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 14:08:37 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 14:08:51 | INFO     | src.data_processing.html_parser:__init__:119 - Initializing FIXED parser for: Quantconnect-Lean-Engine.html
+2025-05-29 14:08:51 | INFO     | src.data_processing.html_parser:parse:126 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 14:08:51 | INFO     | src.data_processing.html_parser:_load_html:157 - Loading document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 14:08:51 | INFO     | src.data_processing.html_parser:_load_html:188 - Loaded HTML for document index 1
+2025-05-29 14:08:51 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:224 - Parsing Table of Contents...
+2025-05-29 14:08:51 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:285 - Found 29 entries in Table of Contents
+2025-05-29 14:08:51 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:194 - Cleaning HTML while preserving code structures...
+2025-05-29 14:08:51 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:220 - HTML cleaned while preserving code structures
+2025-05-29 14:08:51 | INFO     | src.data_processing.html_parser:_parse_content_sections:289 - Parsing content sections with improved code detection...
+2025-05-29 14:08:51 | INFO     | src.data_processing.html_parser:_parse_content_sections:343 - Parsed 29 content sections
+2025-05-29 14:08:51 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:721 - Building section hierarchy...
+2025-05-29 14:08:51 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:733 - Section hierarchy built successfully
+2025-05-29 14:08:51 | INFO     | src.data_processing.html_parser:_post_process:745 - Post-processing parsed sections...
+2025-05-29 14:08:51 | INFO     | src.data_processing.html_parser:_post_process:763 - Post-processing complete. Final: 28 sections, 125 code blocks
+2025-05-29 14:08:51 | INFO     | src.data_processing.html_parser:parse:146 - Successfully parsed 28 sections from Quantconnect-Lean-Engine.html
+2025-05-29 14:08:51 | INFO     | src.data_processing.html_parser:parse:147 - Found 125 total code blocks
+2025-05-29 14:08:51 | INFO     | src.data_processing.parser_utils:export_sections_for_rag:519 - Exported 28 documents for RAG to data/processed/batch_20250529_140851/Quantconnect-Lean-Engine_rag.json
+2025-05-29 14:11:21 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 14:11:21 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 14:11:21 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 14:11:21 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 14:11:21 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 14:11:28 | INFO     | src.data_processing.html_parser:__init__:119 - Initializing FIXED parser for: Quantconnect-Lean-Engine.html
+2025-05-29 14:11:28 | INFO     | src.data_processing.html_parser:parse:126 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 14:11:28 | INFO     | src.data_processing.html_parser:_load_html:157 - Loading document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 14:11:28 | INFO     | src.data_processing.html_parser:_load_html:188 - Loaded HTML for document index 1
+2025-05-29 14:11:28 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:224 - Parsing Table of Contents...
+2025-05-29 14:11:29 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:285 - Found 29 entries in Table of Contents
+2025-05-29 14:11:29 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:194 - Cleaning HTML while preserving code structures...
+2025-05-29 14:11:29 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:220 - HTML cleaned while preserving code structures
+2025-05-29 14:11:29 | INFO     | src.data_processing.html_parser:_parse_content_sections:289 - Parsing content sections with improved code detection...
+2025-05-29 15:18:17 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 15:18:17 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 15:18:17 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 15:18:17 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 15:18:17 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 15:18:37 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 15:18:37 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 15:18:37 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 15:18:37 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 15:18:37 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 15:19:17 | INFO     | src.data_processing.html_parser:__init__:119 - Initializing FIXED parser for: Quantconnect-Lean-Engine.html
+2025-05-29 15:19:17 | INFO     | src.data_processing.html_parser:parse:126 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 15:19:17 | INFO     | src.data_processing.html_parser:_load_html:157 - Loading document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 15:19:17 | INFO     | src.data_processing.html_parser:_load_html:188 - Loaded HTML for document index 1
+2025-05-29 15:19:17 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:224 - Parsing Table of Contents...
+2025-05-29 15:19:17 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:285 - Found 29 entries in Table of Contents
+2025-05-29 15:19:17 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:194 - Cleaning HTML while preserving code structures...
+2025-05-29 15:19:17 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:220 - HTML cleaned while preserving code structures
+2025-05-29 15:19:17 | INFO     | src.data_processing.html_parser:_parse_content_sections:289 - Parsing content sections with improved code detection...
+2025-05-29 15:19:17 | INFO     | src.data_processing.html_parser:_parse_content_sections:343 - Parsed 29 content sections
+2025-05-29 15:19:17 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:808 - Building section hierarchy...
+2025-05-29 15:19:17 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:820 - Section hierarchy built successfully
+2025-05-29 15:19:17 | INFO     | src.data_processing.html_parser:_post_process:832 - Post-processing parsed sections...
+2025-05-29 15:19:17 | INFO     | src.data_processing.html_parser:_post_process:850 - Post-processing complete. Final: 28 sections, 169 code blocks
+2025-05-29 15:19:17 | INFO     | src.data_processing.html_parser:parse:146 - Successfully parsed 28 sections from Quantconnect-Lean-Engine.html
+2025-05-29 15:19:17 | INFO     | src.data_processing.html_parser:parse:147 - Found 169 total code blocks
+2025-05-29 15:19:17 | INFO     | src.data_processing.parser_utils:export_sections_for_rag:519 - Exported 28 documents for RAG to data/processed/batch_20250529_151917/Quantconnect-Lean-Engine_rag.json
+2025-05-29 15:23:41 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 15:23:41 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 15:23:41 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 15:23:41 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 15:23:41 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 15:23:48 | INFO     | src.data_processing.html_parser:__init__:119 - Initializing FIXED parser for: Quantconnect-Lean-Engine.html
+2025-05-29 15:23:48 | INFO     | src.data_processing.html_parser:parse:126 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 15:23:48 | INFO     | src.data_processing.html_parser:_load_html:157 - Loading document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 15:23:48 | INFO     | src.data_processing.html_parser:_load_html:188 - Loaded HTML for document index 1
+2025-05-29 15:23:48 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:224 - Parsing Table of Contents...
+2025-05-29 15:23:48 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:285 - Found 29 entries in Table of Contents
+2025-05-29 15:23:48 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:194 - Cleaning HTML while preserving code structures...
+2025-05-29 15:23:48 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:220 - HTML cleaned while preserving code structures
+2025-05-29 15:23:48 | INFO     | src.data_processing.html_parser:_parse_content_sections:289 - Parsing content sections with improved code detection...
+2025-05-29 15:23:48 | INFO     | src.data_processing.html_parser:_parse_content_sections:343 - Parsed 29 content sections
+2025-05-29 15:23:48 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:718 - Building section hierarchy...
+2025-05-29 15:23:48 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:730 - Section hierarchy built successfully
+2025-05-29 15:23:48 | INFO     | src.data_processing.html_parser:_post_process:742 - Post-processing parsed sections...
+2025-05-29 15:23:48 | INFO     | src.data_processing.html_parser:_post_process:760 - Post-processing complete. Final: 28 sections, 169 code blocks
+2025-05-29 15:23:48 | INFO     | src.data_processing.html_parser:parse:146 - Successfully parsed 28 sections from Quantconnect-Lean-Engine.html
+2025-05-29 15:23:48 | INFO     | src.data_processing.html_parser:parse:147 - Found 169 total code blocks
+2025-05-29 15:38:32 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 15:38:32 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 15:38:32 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 15:38:32 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 15:38:32 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 15:41:09 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 15:41:09 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 15:41:09 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 15:41:09 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 15:41:09 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 15:41:13 | INFO     | src.data_processing.html_parser:__init__:119 - Initializing FIXED parser for: Quantconnect-Lean-Engine.html
+2025-05-29 15:41:13 | INFO     | src.data_processing.html_parser:parse:126 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 15:41:13 | INFO     | src.data_processing.html_parser:_load_html:157 - Loading document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 15:41:13 | INFO     | src.data_processing.html_parser:_load_html:188 - Loaded HTML for document index 1
+2025-05-29 15:41:13 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:224 - Parsing Table of Contents...
+2025-05-29 15:41:13 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:285 - Found 29 entries in Table of Contents
+2025-05-29 15:41:13 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:194 - Cleaning HTML while preserving code structures...
+2025-05-29 15:41:13 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:220 - HTML cleaned while preserving code structures
+2025-05-29 15:41:13 | INFO     | src.data_processing.html_parser:_parse_content_sections:289 - Parsing content sections with improved code detection...
+2025-05-29 15:41:26 | INFO     | src.data_processing.html_parser:_parse_content_sections:343 - Parsed 29 content sections
+2025-05-29 15:41:26 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:718 - Building section hierarchy...
+2025-05-29 15:41:26 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:730 - Section hierarchy built successfully
+2025-05-29 15:41:26 | INFO     | src.data_processing.html_parser:_post_process:742 - Post-processing parsed sections...
+2025-05-29 15:41:26 | INFO     | src.data_processing.html_parser:_post_process:760 - Post-processing complete. Final: 28 sections, 169 code blocks
+2025-05-29 15:41:26 | INFO     | src.data_processing.html_parser:parse:146 - Successfully parsed 28 sections from Quantconnect-Lean-Engine.html
+2025-05-29 15:41:26 | INFO     | src.data_processing.html_parser:parse:147 - Found 169 total code blocks
+2025-05-29 15:44:51 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 15:44:51 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 15:44:51 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 15:44:51 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 15:44:51 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 15:44:53 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 15:44:53 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 15:44:53 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 15:44:53 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 15:44:53 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 15:44:55 | INFO     | src.data_processing.html_parser:__init__:119 - Initializing FIXED parser for: Quantconnect-Lean-Engine.html
+2025-05-29 15:44:55 | INFO     | src.data_processing.html_parser:parse:126 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 15:44:55 | INFO     | src.data_processing.html_parser:_load_html:157 - Loading document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 15:44:55 | INFO     | src.data_processing.html_parser:_load_html:188 - Loaded HTML for document index 1
+2025-05-29 15:44:55 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:224 - Parsing Table of Contents...
+2025-05-29 15:44:55 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:285 - Found 29 entries in Table of Contents
+2025-05-29 15:44:55 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:194 - Cleaning HTML while preserving code structures...
+2025-05-29 15:44:56 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:220 - HTML cleaned while preserving code structures
+2025-05-29 15:44:56 | INFO     | src.data_processing.html_parser:_parse_content_sections:289 - Parsing content sections with improved code detection...
+2025-05-29 15:44:56 | INFO     | src.data_processing.html_parser:_parse_content_sections:343 - Parsed 29 content sections
+2025-05-29 15:44:56 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:718 - Building section hierarchy...
+2025-05-29 15:44:56 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:730 - Section hierarchy built successfully
+2025-05-29 15:44:56 | INFO     | src.data_processing.html_parser:_post_process:742 - Post-processing parsed sections...
+2025-05-29 15:44:56 | INFO     | src.data_processing.html_parser:_post_process:760 - Post-processing complete. Final: 28 sections, 169 code blocks
+2025-05-29 15:44:56 | INFO     | src.data_processing.html_parser:parse:146 - Successfully parsed 28 sections from Quantconnect-Lean-Engine.html
+2025-05-29 15:44:56 | INFO     | src.data_processing.html_parser:parse:147 - Found 169 total code blocks
+2025-05-29 15:51:23 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 15:51:23 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 15:51:23 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 15:51:23 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 15:51:23 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 15:51:30 | INFO     | src.data_processing.html_parser:__init__:119 - Initializing FIXED parser for: Quantconnect-Lean-Engine.html
+2025-05-29 15:51:30 | INFO     | src.data_processing.html_parser:parse:126 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 15:51:30 | INFO     | src.data_processing.html_parser:_load_html:157 - Loading document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 15:51:30 | INFO     | src.data_processing.html_parser:_load_html:188 - Loaded HTML for document index 1
+2025-05-29 15:51:30 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:224 - Parsing Table of Contents...
+2025-05-29 15:51:30 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:285 - Found 29 entries in Table of Contents
+2025-05-29 15:51:30 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:194 - Cleaning HTML while preserving code structures...
+2025-05-29 15:51:30 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:220 - HTML cleaned while preserving code structures
+2025-05-29 15:51:30 | INFO     | src.data_processing.html_parser:_parse_content_sections:289 - Parsing content sections with improved code detection...
+2025-05-29 15:51:30 | INFO     | src.data_processing.html_parser:_parse_content_sections:343 - Parsed 29 content sections
+2025-05-29 15:51:30 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:718 - Building section hierarchy...
+2025-05-29 15:51:30 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:730 - Section hierarchy built successfully
+2025-05-29 15:51:30 | INFO     | src.data_processing.html_parser:_post_process:742 - Post-processing parsed sections...
+2025-05-29 15:51:30 | INFO     | src.data_processing.html_parser:_post_process:760 - Post-processing complete. Final: 28 sections, 169 code blocks
+2025-05-29 15:51:30 | INFO     | src.data_processing.html_parser:parse:146 - Successfully parsed 28 sections from Quantconnect-Lean-Engine.html
+2025-05-29 15:51:30 | INFO     | src.data_processing.html_parser:parse:147 - Found 169 total code blocks
+2025-05-29 15:51:53 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 15:51:53 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 15:51:53 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 15:51:53 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 15:51:53 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 15:51:57 | INFO     | src.data_processing.html_parser:__init__:119 - Initializing FIXED parser for: Quantconnect-Lean-Engine.html
+2025-05-29 15:51:57 | INFO     | src.data_processing.html_parser:parse:126 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 15:51:57 | INFO     | src.data_processing.html_parser:_load_html:157 - Loading document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 15:51:57 | INFO     | src.data_processing.html_parser:_load_html:188 - Loaded HTML for document index 1
+2025-05-29 15:51:57 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:224 - Parsing Table of Contents...
+2025-05-29 15:51:57 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:285 - Found 29 entries in Table of Contents
+2025-05-29 15:51:57 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:194 - Cleaning HTML while preserving code structures...
+2025-05-29 15:51:57 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:220 - HTML cleaned while preserving code structures
+2025-05-29 15:51:57 | INFO     | src.data_processing.html_parser:_parse_content_sections:289 - Parsing content sections with improved code detection...
+2025-05-29 15:51:57 | INFO     | src.data_processing.html_parser:_parse_content_sections:343 - Parsed 29 content sections
+2025-05-29 15:51:57 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:718 - Building section hierarchy...
+2025-05-29 15:51:57 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:730 - Section hierarchy built successfully
+2025-05-29 15:51:57 | INFO     | src.data_processing.html_parser:_post_process:742 - Post-processing parsed sections...
+2025-05-29 15:51:57 | INFO     | src.data_processing.html_parser:_post_process:760 - Post-processing complete. Final: 28 sections, 169 code blocks
+2025-05-29 15:51:57 | INFO     | src.data_processing.html_parser:parse:146 - Successfully parsed 28 sections from Quantconnect-Lean-Engine.html
+2025-05-29 15:51:57 | INFO     | src.data_processing.html_parser:parse:147 - Found 169 total code blocks
+2025-05-29 15:56:30 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 15:56:30 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 15:56:30 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 15:56:30 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 15:56:30 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 15:56:30 | INFO     | __main__:process_parsed_file:54 - Processing Quantconnect-Lean-Engine_parsed.json
+2025-05-29 15:56:30 | INFO     | __main__:_save_chunks:269 - Saved 23 chunks to data/processed/batch_20250529_151917/Quantconnect-Lean-Engine_chunks.json
+2025-05-29 15:56:30 | INFO     | __main__:process_parsed_file:122 - Chunking complete: 23 chunks created
+2025-05-29 16:01:10 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 16:01:10 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 16:01:10 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 16:01:10 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 16:01:10 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 16:01:10 | INFO     | src.data_processing.html_parser:__init__:119 - Initializing FIXED parser for: Quantconnect-Lean-Engine.html
+2025-05-29 16:01:10 | INFO     | src.data_processing.html_parser:parse:126 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-29 16:01:10 | INFO     | src.data_processing.html_parser:_load_html:157 - Loading document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-29 16:01:10 | INFO     | src.data_processing.html_parser:_load_html:188 - Loaded HTML for document index 1
+2025-05-29 16:01:10 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:224 - Parsing Table of Contents...
+2025-05-29 16:01:10 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:285 - Found 29 entries in Table of Contents
+2025-05-29 16:01:10 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:194 - Cleaning HTML while preserving code structures...
+2025-05-29 16:01:10 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:220 - HTML cleaned while preserving code structures
+2025-05-29 16:01:10 | INFO     | src.data_processing.html_parser:_parse_content_sections:289 - Parsing content sections with improved code detection...
+2025-05-29 16:01:10 | INFO     | src.data_processing.html_parser:_parse_content_sections:343 - Parsed 29 content sections
+2025-05-29 16:01:10 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:718 - Building section hierarchy...
+2025-05-29 16:01:10 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:730 - Section hierarchy built successfully
+2025-05-29 16:01:10 | INFO     | src.data_processing.html_parser:_post_process:742 - Post-processing parsed sections...
+2025-05-29 16:01:10 | INFO     | src.data_processing.html_parser:_post_process:760 - Post-processing complete. Final: 28 sections, 169 code blocks
+2025-05-29 16:01:10 | INFO     | src.data_processing.html_parser:parse:146 - Successfully parsed 28 sections from Quantconnect-Lean-Engine.html
+2025-05-29 16:01:10 | INFO     | src.data_processing.html_parser:parse:147 - Found 169 total code blocks
+2025-05-29 16:01:10 | WARNING  | src.data_processing.hybrid_chunker:_chunk_with_strategy:614 - Strategy ChunkingStrategy.HYBRID not available, using fixed size
+2025-05-29 16:30:00 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 16:30:00 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 16:30:00 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 16:30:00 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 16:30:00 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 16:30:01 | INFO     | __main__:process_parsed_file:54 - Processing Quantconnect-Lean-Engine_parsed.json
+2025-05-29 16:30:01 | INFO     | __main__:_save_chunks:286 - Saved 1 chunks to data/processed/batch_20250529_151917/Quantconnect-Lean-Engine_chunks.json
+2025-05-29 16:30:01 | INFO     | __main__:process_parsed_file:122 - Chunking complete: 1 chunks created
+2025-05-29 16:33:33 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-29 16:33:33 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-29 16:33:33 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-29 16:33:33 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-29 16:33:33 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-29 16:33:33 | INFO     | __main__:process_parsed_file:54 - Processing Quantconnect-Lean-Engine_parsed.json
+2025-05-29 16:33:33 | INFO     | __main__:_save_chunks:394 - Saved 55 chunks to data/processed/batch_20250529_151917/Quantconnect-Lean-Engine_chunks_fixed.json
+2025-05-29 16:33:33 | INFO     | __main__:process_parsed_file:126 - Chunking complete: 55 chunks created
+2025-05-29 16:33:33 | INFO     | __main__:process_parsed_file:127 - Code blocks found: 169
+2025-05-29 16:33:33 | INFO     | __main__:process_parsed_file:128 - Tables found: 16
+2025-05-30 13:50:22 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-05-30 13:50:22 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-05-30 13:50:22 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-05-30 13:50:22 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-05-30 13:50:22 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-05-30 13:50:34 | INFO     | src.data_processing.html_parser:__init__:118 - Initializing FIXED parser for: Quantconnect-Lean-Engine.html
+2025-05-30 13:50:34 | INFO     | src.data_processing.html_parser:parse:125 - Starting to parse Quantconnect-Lean-Engine.html
+2025-05-30 13:50:34 | INFO     | src.data_processing.html_parser:_load_html:156 - Loading document at index 1 from data/raw_html/Quantconnect-Lean-Engine.html
+2025-05-30 13:50:34 | INFO     | src.data_processing.html_parser:_load_html:187 - Loaded HTML for document index 1
+2025-05-30 13:50:34 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:223 - Parsing Table of Contents...
+2025-05-30 13:50:34 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:284 - Found 29 entries in Table of Contents
+2025-05-30 13:50:34 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:193 - Cleaning HTML while preserving code structures...
+2025-05-30 13:50:34 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:219 - HTML cleaned while preserving code structures
+2025-05-30 13:50:34 | INFO     | src.data_processing.html_parser:_parse_content_sections:288 - Parsing content sections with improved code detection...
+2025-05-30 13:50:34 | INFO     | src.data_processing.html_parser:_parse_content_sections:342 - Parsed 29 content sections
+2025-05-30 13:50:34 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:716 - Building section hierarchy...
+2025-05-30 13:50:34 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:728 - Section hierarchy built successfully
+2025-05-30 13:50:34 | INFO     | src.data_processing.html_parser:_post_process:740 - Post-processing parsed sections...
+2025-05-30 13:50:34 | INFO     | src.data_processing.html_parser:_post_process:758 - Post-processing complete. Final: 28 sections, 64 code blocks
+2025-05-30 13:50:34 | INFO     | src.data_processing.html_parser:parse:145 - Successfully parsed 28 sections from Quantconnect-Lean-Engine.html
+2025-05-30 13:50:34 | INFO     | src.data_processing.html_parser:parse:146 - Found 64 total code blocks
+2025-05-30 13:50:34 | INFO     | src.data_processing.parser_utils:export_sections_for_rag:519 - Exported 28 documents for RAG to data/processed/batch_20250530_135034/Quantconnect-Lean-Engine_rag.json

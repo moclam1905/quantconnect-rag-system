@@ -59,8 +59,9 @@ class TextChunker:
         Returns:
             List of Chunk objects
         """
-        if not text or not text.strip():
-            return []
+        if not text or not text.strip() or len(text.strip()) < 50:
+            logger.warning(f"Section {section.id} has insufficient content ({len(text or '')} chars)")
+            return []  # Return empty list instead of trying to chunk
         
         # Preprocess text
         text = self._preprocess_text(text)

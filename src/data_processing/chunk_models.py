@@ -277,7 +277,7 @@ class ChunkingPresets:
         """Config cho general documentation (QuantConnect use case)"""
         return ChunkingConfig(
             max_chunk_size=1200,
-            min_chunk_size=150,
+            min_chunk_size=100,
             chunk_overlap=150,
             default_strategy=ChunkingStrategy.HYBRID,
             preserve_small_code_blocks=True,

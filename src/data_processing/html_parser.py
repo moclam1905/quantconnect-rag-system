@@ -1,12 +1,6 @@
 """
-HTML Parser cho QuantConnect Documentation
-Nhiệm vụ: Parse các file HTML single-page lớn và trích xuất nội dung có cấu trúc
-
-Cách tiếp cận:
-1. Đọc file HTML theo chunks để xử lý file lớn
-2. Parse structure (Table of Contents) trước
-3. Extract content theo sections
-4. Phân loại và tag các loại content (text, code, table)
+FIXED HTML Parser cho QuantConnect Documentation
+Sửa lại để xử lý đúng cấu trúc code blocks thực tế
 """
 
 import os
@@ -30,10 +24,11 @@ from config.config import settings
 @dataclass
 class CodeBlock:
     """Đại diện cho một khối code trong documentation"""
-    language: str  # 'python' hoặc 'csharp'
+    language: str  # 'python', 'csharp', 'cli', etc.
     content: str
     section_id: str  # ID của section chứa code block
     line_number: Optional[int] = None  # Dòng bắt đầu trong HTML gốc
+    # Loại bỏ is_inline field
 
     def __post_init__(self):
         # Clean up code content
@@ -43,6 +38,8 @@ class CodeBlock:
             self.language = 'csharp'
         elif self.language.lower() in ['py', 'python']:
             self.language = 'python'
+        elif self.language.lower() in ['cli', 'bash', 'shell', 'cmd']:
+            self.language = 'cli'
 
 
 @dataclass
@@ -106,9 +103,8 @@ class Section:
 
 class QuantConnectHTMLParser:
     """
-    Parser chính cho QuantConnect HTML documentation.
-
-    Được thiết kế dựa trên cấu trúc HTML thực tế được tạo bởi SinglePageDocGenerator.py
+    FIXED Parser chính cho QuantConnect HTML documentation.
+    Sửa lại để xử lý đúng cấu trúc code blocks thực tế.
     """
 
     def __init__(self, file_path: Path):
@@ -119,14 +115,11 @@ class QuantConnectHTMLParser:
         self.sections: List[Section] = []  # Danh sách các sections đã parse
         self.section_map: Dict[str, Section] = {}  # Map section ID to Section object
 
-        logger.info(f"Initializing parser for: {self.file_name}")
+        logger.info(f"Initializing FIXED parser for: {self.file_name}")
 
     def parse(self, target_document_index=0) -> List[Section]:
         """
         Main parsing method - orchestrates toàn bộ quá trình parsing.
-
-        Returns:
-            List[Section]: Danh sách các sections đã được parse và structure
         """
         try:
             logger.info(f"Starting to parse {self.file_name}")
@@ -137,8 +130,8 @@ class QuantConnectHTMLParser:
             # Step 2: Parse Table of Contents
             self._parse_table_of_contents()
 
-            # Step 3: Remove unnecessary elements
-            self._clean_html()
+            # Step 3: Remove unnecessary elements (but preserve code structures)
+            self._clean_html_preserve_code()
 
             # Step 4: Parse content sections
             self._parse_content_sections()
@@ -150,83 +143,85 @@ class QuantConnectHTMLParser:
             self._post_process()
 
             logger.info(f"Successfully parsed {len(self.sections)} sections from {self.file_name}")
+            logger.info(f"Found {sum(len(s.code_blocks) for s in self.sections)} total code blocks")
+            
             return self.sections
 
         except Exception as e:
             logger.error(f"Error parsing {self.file_name}: {str(e)}")
             raise
 
-    def _load_html(self, target_document_index=0): # Mặc định là tài liệu đầu tiên (index 0)
-        """
-        Load HTML file vào BeautifulSoup.
-        Xử lý trường hợp file có multiple DOCTYPE declarations và nested HTML tags.
-        Sẽ parse tài liệu ở vị trí target_document_index (0-based).
-        """
-        logger.info(f"Initializing parser for: {self.file_name}")
-        logger.info(f"Attempting to load document at index {target_document_index} from {self.file_path}")
+    def _load_html(self, target_document_index=0):
+        """Load HTML file vào BeautifulSoup"""
+        logger.info(f"Loading document at index {target_document_index} from {self.file_path}")
 
-        # Kiểm tra file tồn tại
         if not self.file_path.exists():
             raise FileNotFoundError(f"HTML file not found: {self.file_path}")
 
-        # Đọc toàn bộ nội dung file gốc
         with open(self.file_path, 'r', encoding='utf-8') as f:
             full_file_content = f.read()
 
-        # Tìm tất cả các vị trí bắt đầu của <!DOCTYPE html... (không phân biệt chữ hoa thường cho DOCTYPE HTML)
-        # Pattern này tìm đúng <!DOCTYPE html ... >
-        doctype_marker_pattern = r'<!DOCTYPE\s+html[^>]*>'
-        starts = [m.start() for m in re.finditer(doctype_marker_pattern, full_file_content, flags=re.IGNORECASE)]
+        # Find DOCTYPE declarations
+        doctype_pattern = r'<!DOCTYPE\s+html[^>]*>'
+        starts = [m.start() for m in re.finditer(doctype_pattern, full_file_content, flags=re.IGNORECASE)]
         
-        selected_document_content = ""
         if not starts:
-            # Nếu không tìm thấy DOCTYPE nào, coi toàn bộ file là một tài liệu
             if target_document_index == 0:
                 selected_document_content = full_file_content
             else:
-                raise IndexError(f"No <!DOCTYPE html> found in file. Cannot get document at index {target_document_index}.")
+                raise IndexError(f"No <!DOCTYPE html> found. Cannot get document at index {target_document_index}.")
         elif target_document_index < len(starts):
             start_pos = starts[target_document_index]
-            # Điểm kết thúc là điểm bắt đầu của DOCTYPE tiếp theo, hoặc cuối file
             end_pos = starts[target_document_index + 1] if (target_document_index + 1) < len(starts) else len(full_file_content)
             selected_document_content = full_file_content[start_pos:end_pos].strip()
         else:
-            raise IndexError(f"Target document index {target_document_index} is out of range. File contains {len(starts)} documents (0-indexed).")
+            raise IndexError(f"Target document index {target_document_index} out of range. File contains {len(starts)} documents.")
 
         if not selected_document_content:
-            # Trường hợp này không nên xảy ra nếu logic trên đúng và file có nội dung
-            raise ValueError(f"Extracted document content for index {target_document_index} is empty. This might indicate an issue with the splitting logic or the source file structure.")
+            raise ValueError(f"Extracted document content for index {target_document_index} is empty.")
 
-        # selected_document_content bây giờ chứa chuỗi HTML của tài liệu bạn muốn parse,
-        # bắt đầu bằng <!DOCTYPE html...> của chính nó.
+        # Remove DOCTYPE và parse
+        html_content_for_soup = re.sub(r'<!DOCTYPE[^>]*>', '', selected_document_content, count=1, flags=re.IGNORECASE)
+        self.soup = BeautifulSoup(html_content_for_soup, 'html.parser')
 
-        # Loại bỏ khai báo DOCTYPE khỏi phần nội dung đã chọn này.
-        # Mã gốc loại bỏ TẤT CẢ các DOCTYPE. Vì selected_document_content chỉ nên có một ở đầu,
-        # việc này vẫn ổn.
-        html_content_for_soup = re.sub(r'<!DOCTYPE[^>]*>', '', selected_document_content, count=1, flags=re.IGNORECASE) # [html_parser.py]
-        # count=1 để đảm bảo chỉ loại bỏ cái đầu tiên (nếu có nhiều, dù không nên)
+        logger.info(f"Loaded HTML for document index {target_document_index}")
 
-        # Parse với BeautifulSoup
-        self.soup = BeautifulSoup(html_content_for_soup, 'html.parser') 
+    def _clean_html_preserve_code(self):
+        """
+        Loại bỏ các elements không cần thiết nhưng GIỮ LẠI code structures.
+        """
+        logger.info("Cleaning HTML while preserving code structures...")
 
-        logger.info(f"Loaded HTML for document index {target_document_index}, effective content size after DOCTYPE removal: {len(html_content_for_soup) / 1024 / 1024:.2f} MB")
-        if not self.soup.contents or (self.soup.html and not self.soup.html.body.contents and not self.soup.html.head.contents):
-             logger.warning(f"Parsed soup for document index {target_document_index} appears to be empty or minimal. Original chunk started with: '{selected_document_content[:200]}...'")
+        # Remove scripts, styles, etc. but NOT pre, code, or div.section-example-container
+        elements_to_remove = [
+            'script',
+            'style', 
+            'link',
+            'meta',
+            'img',
+            'video',
+            'audio',
+            'iframe',
+            'embed',
+            'object'
+        ]
+
+        for selector in elements_to_remove:
+            for element in self.soup.select(selector):
+                element.decompose()
+
+        # KEEP nav elements with ToC
+        for nav in self.soup.find_all('nav'):
+            has_toc_links = nav.find('a', class_=re.compile(r'toc-h\d+'))
+            if not has_toc_links:
+                nav.decompose()
+
+        logger.info("HTML cleaned while preserving code structures")
 
     def _parse_table_of_contents(self):
-        """
-        Parse Table of Contents theo cấu trúc được tạo bởi SinglePageDocGenerator:
-        <h3>Table of Content</h3>
-        <nav>
-            <ul>
-                <li><a href="#{id}" class="toc-h{level}">{id} {title}</a></li>
-                ...
-            </ul>
-        </nav>
-        """
+        """Parse Table of Contents"""
         logger.info("Parsing Table of Contents...")
 
-        # Tìm heading "Table of Content"
         toc_heading = None
         for heading in self.soup.find_all(['h3', 'h2', 'h4']):
             if 'table of content' in heading.get_text().lower():
@@ -234,43 +229,39 @@ class QuantConnectHTMLParser:
                 break
 
         if not toc_heading:
-            logger.warning("Table of Contents heading not found, will parse sections directly")
+            logger.warning("Table of Contents heading not found")
             return
 
-        # Tìm nav element sau heading này
+        # Find nav element
         toc_container = None
         current = toc_heading.next_sibling
         while current and not toc_container:
-            if isinstance(current, Tag):
-                if current.name == 'nav':
-                    toc_container = current
-                    break
+            if isinstance(current, Tag) and current.name == 'nav':
+                toc_container = current
+                break
             current = current.next_sibling
 
         if not toc_container:
             logger.warning("Table of Contents nav element not found")
             return
 
-        # Parse các entries trong ToC
+        # Parse ToC entries
         toc_entries = toc_container.find_all('a', href=re.compile('^#'))
 
         for entry in toc_entries:
-            # Extract thông tin từ mỗi ToC entry
-            href = entry.get('href', '').lstrip('#')  # Remove # prefix
+            href = entry.get('href', '').lstrip('#')
             full_text = entry.get_text(strip=True)
 
-            # Parse text format: "{id} {title}" (e.g., "1.2.3 Section Title")
             match = re.match(r'^([\d\.]+)\s+(.+)$', full_text)
             if match:
                 section_id = match.group(1)
                 title = match.group(2)
             else:
-                # Fallback nếu format không match
                 section_id = href
                 title = full_text
 
-            # Xác định level từ class attribute
-            level = 1  # default
+            # Get level from class
+            level = 1
             entry_classes = entry.get('class', [])
             for class_name in entry_classes:
                 match = re.search(r'toc-h(\d+)', str(class_name))
@@ -278,14 +269,10 @@ class QuantConnectHTMLParser:
                     level = int(match.group(1))
                     break
 
-            # Verify level bằng cách đếm số dấu chấm
-            # Level = số dấu chấm + 1 (e.g., "1.2.3" = level 3)
             calculated_level = len(section_id.split('.'))
             if calculated_level != level:
-                logger.debug(f"Level mismatch for {section_id}: class says {level}, dots say {calculated_level}")
-                level = calculated_level  # Trust the dots
+                level = calculated_level
 
-            # Lưu vào toc_structure
             self.toc_structure[section_id] = {
                 'id': section_id,
                 'title': title,
@@ -296,87 +283,10 @@ class QuantConnectHTMLParser:
 
         logger.info(f"Found {len(self.toc_structure)} entries in Table of Contents")
 
-        # Debug: print first few entries
-        if self.toc_structure:
-            logger.debug("Sample ToC entries:")
-            for i, (section_id, info) in enumerate(list(self.toc_structure.items())[:5]):
-                logger.debug(f"  {section_id}: Level {info['level']} - {info['title']}")
-
-    def _clean_html(self):
-        """
-        Loại bỏ các elements không cần thiết khỏi HTML.
-        Cẩn thận với nested HTML structure của QuantConnect.
-        """
-        logger.info("Cleaning HTML content...")
-
-        # Danh sách các elements cần remove
-        elements_to_remove = [
-            # Scripts và styles
-            'script',
-            'style',
-            'link',
-            'meta',
-
-            # Media elements (theo yêu cầu)
-            'img',
-            'video',
-            'audio',
-            'iframe',
-            'embed',
-            'object',
-
-            # KHÔNG remove 'html' và 'body' vì chúng chứa content
-
-            # Ads hoặc promotional content
-            'div.advertisement',
-            'div.promo',
-            'div.banner'
-        ]
-
-        # Remove các elements
-        for selector in elements_to_remove:
-            for element in self.soup.select(selector):
-                element.decompose()
-
-        # Remove empty nested html/body tags but keep ones with content
-        for html_tag in self.soup.find_all('html'):
-            # Check if this html tag has actual content
-            body = html_tag.find('body')
-            if body:
-                # Check if body has content
-                text_content = body.get_text(strip=True)
-                if not text_content or text_content == '\xa0':  # empty or just &nbsp;
-                    html_tag.decompose()
-            else:
-                # No body tag, check direct content
-                text_content = html_tag.get_text(strip=True)
-                if not text_content:
-                    html_tag.decompose()
-
-        # Remove nav elements EXCEPT the ToC nav
-        for nav in self.soup.find_all('nav'):
-            # Check if this nav contains ToC links
-            has_toc_links = nav.find('a', class_=re.compile(r'toc-h\d+'))
-            if not has_toc_links:
-                nav.decompose()
-
-        # DON'T remove page break paragraphs yet - we need them to identify section boundaries
-
-        # Remove comments
-        comments = self.soup.find_all(string=lambda text: isinstance(text, NavigableString) and '<!--' in str(text))
-        for comment in comments:
-            comment.extract()
-
-        logger.info("HTML cleaned successfully")
-
     def _parse_content_sections(self):
-        """
-        Parse content sections dựa trên cấu trúc được tạo bởi SinglePageDocGenerator.
-        Sections được wrap trong <section id="{number}"> tags.
-        """
-        logger.info("Parsing content sections...")
+        """Parse content sections với improved code detection"""
+        logger.info("Parsing content sections with improved code detection...")
 
-        # Tìm tất cả <section> elements với id
         section_elements = self.soup.find_all('section', id=True)
 
         if not section_elements:
@@ -387,35 +297,30 @@ class QuantConnectHTMLParser:
         for section_elem in tqdm(section_elements, desc="Parsing sections"):
             section_id = section_elem.get('id', '')
 
-            # Skip empty IDs
             if not section_id:
                 continue
 
-            # Extract section info từ ToC nếu có
+            # Get ToC info
             toc_info = self.toc_structure.get(section_id, {})
 
-            # Extract title từ headings trong section
+            # Extract title và breadcrumb
             title = ""
             breadcrumb = ""
 
-            # Tìm breadcrumb
             breadcrumb_elem = section_elem.find_previous('p', class_='page-breadcrumb')
             if breadcrumb_elem:
                 breadcrumb = breadcrumb_elem.get_text(strip=True)
 
-            # Tìm headings trong section
             h1 = section_elem.find('h1')
             h2 = section_elem.find('h2')
 
-            if h2:  # Nếu có h2, đó là title chính
+            if h2:
                 title = h2.get_text(strip=True)
-            elif h1:  # Nếu chỉ có h1
+            elif h1:
                 title = h1.get_text(strip=True)
             else:
-                # Fallback to ToC title
                 title = toc_info.get('title', f'Section {section_id}')
 
-            # Determine level
             level = toc_info.get('level', len(section_id.split('.')))
 
             # Create Section object
@@ -428,80 +333,23 @@ class QuantConnectHTMLParser:
                 breadcrumb=breadcrumb
             )
 
-            # Parse content của section
-            self._parse_section_content(section_elem, section)
+            # Parse content với improved logic
+            self._parse_section_content_improved(section_elem, section)
 
-            # Add to collections
             self.sections.append(section)
             self.section_map[section_id] = section
 
         logger.info(f"Parsed {len(self.sections)} content sections")
 
-    def _parse_sections_from_headings(self):
+    def _parse_section_content_improved(self, element: Tag, section: Section):
         """
-        Fallback method: Parse sections từ headings nếu không có <section> tags.
-        """
-        logger.info("Parsing sections from heading elements...")
-
-        # Tìm tất cả heading elements (h1-h6)
-        headings = self.soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
-
-        for heading in tqdm(headings, desc="Parsing sections"):
-            # Skip ToC heading
-            if 'table of content' in heading.get_text().lower():
-                continue
-
-            # Extract section info
-            section_id = heading.get('id', '')
-            if not section_id:
-                # Try parent section
-                parent_section = heading.find_parent('section', id=True)
-                if parent_section:
-                    section_id = parent_section.get('id', '')
-
-            if not section_id:
-                # Generate ID
-                section_id = self._generate_section_id(heading.get_text())
-
-            section_title = heading.get_text(strip=True)
-            section_level = int(heading.name[1])  # h1 -> 1, h2 -> 2, etc.
-
-            # Create Section object
-            section = Section(
-                id=section_id,
-                title=section_title,
-                level=section_level,
-                content=""
-            )
-
-            # Parse content
-            self._parse_section_content(heading, section)
-
-            # Add to collections
-            self.sections.append(section)
-            self.section_map[section_id] = section
-
-    def _parse_section_content(self, element: Tag, section: Section):
-        """
-        Parse nội dung của một section theo cấu trúc thực tế của QuantConnect HTML.
-
-        Cấu trúc:
-        1. <p class='page-breadcrumb'>
-        2. <div class='page-heading'><section id="X"><h1>Title</h1></section></div>
-        3. <h3>Subsection</h3> (optional)
-        4. <html><body>actual content</body></html>
-        5. <p style="page-break-after: always;">
-
-        Args:
-            element: BeautifulSoup Tag - <section> element
-            section: Section object để populate
+        UPDATED: Parse nội dung của một section với improved recursive code detection
         """
         content_parts = []
 
         # Find the parent div.page-heading
         page_heading_div = element.parent
         if not page_heading_div or page_heading_div.name != 'div' or 'page-heading' not in page_heading_div.get('class', []):
-            # Fallback: try to find content after section
             page_heading_div = element
 
         # Start looking for content after the page-heading div
@@ -512,22 +360,18 @@ class QuantConnectHTMLParser:
             if isinstance(current, Tag):
                 # Stop conditions
                 if current.name == 'p' and 'page-breadcrumb' in current.get('class', []):
-                    # Next section starting
                     break
 
                 if current.name == 'div' and 'page-heading' in current.get('class', []):
-                    # Another section
                     break
 
                 # Skip page breaks
                 if current.name == 'p' and current.get('style') and 'page-break' in current.get('style'):
-                    # This usually marks the end of this section's content
                     current = current.next_sibling
                     continue
 
                 # Process different content types
                 if current.name == 'h3':
-                    # Subsection heading
                     heading_text = current.get_text(strip=True)
                     if heading_text:
                         content_parts.append(f"### {heading_text}")
@@ -540,17 +384,16 @@ class QuantConnectHTMLParser:
 
                 elif current.name == 'pre':
                     # Direct code block
-                    self._extract_code_block(current, section)
+                    self._extract_code_block_improved(current, section)
 
                 elif current.name == 'table':
-                    # Direct table
                     self._extract_table(current, section)
 
-                elif current.name in ['p', 'div', 'ul', 'ol', 'h4', 'h5', 'h6']:
-                    # Other content
-                    text = current.get_text(strip=True)
-                    if text and text not in content_parts:
-                        content_parts.append(text)
+                else:
+                    # UPDATED: Use new method that handles nested code containers
+                    text_with_inline_code = self._process_text_with_inline_code_and_extract_containers(current, section)
+                    if text_with_inline_code and text_with_inline_code not in content_parts:
+                        content_parts.append(text_with_inline_code)
 
             current = current.next_sibling
 
@@ -559,7 +402,7 @@ class QuantConnectHTMLParser:
 
     def _extract_content_from_body(self, body: Tag, section: Section, content_parts: List[str]):
         """
-        Extract content from <body> tag trong nested HTML structure.
+        UPDATED: Extract content from <body> with improved recursive code detection
         """
         for element in body.children:
             if isinstance(element, NavigableString):
@@ -570,54 +413,104 @@ class QuantConnectHTMLParser:
             elif isinstance(element, Tag):
                 if element.name == 'pre':
                     # Code block
-                    self._extract_code_block(element, section)
-                    # Also add to content for context
-                    content_parts.append(f"[Code Block - {section.code_blocks[-1].language}]")
+                    self._extract_code_block_improved(element, section)
+                    content_parts.append("[Code Block]")
 
                 elif element.name == 'table':
-                    # Table
                     self._extract_table(element, section)
-                    content_parts.append(f"[Table - {len(section.tables[-1].rows)} rows]")
+                    content_parts.append("[Table]")
 
-                elif element.name in ['p', 'div', 'ul', 'ol', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
-                    text = element.get_text(strip=True)
-                    if text:
-                        # Check for special content like JSON
-                        if text.startswith('{') and text.endswith('}'):
-                            try:
-                                # Try to parse as JSON for better formatting
-                                import json
-                                data = json.loads(text)
-                                content_parts.append(f"[Metadata: {data.get('type', 'unknown')} - {data.get('heading', '')}]")
-                            except:
-                                content_parts.append(text)
-                        else:
-                            content_parts.append(text)
+                else:
+                    # UPDATED: Use new method that handles nested code containers
+                    text_with_inline = self._process_text_with_inline_code_and_extract_containers(element, section)
+                    if text_with_inline:
+                        # Skip JSON metadata
+                        if not (text_with_inline.startswith('{') and text_with_inline.endswith('}')):
+                            content_parts.append(text_with_inline)
+    
+    def _handle_div_element(self, div_element: Tag, section: Section, content_parts: List[str]):
+        """
+        FIXED: Xử lý div elements, đặc biệt các div chứa code.
+        """
+        div_classes = div_element.get('class', [])
+        div_classes_str = ' '.join(div_classes)
 
-    def _extract_code_block(self, pre_element: Tag, section: Section):
+        # Check for code container divs
+        if 'section-example-container' in div_classes_str:
+            # This is a code container
+            self._extract_code_from_container(div_element, section)
+            content_parts.append("[Code Example]")  # Placeholder in text
+            
+        elif any(lang in div_classes_str for lang in ['python', 'csharp', 'cli']):
+            # Language-specific div
+            self._extract_code_from_container(div_element, section)
+            content_parts.append("[Code Example]")
+            
+        else:
+            # Regular div - extract text content
+            text_content = self._process_text_with_inline_code(div_element, section)
+            if text_content:
+                content_parts.append(text_content)
+
+    def _extract_code_from_container(self, container: Tag, section: Section):
         """
-        Extract code block từ <pre> element.
-        Xác định ngôn ngữ từ class attribute hoặc content.
+        FIXED: Extract code từ các container divs.
         """
-        # Xác định ngôn ngữ từ class
+        # Find all pre elements trong container
+        pre_elements = container.find_all('pre')
+        
+        for pre_elem in pre_elements:
+            self._extract_code_block_improved(pre_elem, section)
+
+    def _extract_code_block_improved(self, pre_element: Tag, section: Section):
+        """
+        IMPROVED: Extract code block với better language detection.
+        """
+        # Kiểm tra xem pre element này có phải là part của code container không
+        parent = pre_element.parent
+        if parent and parent.name == 'div':
+            parent_classes = parent.get('class', [])
+            parent_classes_str = ' '.join(str(c) for c in parent_classes)
+            if 'section-example-container' not in parent_classes_str:
+                # Đây không phải code container, skip
+                return
+
+        # Determine language từ pre element classes
         language = 'text'  # default
-        classes = pre_element.get('class', [])
+        pre_classes = pre_element.get('class', [])
 
-        for class_name in classes:
+        for class_name in pre_classes:
             class_str = str(class_name).lower()
-            if 'python' in class_str or 'py' in class_str:
+            if 'python' in class_str:
                 language = 'python'
                 break
-            elif 'csharp' in class_str or 'c#' in class_str or 'cs' in class_str:
+            elif 'csharp' in class_str or 'c#' in class_str:
                 language = 'csharp'
                 break
+            elif 'cli' in class_str or 'bash' in class_str or 'shell' in class_str:
+                language = 'cli'
+                break
+
+        # Check parent div classes if pre doesn't have language class
+        if language == 'text' and parent:
+            parent_classes = parent.get('class', [])
+            for class_name in parent_classes:
+                class_str = str(class_name).lower()
+                if 'python' in class_str:
+                    language = 'python'
+                    break
+                elif 'csharp' in class_str:
+                    language = 'csharp'
+                    break
+                elif 'cli' in class_str:
+                    language = 'cli'
+                    break
 
         # Extract code content
-        # Check for nested <code> tag first
         code_elem = pre_element.find('code')
         if code_elem:
             code_content = code_elem.get_text(strip=False)
-            # Also check code element classes
+            # Check code element classes too
             code_classes = code_elem.get('class', [])
             for class_name in code_classes:
                 class_str = str(class_name).lower()
@@ -625,35 +518,99 @@ class QuantConnectHTMLParser:
                     language = 'python'
                 elif 'csharp' in class_str:
                     language = 'csharp'
+                elif 'cli' in class_str:
+                    language = 'cli'
         else:
             code_content = pre_element.get_text(strip=False)
 
-        # If language still not determined, analyze content
+        # Final language detection từ content nếu vẫn chưa xác định
         if language == 'text':
-            # Import từ parser_utils nếu cần
-            try:
-                from src.data_processing.parser_utils import CodeLanguageDetector
-                language = CodeLanguageDetector.detect_language(code_content, classes)
-            except:
-                # Fallback to simple detection
-                if 'import ' in code_content or 'def ' in code_content or 'self.' in code_content:
-                    language = 'python'
-                elif 'using ' in code_content or 'namespace ' in code_content or 'public class' in code_content:
-                    language = 'csharp'
+            language = self._detect_language_from_content(code_content)
 
         # Create CodeBlock object
-        code_block = CodeBlock(
-            language=language,
-            content=code_content,
-            section_id=section.id
-        )
+        if code_content.strip():  # Only create if has content
+            code_block = CodeBlock(
+                language=language,
+                content=code_content,
+                section_id=section.id
+            )
+            section.code_blocks.append(code_block)
+            logger.debug(f"Added {language} code block to section {section.id}")
 
-        section.code_blocks.append(code_block)
+    def _detect_language_from_content(self, code_content: str) -> str:
+        """Detect programming language từ code content"""
+        content_lower = code_content.lower()
+        
+        # Python indicators
+        python_indicators = [
+            'import ', 'from ', 'def ', 'class ', 'self.', 'print(', '__init__',
+            'import numpy', 'import pandas', 'def ', 'elif', 'True', 'False', 'None'
+        ]
+        
+        # C# indicators  
+        csharp_indicators = [
+            'using ', 'namespace ', 'public class', 'private ', 'public ', 'void ',
+            'string ', 'int ', 'var ', 'new ', '();', 'Console.', 'public override'
+        ]
+        
+        # CLI indicators
+        cli_indicators = [
+            '$ ', 'conda ', 'pip ', 'dotnet ', 'git ', 'cd ', 'ls ', 'mkdir',
+            '--', 'sudo ', 'chmod ', 'export '
+        ]
+        
+        python_score = sum(1 for indicator in python_indicators if indicator in content_lower)
+        csharp_score = sum(1 for indicator in csharp_indicators if indicator in content_lower)
+        cli_score = sum(1 for indicator in cli_indicators if indicator in content_lower)
+        
+        if cli_score > 0:
+            return 'cli'
+        elif python_score > csharp_score:
+            return 'python'
+        elif csharp_score > 0:
+            return 'csharp'
+        else:
+            return 'text'
+
+    def _process_text_with_inline_code(self, element: Tag, section: Section) -> str:
+        """
+        FIXED: Process text content và handle inline code properly - KHÔNG tạo CodeBlock cho inline code
+        """
+        result_parts = []
+
+        for child in element.children:
+            if isinstance(child, NavigableString):
+                result_parts.append(str(child))
+            elif isinstance(child, Tag):
+                if child.name == 'code':
+                    # Đây là inline code - chỉ format trong text, KHÔNG tạo CodeBlock
+                    code_content = child.get_text(strip=True)
+                    if code_content:
+                        # Determine language from class
+                        language = None
+                        code_classes = child.get('class', [])
+                        for class_name in code_classes:
+                            class_str = str(class_name).lower()
+                            if 'python' in class_str:
+                                language = 'python'
+                                break
+                            elif 'csharp' in class_str:
+                                language = 'csharp'
+                                break
+
+                        # Format inline code trong text
+                        if language:
+                            result_parts.append(f"{code_content}({language})")
+                        else:
+                            result_parts.append(f"{code_content}(code)")
+                else:
+                    # Regular tag, get text content
+                    result_parts.append(child.get_text())
+
+        return ''.join(result_parts).strip()
 
     def _extract_table(self, table_element: Tag, section: Section):
-        """
-        Extract table data từ <table> element.
-        """
+        """Extract table data"""
         headers = []
         rows = []
 
@@ -664,7 +621,6 @@ class QuantConnectHTMLParser:
             if header_row:
                 headers = [th.get_text(strip=True) for th in header_row.find_all(['th', 'td'])]
         else:
-            # Try first row as headers
             first_row = table_element.find('tr')
             if first_row and first_row.find('th'):
                 headers = [th.get_text(strip=True) for th in first_row.find_all('th')]
@@ -672,20 +628,17 @@ class QuantConnectHTMLParser:
         # Extract rows
         tbody = table_element.find('tbody') or table_element
         for tr in tbody.find_all('tr'):
-            # Skip header row if already processed
             if tr.find('th') and not rows:
                 continue
-
             row_data = [td.get_text(strip=True) for td in tr.find_all(['td', 'th'])]
             if row_data:
                 rows.append(row_data)
 
-        # Extract caption if exists
+        # Extract caption
         caption_element = table_element.find('caption')
         caption = caption_element.get_text(strip=True) if caption_element else None
 
-        # Create TableData object
-        if headers or rows:  # Only create if table has content
+        if headers or rows:
             table_data = TableData(
                 headers=headers,
                 rows=rows,
@@ -694,20 +647,78 @@ class QuantConnectHTMLParser:
             )
             section.tables.append(table_data)
 
+    def _parse_sections_from_headings(self):
+        """Fallback method khi không có section tags"""
+        logger.info("Parsing sections from heading elements...")
+
+        headings = self.soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
+
+        for heading in tqdm(headings, desc="Parsing sections"):
+            if 'table of content' in heading.get_text().lower():
+                continue
+
+            section_id = heading.get('id', '')
+            if not section_id:
+                parent_section = heading.find_parent('section', id=True)
+                if parent_section:
+                    section_id = parent_section.get('id', '')
+
+            if not section_id:
+                section_id = self._generate_section_id(heading.get_text())
+
+            section_title = heading.get_text(strip=True)
+            section_level = int(heading.name[1])
+
+            section = Section(
+                id=section_id,
+                title=section_title,
+                level=section_level,
+                content=""
+            )
+
+            # Parse content around this heading
+            self._parse_content_around_heading(heading, section)
+
+            self.sections.append(section)
+            self.section_map[section_id] = section
+
+    def _parse_content_around_heading(self, heading: Tag, section: Section):
+        """Parse content around a heading element"""
+        content_parts = []
+        
+        # Look for content after this heading
+        current = heading.next_sibling
+        
+        while current:
+            if isinstance(current, Tag):
+                # Stop at next heading of same or higher level
+                if current.name in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
+                    current_level = int(current.name[1])
+                    if current_level <= section.level:
+                        break
+                
+                # Process content
+                if current.name == 'pre':
+                    self._extract_code_block_improved(current, section)
+                elif current.name == 'div':
+                    self._handle_div_element(current, section, content_parts)
+                elif current.name in ['p', 'ul', 'ol']:
+                    text = self._process_text_with_inline_code(current, section)
+                    if text:
+                        content_parts.append(text)
+            
+            current = current.next_sibling
+        
+        section.content = '\n\n'.join(content_parts)
+
     def _build_section_hierarchy(self):
-        """
-        Xây dựng hierarchy cho sections dựa trên section IDs.
-        E.g., "1.2.3" là con của "1.2", "1.2" là con của "1"
-        """
+        """Build hierarchy for sections"""
         logger.info("Building section hierarchy...")
 
-        # Sort sections by ID để process theo thứ tự
         self.sections.sort(key=lambda s: [int(x) for x in s.id.split('.') if x.isdigit()])
 
-        # Build parent-child relationships
         for section in self.sections:
             if '.' in section.id:
-                # Find parent ID
                 parent_id = '.'.join(section.id.split('.')[:-1])
                 if parent_id in self.section_map:
                     parent = self.section_map[parent_id]
@@ -717,34 +728,18 @@ class QuantConnectHTMLParser:
         logger.info("Section hierarchy built successfully")
 
     def _generate_section_id(self, title: str) -> str:
-        """
-        Generate a unique section ID từ title.
-        Convert to lowercase, replace spaces with hyphens, remove special chars.
-        """
-        # Convert to lowercase và replace spaces
+        """Generate unique section ID from title"""
         section_id = title.lower().replace(' ', '-')
-
-        # Remove special characters
         section_id = re.sub(r'[^a-z0-9\-]', '', section_id)
-
-        # Remove multiple hyphens
         section_id = re.sub(r'-+', '-', section_id)
-
-        # Add hash suffix để ensure unique
         hash_suffix = hashlib.md5(title.encode()).hexdigest()[:6]
-
         return f"{section_id}-{hash_suffix}"
 
     def _post_process(self):
-        """
-        Post-process các sections đã parse.
-        - Validate data
-        - Clean up empty sections
-        - Fix any issues
-        """
+        """Post-process sections"""
         logger.info("Post-processing parsed sections...")
 
-        # Remove empty sections (but keep if they have subsections)
+        # Remove empty sections
         self.sections = [
             s for s in self.sections
             if s.content or s.code_blocks or s.tables or s.subsections
@@ -753,204 +748,244 @@ class QuantConnectHTMLParser:
         # Update section map
         self.section_map = {s.id: s for s in self.sections}
 
-        # Clean content using utilities if available
-        try:
-            from src.data_processing.parser_utils import ContentCleaner
-            cleaner = ContentCleaner()
-            for section in self.sections:
-                section.content = cleaner.clean_text(section.content)
-                for code_block in section.code_blocks:
-                    code_block.content = cleaner.clean_code(code_block.content, code_block.language)
-        except ImportError:
-            logger.warning("ContentCleaner not available, skipping content cleaning")
+        # Clean content
+        for section in self.sections:
+            if section.content:
+                # Basic cleaning
+                section.content = re.sub(r'\s+', ' ', section.content).strip()
+                section.content = section.content.replace('\xa0', ' ')
 
-        logger.info(f"Post-processing complete. Final section count: {len(self.sections)}")
+        logger.info(f"Post-processing complete. Final: {len(self.sections)} sections, "
+                   f"{sum(len(s.code_blocks) for s in self.sections)} code blocks")
 
     def save_parsed_data(self, output_dir: Path):
-        """
-        Save parsed data ra file để có thể reuse sau này.
-        Lưu dưới dạng JSON để dễ load lại.
-        """
+        """Save parsed data to JSON file"""
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        # Create output filename
         base_name = self.file_path.stem
         output_file = output_dir / f"{base_name}_parsed.json"
 
-        # Convert sections to JSON-serializable format
+        # Include code block statistics
+        total_code_blocks = sum(len(s.code_blocks) for s in self.sections)
+        inline_code_blocks = sum(len([cb for cb in s.code_blocks if cb.is_inline]) for s in self.sections)
+        languages = set()
+        for s in self.sections:
+            for cb in s.code_blocks:
+                languages.add(cb.language)
+
         data = {
             'source_file': self.file_name,
             'sections': [s.to_dict() for s in self.sections],
             'statistics': {
                 'total_sections': len(self.sections),
-                'total_code_blocks': sum(len(s.code_blocks) for s in self.sections),
+                'total_code_blocks': total_code_blocks,
+                'inline_code_blocks': inline_code_blocks,
+                'block_code_blocks': total_code_blocks - inline_code_blocks,
                 'total_tables': sum(len(s.tables) for s in self.sections),
-                'languages': list(set(cb.language for s in self.sections for cb in s.code_blocks))
+                'languages': list(languages)
             }
         }
 
-        # Save to file
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
 
         logger.info(f"Saved parsed data to: {output_file}")
+        logger.info(f"Statistics: {data['statistics']}")
 
         return output_file
 
+    def _extract_all_code_containers_recursive(self, element: Tag, section: Section):
+        """
+        UPDATED: Recursively find and extract code containers
+        """
+        if not isinstance(element, Tag):
+            return
 
-def test_parser():
-    """
-    Test function để kiểm tra parser với một file HTML cụ thể
-    """
-    # Path to test file
-    test_file = Path(settings.raw_html_path) / "Quantconnect-Lean-Engine.html"
+        # Check if this element itself is a code container
+        if element.name == 'div':
+            div_classes = element.get('class', [])
+            div_classes_str = ' '.join(str(c) for c in div_classes)
 
-    if not test_file.exists():
-        logger.error(f"Test file not found: {test_file}")
-        return
+            if 'section-example-container' in div_classes_str:
+                # This is a code container - extract it
+                pre_elements = element.find_all('pre')
+                for pre_elem in pre_elements:
+                    self._extract_code_block_improved(pre_elem, section)
+                return  # Don't process children since we've handled this container
 
-    # Create parser và parse file
-    parser = QuantConnectHTMLParser(test_file)
-    sections = parser.parse(target_document_index=1)
+        # Recursively process children only if current element is not a code container
+        for child in element.children:
+            if isinstance(child, Tag):
+                self._extract_all_code_containers_recursive(child, section)
 
-    # Print some statistics
-    print(f"\n=== Parsing Results ===")
-    print(f"Total sections: {len(sections)}")
-    print(f"Total code blocks: {sum(len(s.code_blocks) for s in sections)}")
-    print(f"Total tables: {sum(len(s.tables) for s in sections)}")
+    def _process_text_with_inline_code_and_extract_containers(self, element: Tag, section: Section) -> str:
+        """
+        FIXED: Process text content, handle inline code properly, và extract code containers
+        """
+        # First, extract any nested code containers recursively
+        self._extract_all_code_containers_recursive(element, section)
 
-    # Print first few sections as examples
-    print(f"\n=== First 5 Sections ===")
-    for i, section in enumerate(sections[:5]):
-        print(f"\n{i+1}. Section {section.id}: {section.title}")
-        print(f"   Level: {section.level}")
-        print(f"   Breadcrumb: {section.breadcrumb}")
-        print(f"   Content preview: {section.content[:100]}..." if section.content else "   No content")
-        print(f"   Code blocks: {len(section.code_blocks)}")
-        print(f"   Tables: {len(section.tables)}")
-        print(f"   Subsections: {len(section.subsections)}")
+        # Then process the text content with inline code handling
+        return self._get_text_with_inline_code_formatting(element)
 
-    # Save parsed data
-    output_dir = Path(settings.processed_data_path)
-    output_file = parser.save_parsed_data(output_dir)
-    print(f"\nSaved parsed data to: {output_file}")
+    def _get_text_with_inline_code_formatting(self, element: Tag) -> str:
+        """
+        NEW METHOD: Get text content và format inline code properly
+        """
+        result_parts = []
 
+        for child in element.children:
+            if isinstance(child, NavigableString):
+                result_parts.append(str(child))
+            elif isinstance(child, Tag):
+                if child.name == 'code':
+                    # Đây là inline code - format theo yêu cầu
+                    code_content = child.get_text(strip=True)
+                    if code_content:
+                        # Determine language from class
+                        language = None
+                        code_classes = child.get('class', [])
+                        for class_name in code_classes:
+                            class_str = str(class_name).lower()
+                            if 'python' in class_str:
+                                language = 'python'
+                                break
+                            elif 'csharp' in class_str:
+                                language = 'csharp'
+                                break
 
-def test_with_sample_html():
-    """
-    Test với sample HTML được cung cấp
-    """
-    sample_html = '''<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-</body>
-</html><p style="page-break-after: always;">&nbsp;</p>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div class="cover-content" style="padding-left:200px;padding-top: 300px;">
-        <h2 class= "cover-section-name" style="color: #484948;font-size:30px;font-weight: 400;margin-top:1rem;">LEAN ENGINE</h2>
-        <h1 class="cover-section-tagline" style="color:#1a1919;font-size:54px;font-weight: 400;margin:1rem 0">Radically open-source <br>algorithmic trading <br>engine</h1>
-        <h2 class="cover-section-description" style="color: #484948;font-size:32px;font-weight: 400;line-height: 1.4;">Multi-asset with full portfolio modeling, <br>LEAN is data agnostic, empowering you <br>to explore faster than ever before.</h2>
-    </div>
-</body>
-</html>
-<p style="page-break-after: always;">&nbsp;</p>
-<h3>Table of Content</h3>
-<nav>
-<ul>
-<li><a href="#1" class="toc-h1" target="_parent">1 Getting Started</a></li>
-<li><a href="#2" class="toc-h1" target="_parent">2 Contributions</a></li>
-</ul>
-</nav>
-<p style="page-break-after: always;">&nbsp;</p>
-<p class='page-breadcrumb'>Getting Started</p>
-<div class='page-heading'>
-    <section id="1">
-        <h1>Getting Started</h1>
+                        # Format inline code
+                        if language:
+                            result_parts.append(f"{code_content}({language})")
+                        else:
+                            result_parts.append(f"{code_content}(code)")
+
+                elif child.name == 'div':
+                    div_classes = child.get('class', [])
+                    div_classes_str = ' '.join(str(c) for c in div_classes)
+
+                    if 'section-example-container' in div_classes_str:
+                        # Code container đã được extract - skip content để tránh duplicate
+                        pass  # Không add gì vào result_parts
+                    else:
+                        # Regular div - process recursively
+                        text_content = self._get_text_with_inline_code_formatting(child)
+                        if text_content:
+                            result_parts.append(text_content)
+
+                elif child.name == 'pre':
+                    # Pre element có thể là code block - check if it's in a container
+                    parent = child.parent
+                    if parent and parent.name == 'div':
+                        parent_classes = parent.get('class', [])
+                        if any('section-example-container' in str(c) for c in parent_classes):
+                            # Đây là code block trong container - skip để tránh duplicate
+                            pass
+                        else:
+                            # Pre element độc lập - get text
+                            result_parts.append(child.get_text())
+                    else:
+                        result_parts.append(child.get_text())
+
+                else:
+                    # Other tags - process recursively
+                    text_content = self._get_text_with_inline_code_formatting(child)
+                    if text_content:
+                        result_parts.append(text_content)
+
+        return ''.join(result_parts).strip()
+
+    # def _get_text_without_code_containers(self, element: Tag) -> str:
+    #     """
+    #     NEW METHOD: Get text content from element but exclude text from code containers
+    #     since those are handled separately
+    #     """
+    #     result_parts = []
+    #
+    #     for child in element.children:
+    #         if isinstance(child, NavigableString):
+    #             result_parts.append(str(child))
+    #         elif isinstance(child, Tag):
+    #             if child.name == 'div':
+    #                 div_classes = child.get('class', [])
+    #                 div_classes_str = ' '.join(str(c) for c in div_classes)
+    #
+    #                 if 'section-example-container' in div_classes_str:
+    #                     # Skip code container text - it's handled separately
+    #                     result_parts.append("[Code Example]")
+    #                 else:
+    #                     # Regular div - get its text recursively
+    #                     result_parts.append(self._get_text_without_code_containers(child))
+    #             elif child.name == 'pre':
+    #                 # Skip pre elements - they're handled as code blocks
+    #                 result_parts.append("[Code Block]")
+    #             else:
+    #                 # Recursive call for other elements
+    #                 result_parts.append(self._get_text_without_code_containers(child))
+    #
+    #     return ''.join(result_parts).strip()
+
+# Test function
+def test_fixed_parser():
+    """Test the fixed parser"""
+    print("Testing FIXED HTML Parser...")
+    
+    # Test với file HTML thực tế
+    test_files = [
+        "Quantconnect-Lean-Engine.html",
+        "Quantconnect-Writing-Algorithms.html", 
+        "Quantconnect-Lean-Cli.html"
+    ]
+    
+    for file_name in test_files:
+        test_file = Path(settings.raw_html_path) / file_name
         
-    </section>
-</div>
-<h3>Introduction</h3>
-<html>
- <body>
-  <p>
-   Lean Engine is an open-source algorithmic trading engine built for easy strategy research, backtesting and live trading. We integrate with common data providers and brokerages so you can quickly deploy algorithmic trading strategies.
-  </p>
-  <p>
-   The core of the LEAN Engine is written in C#; but it operates seamlessly on Linux, Mac and Windows operating systems. It supports algorithms written in Python 3.11 or C#. Lean drives the web-based algorithmic trading platform
-   <a href="https://www.quantconnect.com/">
-    QuantConnect
-   </a>
-   .
-  </p>
- </body>
-</html>
-<p style="page-break-after: always;">&nbsp;</p>
-<p class='page-breadcrumb'>Class Reference</p>
-<div class='page-heading'>
-    <section id="5">
-        <h1>Class Reference</h1>
+        if not test_file.exists():
+            print(f"❌ Test file not found: {test_file}")
+            continue
+            
+        print(f"\n🔍 Testing with: {file_name}")
         
-    </section>
-</div>
-<html>
- <body>
-  <p>
-   {
-   "type": "link",
-   "heading": "Class Reference",
-   "subHeading": "",
-   "content": "",
-   "alsoLinks": [],
-   "href": "https://www.lean.io/docs/v2/lean-engine/class-reference/"
-}
-  </p>
- </body>
-</html>
-<p style="page-break-after: always;">&nbsp;</p>'''
-
-    # Save sample to temp file
-    temp_file = Path(settings.raw_html_path) / "test_sample.html"
-    with open(temp_file, 'w', encoding='utf-8') as f:
-        f.write(sample_html)
-
-    # Parse
-    parser = QuantConnectHTMLParser(temp_file)
-    # Để parse tài liệu HTML thứ hai (index 1)
-    sections = parser.parse(target_document_index=1)
-
-    print(f"\n=== Sample HTML Parsing Results ===")
-    print(f"Total sections found: {len(sections)}")
-
-    for section in sections:
-        print(f"\n--- Section {section.id}: {section.title} ---")
-        print(f"Level: {section.level}")
-        print(f"Breadcrumb: {section.breadcrumb}")
-        print(f"Content: {section.content[:200]}..." if len(section.content) > 200 else f"Content: {section.content}")
-        print(f"Code blocks: {len(section.code_blocks)}")
-        print(f"Tables: {len(section.tables)}")
-
-    # Clean up
-    temp_file.unlink()
+        try:
+            parser = QuantConnectHTMLParser(test_file)
+            sections = parser.parse(target_document_index=1)
+            
+            # Statistics
+            total_sections = len(sections)
+            total_code_blocks = sum(len(s.code_blocks) for s in sections)
+            inline_code = sum(len([cb for cb in s.code_blocks if cb.is_inline]) for s in sections)
+            block_code = total_code_blocks - inline_code
+            languages = set()
+            for s in sections:
+                for cb in s.code_blocks:
+                    languages.add(cb.language)
+            
+            print(f"✅ Parsed {total_sections} sections")
+            print(f"📝 Found {total_code_blocks} total code blocks:")
+            print(f"   - {block_code} code blocks")  
+            print(f"   - {inline_code} inline code")
+            print(f"🗣️ Languages: {', '.join(languages)}")
+            
+            # Show sample with code
+            sections_with_code = [s for s in sections if s.code_blocks][:3]
+            if sections_with_code:
+                print(f"\n📋 Sample sections with code:")
+                for s in sections_with_code:
+                    print(f"   - {s.id}: {s.title} ({len(s.code_blocks)} code blocks)")
+                    for i, cb in enumerate(s.code_blocks[:2]):
+                        cb_type = "inline" if cb.is_inline else "block"
+                        preview = cb.content[:50].replace('\n', ' ') + "..." if len(cb.content) > 50 else cb.content
+                        print(f"     {i+1}. {cb.language} ({cb_type}): {preview}")
+            
+            # Save results
+            output_file = parser.save_parsed_data(settings.processed_data_path)
+            print(f"💾 Saved to: {output_file}")
+            
+        except Exception as e:
+            print(f"❌ Error parsing {file_name}: {e}")
+            import traceback
+            traceback.print_exc()
 
 
 if __name__ == "__main__":
-    # Test với sample HTML trước
-    # print("Testing with sample HTML...")
-    # test_with_sample_html()
-
-    # print("\n" + "="*50 + "\n")
-
-    # Sau đó test với file thực nếu có
-    test_parser()
+    test_fixed_parser()

@@ -4,8 +4,8 @@
   "successful_documents": 1,
   "failed_documents": 0,
   "skipped_documents": 1,
-  "total_sections": 29,
-  "total_code_blocks": 0,
+  "total_sections": 28,
+  "total_code_blocks": 64,
   "total_tables": 16,
   "details": [
     {
@@ -15,13 +15,13 @@
       "documents": [
         {
           "document_index": 1,
-          "sections": 29,
-          "code_blocks": 0,
+          "sections": 28,
+          "code_blocks": 64,
           "tables": 16,
           "status": "success"
         }
       ]
     }
   ],
-  "processing_time_seconds": 0.178768
+  "processing_time_seconds": 0.161841
 }
