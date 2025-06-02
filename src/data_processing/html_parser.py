@@ -22,6 +22,20 @@ from config.config import settings
 
 
 @dataclass
+class ContentElement:
+    """
+    Đại diện cho một element trong mixed content stream.
+    Giúp track đúng thứ tự của text và code trong document.
+    """
+    type: str  # 'text', 'code', 'table'
+    content: str
+    order: int
+    language: Optional[str] = None  # For code elements
+    title: Optional[str] = None     # Descriptive title for code/table
+    context: Optional[str] = None   # Context description
+
+
+@dataclass
 class CodeBlock:
     """Đại diện cho một khối code trong documentation"""
     language: str  # 'python', 'csharp', 'cli', etc.
@@ -60,13 +74,75 @@ class Section:
     id: str  # ID unique từ HTML (dùng cho navigation) - e.g., "1.2.3"
     title: str
     level: int  # Được xác định từ số dấu chấm trong ID
-    content: str  # Text content của section
-    code_blocks: List[CodeBlock] = field(default_factory=list)
+
+    # NEW: Mixed content tracking (preserves exact order)
+    mixed_content: List[ContentElement] = field(default_factory=list)
+
+    # Traditional fields (computed properties for backward compatibility)
+    _content: Optional[str] = None
+    _code_blocks: Optional[List[CodeBlock]] = None
+
     tables: List[TableData] = field(default_factory=list)
     subsections: List['Section'] = field(default_factory=list)
     parent_id: Optional[str] = None
     section_number: Optional[str] = None  # e.g., "1.2.3"
     breadcrumb: Optional[str] = None  # Full breadcrumb path
+
+    @property
+    def content(self) -> str:
+        """
+        Backward compatible content property.
+        Generates from mixed_content if available, otherwise returns stored content.
+        """
+        if self._content is not None:
+            return self._content
+
+        # Generate from mixed_content
+        if self.mixed_content:
+            text_parts = []
+            for element in self.mixed_content:
+                if element.type == "text":
+                    text_parts.append(element.content)
+                elif element.type == "code":
+                    # Add placeholder for code in text flow
+                    title = element.title or f"{element.language} code"
+                    text_parts.append(f"[{title}]")
+            return " ".join(text_parts)
+
+        return ""
+
+    @content.setter
+    def content(self, value: str):
+        """Allow setting content for backward compatibility"""
+        self._content = value
+
+    @property
+    def code_blocks(self) -> List[CodeBlock]:
+        """
+        Backward compatible code_blocks property.
+        Generates from mixed_content if available, otherwise returns stored code_blocks.
+        """
+        if self._code_blocks is not None:
+            return self._code_blocks
+
+        # Generate from mixed_content
+        if self.mixed_content:
+            codes = []
+            for element in self.mixed_content:
+                if element.type == "code":
+                    codes.append(CodeBlock(
+                        language=element.language or 'text',
+                        content=element.content,
+                        section_id=self.id
+                    ))
+            return codes
+
+        return []
+
+    @code_blocks.setter
+    def code_blocks(self, value: List[CodeBlock]):
+        """Allow setting code_blocks for backward compatibility"""
+        self._code_blocks = value
 
     def get_full_path(self) -> str:
         """Trả về đường dẫn đầy đủ của section (e.g., "1.2.3 Section Title")"""
@@ -80,14 +156,17 @@ class Section:
             'id': self.id,
             'title': self.title,
             'level': self.level,
-            'content': self.content,
             'section_number': self.section_number,
             'breadcrumb': self.breadcrumb,
-            'code_blocks': [
+            'mixed_content': [
                 {
-                    'language': cb.language,
-                    'content': cb.content
-                } for cb in self.code_blocks
+                    'type': elem.type,
+                    'content': elem.content,
+                    'order': elem.order,
+                    'language': elem.language,
+                    'title': elem.title,
+                    'context': elem.context
+                } for elem in self.mixed_content
             ],
             'tables': [
                 {
@@ -115,7 +194,7 @@ class QuantConnectHTMLParser:
         self.sections: List[Section] = []  # Danh sách các sections đã parse
         self.section_map: Dict[str, Section] = {}  # Map section ID to Section object
 
-        logger.info(f"Initializing FIXED parser for: {self.file_name}")
+        logger.info(f"Initializing ENHANCED parser for: {self.file_name}")
 
     def parse(self, target_document_index=0) -> List[Section]:
         """
@@ -133,7 +212,7 @@ class QuantConnectHTMLParser:
             # Step 3: Remove unnecessary elements (but preserve code structures)
             self._clean_html_preserve_code()
 
-            # Step 4: Parse content sections
+            # Step 4: Parse content sections with mixed content tracking
             self._parse_content_sections()
 
             # Step 5: Build hierarchy
@@ -144,7 +223,8 @@ class QuantConnectHTMLParser:
 
             logger.info(f"Successfully parsed {len(self.sections)} sections from {self.file_name}")
             logger.info(f"Found {sum(len(s.code_blocks) for s in self.sections)} total code blocks")
-            
+            logger.info(f"Mixed content elements: {sum(len(s.mixed_content) for s in self.sections)}")
+
             return self.sections
 
         except Exception as e:
@@ -164,7 +244,7 @@ class QuantConnectHTMLParser:
         # Find DOCTYPE declarations
         doctype_pattern = r'<!DOCTYPE\s+html[^>]*>'
         starts = [m.start() for m in re.finditer(doctype_pattern, full_file_content, flags=re.IGNORECASE)]
-        
+
         if not starts:
             if target_document_index == 0:
                 selected_document_content = full_file_content
@@ -172,10 +252,12 @@ class QuantConnectHTMLParser:
                 raise IndexError(f"No <!DOCTYPE html> found. Cannot get document at index {target_document_index}.")
         elif target_document_index < len(starts):
             start_pos = starts[target_document_index]
-            end_pos = starts[target_document_index + 1] if (target_document_index + 1) < len(starts) else len(full_file_content)
+            end_pos = starts[target_document_index + 1] if (target_document_index + 1) < len(starts) else len(
+                full_file_content)
             selected_document_content = full_file_content[start_pos:end_pos].strip()
         else:
-            raise IndexError(f"Target document index {target_document_index} out of range. File contains {len(starts)} documents.")
+            raise IndexError(
+                f"Target document index {target_document_index} out of range. File contains {len(starts)} documents.")
 
         if not selected_document_content:
             raise ValueError(f"Extracted document content for index {target_document_index} is empty.")
@@ -284,10 +366,15 @@ class QuantConnectHTMLParser:
         logger.info(f"Found {len(self.toc_structure)} entries in Table of Contents")
 
     def _parse_content_sections(self):
-        """Parse content sections với improved code detection"""
-        logger.info("Parsing content sections with improved code detection...")
-
-        section_elements = self.soup.find_all('section', id=True)
+        """ENHANCED: Parse content sections với mixed content tracking"""
+        logger.info("Parsing content sections with mixed content tracking...")
+        
+        # DEBUG: Check for all data-tree elements in entire document
+        all_data_trees = self.soup.find_all('div', attrs={'data-tree': True})
+        logger.info(f"Total data-tree elements found in document: {len(all_data_trees)}")
+        for dt in all_data_trees:
+            logger.info(f"  - data-tree: {dt.get('data-tree')}")
+            section_elements = self.soup.find_all('section', id=True)
 
         if not section_elements:
             logger.warning("No <section> elements found, falling back to heading-based parsing")
@@ -328,29 +415,83 @@ class QuantConnectHTMLParser:
                 id=section_id,
                 title=title,
                 level=level,
-                content="",
                 section_number=section_id,
                 breadcrumb=breadcrumb
             )
 
-            # Parse content với improved logic
-            self._parse_section_content_improved(section_elem, section)
+            # ENHANCED: Parse content với mixed content tracking
+            self._parse_section_content_with_mixed_tracking(section_elem, section)
 
             self.sections.append(section)
             self.section_map[section_id] = section
 
         logger.info(f"Parsed {len(self.sections)} content sections")
 
-    def _parse_section_content_improved(self, element: Tag, section: Section):
+    def _parse_section_content_with_mixed_tracking(self, element: Tag, section: Section):
         """
-        UPDATED: Parse nội dung của một section với improved recursive code detection
+        ENHANCED: Parse nội dung section và track mixed_content order.
+        Giữ nguyên 100% logic xử lý text cũ để ensure backward compatibility.
         """
+        # Traditional content parts (for backward compatibility)
         content_parts = []
+
+        # NEW: Mixed content tracking
+        mixed_elements = []
+        order = 1
 
         # Find the parent div.page-heading
         page_heading_div = element.parent
-        if not page_heading_div or page_heading_div.name != 'div' or 'page-heading' not in page_heading_div.get('class', []):
+        if not page_heading_div or page_heading_div.name != 'div' or 'page-heading' not in page_heading_div.get('class',
+                                                                                                                []):
             page_heading_div = element
+
+        # DEBUG: Kiểm tra data-tree trong phạm vi section này
+        logger.info(f"=== PARSING SECTION {section.id}: {section.title} ===")
+
+        # Find the parent div.page-heading
+        page_heading_div = element.parent
+        if not page_heading_div or page_heading_div.name != 'div' or 'page-heading' not in page_heading_div.get('class',
+                                                                                                                []):
+            page_heading_div = element
+
+        # DEBUG: Check data-tree trong toàn bộ phạm vi section
+        current_check = page_heading_div.next_sibling
+        section_data_trees = []
+        sibling_count = 0
+
+        while current_check:
+            sibling_count += 1
+            if isinstance(current_check, Tag):
+                logger.debug(f"  Sibling {sibling_count}: {current_check.name}, classes: {current_check.get('class')}")
+
+                # Check direct data-tree
+                if current_check.get('data-tree'):
+                    section_data_trees.append(f"Direct: {current_check.get('data-tree')}")
+                    logger.info(f"  ✓ FOUND DIRECT DATA-TREE: {current_check.get('data-tree')}")
+
+                # Check nested data-tree
+                nested = current_check.find_all('div', attrs={'data-tree': True})
+                for n in nested:
+                    section_data_trees.append(f"Nested: {n.get('data-tree')}")
+                    logger.info(f"  ✓ FOUND NESTED DATA-TREE: {n.get('data-tree')}")
+
+                # Stop conditions
+                if current_check.name == 'p' and 'page-breadcrumb' in current_check.get('class', []):
+                    logger.debug(f"  Stopping at breadcrumb")
+                    break
+                if current_check.name == 'div' and 'page-heading' in current_check.get('class', []):
+                    logger.debug(f"  Stopping at next page-heading")
+                    break
+
+            current_check = current_check.next_sibling
+
+            # Safety break
+            if sibling_count > 50:
+                logger.warning(f"  Breaking after {sibling_count} siblings")
+                break
+
+        logger.info(f"Section {section.id} total siblings checked: {sibling_count}")
+        logger.info(f"Section {section.id} data-trees found: {section_data_trees}")
 
         # Start looking for content after the page-heading div
         current = page_heading_div.next_sibling
@@ -359,6 +500,8 @@ class QuantConnectHTMLParser:
         while current:
             if isinstance(current, Tag):
                 # Stop conditions
+                logger.debug(f"Processing element: {current.name}, classes: {current.get('class')}, data-tree: {current.get('data-tree')}")
+            
                 if current.name == 'p' and 'page-breadcrumb' in current.get('class', []):
                     break
 
@@ -370,97 +513,322 @@ class QuantConnectHTMLParser:
                     current = current.next_sibling
                     continue
 
+                # Process data-tree
+                data_tree_processed = False
+
+                # Check direct data-tree
+                if current.get('data-tree'):
+                    logger.info(f"🎯 PROCESSING DIRECT DATA-TREE: {current.get('data-tree')}")
+                    new_order = self._process_patched_data_tree_element(current, section, mixed_elements, order)
+                    if isinstance(new_order, int):
+                        order = new_order
+                    data_tree_processed = True
+
+                # Check nested data-tree
+                nested_trees = current.find_all('div', attrs={'data-tree': True})
+                for tree_elem in nested_trees:
+                    logger.info(f"🎯 PROCESSING NESTED DATA-TREE: {tree_elem.get('data-tree')}")
+                    new_order = self._process_patched_data_tree_element(tree_elem, section, mixed_elements, order)
+                    if isinstance(new_order, int):
+                        order = new_order
+
+                # For direct data-tree, skip other processing of this element
+                if data_tree_processed and current.get('data-tree'):
+                    current = current.next_sibling  # ✅ Cuối while loop
+                    continue
+
                 # Process different content types
                 if current.name == 'h3':
                     heading_text = current.get_text(strip=True)
                     if heading_text:
                         content_parts.append(f"### {heading_text}")
+                        # Track in mixed content
+                        mixed_elements.append(ContentElement(
+                            type="text",
+                            content=f"### {heading_text}",
+                            order=order
+                        ))
+                        order += 1
 
                 elif current.name == 'html':
                     # Main content block
                     body = current.find('body')
                     if body:
-                        self._extract_content_from_body(body, section, content_parts)
+                        self._extract_content_from_body_with_mixed_tracking(
+                            body, section, content_parts, mixed_elements, order
+                        )
+                        order += len([e for e in mixed_elements if e.order >= order])
 
                 elif current.name == 'pre':
                     # Direct code block
-                    self._extract_code_block_improved(current, section)
+                    code_info = self._extract_code_block_improved_with_mixed_tracking(current, section)
+                    if code_info:
+                        mixed_elements.append(ContentElement(
+                            type="code",
+                            content=code_info['content'],
+                            language=code_info['language'],
+                            title=code_info.get('title', f"{code_info['language']} code"),
+                            order=order
+                        ))
+                        order += 1
 
                 elif current.name == 'table':
                     self._extract_table(current, section)
-
+                    # Track table in mixed content
+                    mixed_elements.append(ContentElement(
+                        type="table",
+                        content="[Table Data]",
+                        title="Data Table",
+                        order=order
+                    ))
+                    order += 1
                 else:
-                    # UPDATED: Use new method that handles nested code containers
-                    text_with_inline_code = self._process_text_with_inline_code_and_extract_containers(current, section)
+                    # GIỮ NGUYÊN logic xử lý text với inline code
+                    text_with_inline_code = self._process_text_with_inline_code_and_extract_containers_with_mixed_tracking(
+                        current, section, mixed_elements, order
+                    )
                     if text_with_inline_code and text_with_inline_code not in content_parts:
                         content_parts.append(text_with_inline_code)
 
             current = current.next_sibling
 
-        # Combine all text parts
+        # Set traditional content (backward compatibility)
         section.content = '\n\n'.join(content_parts)
 
-    def _extract_content_from_body(self, body: Tag, section: Section, content_parts: List[str]):
+        # Set mixed content (new functionality)
+        section.mixed_content = mixed_elements
+
+    def _extract_content_from_body_with_mixed_tracking(
+            self,
+            body: Tag,
+            section: Section,
+            content_parts: List[str],
+            mixed_elements: List[ContentElement],
+            start_order: int
+    ):
         """
-        UPDATED: Extract content from <body> with improved recursive code detection
+        ENHANCED: Extract content from <body> với mixed content tracking.
+        Giữ nguyên logic xử lý text cũ.
         """
+        current_order = start_order
+
         for element in body.children:
             if isinstance(element, NavigableString):
                 text = str(element).strip()
                 if text:
                     content_parts.append(text)
+                    # Track in mixed content
+                    mixed_elements.append(ContentElement(
+                        type="text",
+                        content=text,
+                        order=current_order
+                    ))
+                    current_order += 1
 
             elif isinstance(element, Tag):
                 if element.name == 'pre':
                     # Code block
-                    self._extract_code_block_improved(element, section)
-                    content_parts.append("[Code Block]")
+                    code_info = self._extract_code_block_improved_with_mixed_tracking(element, section)
+                    if code_info:
+                        content_parts.append("[Code Block]")
+                        # Track in mixed content
+                        mixed_elements.append(ContentElement(
+                            type="code",
+                            content=code_info['content'],
+                            language=code_info['language'],
+                            title=code_info.get('title', f"{code_info['language']} code"),
+                            order=current_order
+                        ))
+                        current_order += 1
 
                 elif element.name == 'table':
                     self._extract_table(element, section)
                     content_parts.append("[Table]")
+                    # Track in mixed content
+                    mixed_elements.append(ContentElement(
+                        type="table",
+                        content="[Table Data]",
+                        title="Data Table",
+                        order=current_order
+                    ))
+                    current_order += 1
 
                 else:
-                    # UPDATED: Use new method that handles nested code containers
-                    text_with_inline = self._process_text_with_inline_code_and_extract_containers(element, section)
+                    # GIỮ NGUYÊN logic xử lý text với inline code
+                    text_with_inline = self._process_text_with_inline_code_and_extract_containers_with_mixed_tracking(
+                        element, section, mixed_elements, current_order
+                    )
                     if text_with_inline:
                         # Skip JSON metadata
                         if not (text_with_inline.startswith('{') and text_with_inline.endswith('}')):
                             content_parts.append(text_with_inline)
-    
-    def _handle_div_element(self, div_element: Tag, section: Section, content_parts: List[str]):
-        """
-        FIXED: Xử lý div elements, đặc biệt các div chứa code.
-        """
-        div_classes = div_element.get('class', [])
-        div_classes_str = ' '.join(div_classes)
 
-        # Check for code container divs
-        if 'section-example-container' in div_classes_str:
-            # This is a code container
-            self._extract_code_from_container(div_element, section)
-            content_parts.append("[Code Example]")  # Placeholder in text
-            
-        elif any(lang in div_classes_str for lang in ['python', 'csharp', 'cli']):
-            # Language-specific div
-            self._extract_code_from_container(div_element, section)
-            content_parts.append("[Code Example]")
-            
+    def _extract_code_block_improved_with_mixed_tracking(self, pre_element: Tag, section: Section) -> Optional[Dict]:
+        """
+        ENHANCED: Extract code block và return info for mixed content tracking.
+        Giữ nguyên 100% logic detection cũ.
+        """
+        # Kiểm tra xem pre element này có phải là part của code container không
+        parent = pre_element.parent
+        if parent and parent.name == 'div':
+            parent_classes = parent.get('class', [])
+            parent_classes_str = ' '.join(str(c) for c in parent_classes)
+            if 'section-example-container' not in parent_classes_str:
+                # Đây không phải code container, skip
+                return None
+
+        # GIỮ NGUYÊN logic detect language
+        language = 'text'  # default
+        pre_classes = pre_element.get('class', [])
+
+        for class_name in pre_classes:
+            class_str = str(class_name).lower()
+            if 'python' in class_str:
+                language = 'python'
+                break
+            elif 'csharp' in class_str or 'c#' in class_str:
+                language = 'csharp'
+                break
+            elif 'cli' in class_str or 'bash' in class_str or 'shell' in class_str:
+                language = 'cli'
+                break
+
+        # Check parent div classes if pre doesn't have language class
+        if language == 'text' and parent:
+            parent_classes = parent.get('class', [])
+            for class_name in parent_classes:
+                class_str = str(class_name).lower()
+                if 'python' in class_str:
+                    language = 'python'
+                    break
+                elif 'csharp' in class_str:
+                    language = 'csharp'
+                    break
+                elif 'cli' in class_str:
+                    language = 'cli'
+                    break
+
+        # GIỮ NGUYÊN logic extract content
+        code_elem = pre_element.find('code')
+        if code_elem:
+            code_content = code_elem.get_text(strip=False)
+            # Check code element classes too
+            code_classes = code_elem.get('class', [])
+            for class_name in code_classes:
+                class_str = str(class_name).lower()
+                if 'python' in class_str:
+                    language = 'python'
+                elif 'csharp' in class_str:
+                    language = 'csharp'
+                elif 'cli' in class_str:
+                    language = 'cli'
         else:
-            # Regular div - extract text content
-            text_content = self._process_text_with_inline_code(div_element, section)
-            if text_content:
-                content_parts.append(text_content)
+            code_content = pre_element.get_text(strip=False)
 
-    def _extract_code_from_container(self, container: Tag, section: Section):
+        # Final language detection từ content nếu vẫn chưa xác định
+        if language == 'text':
+            language = self._detect_language_from_content(code_content)
+
+        # GIỮ NGUYÊN việc tạo CodeBlock cho backward compatibility
+        if code_content.strip():  # Only create if has content
+            code_block = CodeBlock(
+                language=language,
+                content=code_content,
+                section_id=section.id
+            )
+            # Ensure section has _code_blocks list
+            if section._code_blocks is None:
+                section._code_blocks = []
+            section._code_blocks.append(code_block)
+            logger.debug(f"Added {language} code block to section {section.id}")
+
+            # Return info for mixed content tracking
+            return {
+                'content': code_content,
+                'language': language,
+                'title': self._generate_code_title_from_context(language)
+            }
+
+        return None
+
+    def _generate_code_title_from_context(self, language: str) -> str:
+        """Generate descriptive title for code blocks"""
+        language_map = {
+            'python': 'Python Code Example',
+            'csharp': 'C# Code Example',
+            'cli': 'Command Line Example',
+            'text': 'Code Example'
+        }
+        return language_map.get(language, f"{language} Code Example")
+
+    def _process_text_with_inline_code_and_extract_containers_with_mixed_tracking(
+            self,
+            element: Tag,
+            section: Section,
+            mixed_elements: List[ContentElement],
+            current_order: int
+    ) -> str:
         """
-        FIXED: Extract code từ các container divs.
+        ENHANCED: Process text với mixed content tracking.
+        GIỮ NGUYÊN 100% logic xử lý text và inline code cũ.
         """
-        # Find all pre elements trong container
-        pre_elements = container.find_all('pre')
-        
-        for pre_elem in pre_elements:
-            self._extract_code_block_improved(pre_elem, section)
+        # GIỮ NGUYÊN logic extract code containers
+        self._extract_all_code_containers_recursive_with_mixed_tracking(element, section, mixed_elements, current_order)
+
+        # GIỮ NGUYÊN logic format inline code
+        text_result = self._get_text_with_inline_code_formatting(element)
+
+        # Track text trong mixed content nếu có substantial content
+        if text_result and len(text_result.strip()) > 10:
+            mixed_elements.append(ContentElement(
+                type="text",
+                content=text_result,
+                order=current_order
+            ))
+
+        return text_result
+
+    def _extract_all_code_containers_recursive_with_mixed_tracking(
+            self,
+            element: Tag,
+            section: Section,
+            mixed_elements: List[ContentElement],
+            current_order: int
+    ):
+        """
+        ENHANCED: Recursively find and extract code containers với mixed tracking.
+        GIỮ NGUYÊN 100% logic detection cũ.
+        """
+        if not isinstance(element, Tag):
+            return
+
+        # GIỮ NGUYÊN logic check code container
+        if element.name == 'div':
+            div_classes = element.get('class', [])
+            div_classes_str = ' '.join(str(c) for c in div_classes)
+
+            if 'section-example-container' in div_classes_str:
+                # This is a code container - extract it
+                pre_elements = element.find_all('pre')
+                for pre_elem in pre_elements:
+                    code_info = self._extract_code_block_improved_with_mixed_tracking(pre_elem, section)
+                    if code_info:
+                        # Track in mixed content
+                        mixed_elements.append(ContentElement(
+                            type="code",
+                            content=code_info['content'],
+                            language=code_info['language'],
+                            title=code_info.get('title', f"{code_info['language']} code"),
+                            order=current_order
+                        ))
+                return  # Don't process children since we've handled this container
+
+        # GIỮ NGUYÊN recursive logic
+        for child in element.children:
+            if isinstance(child, Tag):
+                self._extract_all_code_containers_recursive_with_mixed_tracking(child, section, mixed_elements,
+                                                                                current_order)
+
 
     def _extract_code_block_improved(self, pre_element: Tag, section: Section):
         """
@@ -572,43 +940,6 @@ class QuantConnectHTMLParser:
         else:
             return 'text'
 
-    def _process_text_with_inline_code(self, element: Tag, section: Section) -> str:
-        """
-        FIXED: Process text content và handle inline code properly - KHÔNG tạo CodeBlock cho inline code
-        """
-        result_parts = []
-
-        for child in element.children:
-            if isinstance(child, NavigableString):
-                result_parts.append(str(child))
-            elif isinstance(child, Tag):
-                if child.name == 'code':
-                    # Đây là inline code - chỉ format trong text, KHÔNG tạo CodeBlock
-                    code_content = child.get_text(strip=True)
-                    if code_content:
-                        # Determine language from class
-                        language = None
-                        code_classes = child.get('class', [])
-                        for class_name in code_classes:
-                            class_str = str(class_name).lower()
-                            if 'python' in class_str:
-                                language = 'python'
-                                break
-                            elif 'csharp' in class_str:
-                                language = 'csharp'
-                                break
-
-                        # Format inline code trong text
-                        if language:
-                            result_parts.append(f"{code_content}({language})")
-                        else:
-                            result_parts.append(f"{code_content}(code)")
-                else:
-                    # Regular tag, get text content
-                    result_parts.append(child.get_text())
-
-        return ''.join(result_parts).strip()
-
     def _extract_table(self, table_element: Tag, section: Section):
         """Extract table data"""
         headers = []
@@ -648,7 +979,7 @@ class QuantConnectHTMLParser:
             section.tables.append(table_data)
 
     def _parse_sections_from_headings(self):
-        """Fallback method khi không có section tags"""
+        """GIỮ NGUYÊN: Fallback method khi không có section tags"""
         logger.info("Parsing sections from heading elements...")
 
         headings = self.soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
@@ -672,8 +1003,7 @@ class QuantConnectHTMLParser:
             section = Section(
                 id=section_id,
                 title=section_title,
-                level=section_level,
-                content=""
+                level=section_level
             )
 
             # Parse content around this heading
@@ -683,12 +1013,12 @@ class QuantConnectHTMLParser:
             self.section_map[section_id] = section
 
     def _parse_content_around_heading(self, heading: Tag, section: Section):
-        """Parse content around a heading element"""
+        """GIỮ NGUYÊN: Parse content around a heading element"""
         content_parts = []
-        
+
         # Look for content after this heading
         current = heading.next_sibling
-        
+
         while current:
             if isinstance(current, Tag):
                 # Stop at next heading of same or higher level
@@ -696,23 +1026,22 @@ class QuantConnectHTMLParser:
                     current_level = int(current.name[1])
                     if current_level <= section.level:
                         break
-                
+
                 # Process content
                 if current.name == 'pre':
-                    self._extract_code_block_improved(current, section)
-                elif current.name == 'div':
-                    self._handle_div_element(current, section, content_parts)
+                    self._extract_code_block_improved_with_mixed_tracking(current, section)
                 elif current.name in ['p', 'ul', 'ol']:
-                    text = self._process_text_with_inline_code(current, section)
+                    # GIỮ NGUYÊN logic xử lý inline code
+                    text = self._get_text_with_inline_code_formatting(current)
                     if text:
                         content_parts.append(text)
-            
+
             current = current.next_sibling
-        
+
         section.content = '\n\n'.join(content_parts)
 
     def _build_section_hierarchy(self):
-        """Build hierarchy for sections"""
+        """GIỮ NGUYÊN: Build hierarchy for sections"""
         logger.info("Building section hierarchy...")
 
         self.sections.sort(key=lambda s: [int(x) for x in s.id.split('.') if x.isdigit()])
@@ -736,13 +1065,13 @@ class QuantConnectHTMLParser:
         return f"{section_id}-{hash_suffix}"
 
     def _post_process(self):
-        """Post-process sections"""
+        """GIỮ NGUYÊN: Post-process sections"""
         logger.info("Post-processing parsed sections...")
 
         # Remove empty sections
         self.sections = [
             s for s in self.sections
-            if s.content or s.code_blocks or s.tables or s.subsections
+            if s.content or s.code_blocks or s.tables or s.subsections or s.mixed_content
         ]
 
         # Update section map
@@ -750,13 +1079,14 @@ class QuantConnectHTMLParser:
 
         # Clean content
         for section in self.sections:
-            if section.content:
+            if section._content:  # Only clean if we have stored content
                 # Basic cleaning
-                section.content = re.sub(r'\s+', ' ', section.content).strip()
-                section.content = section.content.replace('\xa0', ' ')
+                section._content = re.sub(r'\s+', ' ', section._content).strip()
+                section._content = section._content.replace('\xa0', ' ')
 
         logger.info(f"Post-processing complete. Final: {len(self.sections)} sections, "
-                   f"{sum(len(s.code_blocks) for s in self.sections)} code blocks")
+                   f"{sum(len(s.code_blocks) for s in self.sections)} code blocks, "
+                   f"{sum(len(s.mixed_content) for s in self.sections)} mixed content elements")
 
     def save_parsed_data(self, output_dir: Path):
         """Save parsed data to JSON file"""
@@ -765,9 +1095,10 @@ class QuantConnectHTMLParser:
         base_name = self.file_path.stem
         output_file = output_dir / f"{base_name}_parsed.json"
 
-        # Include code block statistics
+        # Include enhanced statistics
         total_code_blocks = sum(len(s.code_blocks) for s in self.sections)
-        inline_code_blocks = sum(len([cb for cb in s.code_blocks if cb.is_inline]) for s in self.sections)
+        total_mixed_elements = sum(len(s.mixed_content) for s in self.sections)
+
         languages = set()
         for s in self.sections:
             for cb in s.code_blocks:
@@ -779,10 +1110,10 @@ class QuantConnectHTMLParser:
             'statistics': {
                 'total_sections': len(self.sections),
                 'total_code_blocks': total_code_blocks,
-                'inline_code_blocks': inline_code_blocks,
-                'block_code_blocks': total_code_blocks - inline_code_blocks,
                 'total_tables': sum(len(s.tables) for s in self.sections),
-                'languages': list(languages)
+                'total_mixed_elements': total_mixed_elements,
+                'languages': list(languages),
+                'enhanced_parsing': True  # Flag to indicate mixed content support
             }
         }
 
@@ -818,19 +1149,9 @@ class QuantConnectHTMLParser:
             if isinstance(child, Tag):
                 self._extract_all_code_containers_recursive(child, section)
 
-    def _process_text_with_inline_code_and_extract_containers(self, element: Tag, section: Section) -> str:
-        """
-        FIXED: Process text content, handle inline code properly, và extract code containers
-        """
-        # First, extract any nested code containers recursively
-        self._extract_all_code_containers_recursive(element, section)
-
-        # Then process the text content with inline code handling
-        return self._get_text_with_inline_code_formatting(element)
-
     def _get_text_with_inline_code_formatting(self, element: Tag) -> str:
         """
-        NEW METHOD: Get text content và format inline code properly
+        GIỮ NGUYÊN: Get text content và format inline code properly
         """
         result_parts = []
 
@@ -895,35 +1216,123 @@ class QuantConnectHTMLParser:
 
         return ''.join(result_parts).strip()
 
-    # def _get_text_without_code_containers(self, element: Tag) -> str:
-    #     """
-    #     NEW METHOD: Get text content from element but exclude text from code containers
-    #     since those are handled separately
-    #     """
-    #     result_parts = []
-    #
-    #     for child in element.children:
-    #         if isinstance(child, NavigableString):
-    #             result_parts.append(str(child))
-    #         elif isinstance(child, Tag):
-    #             if child.name == 'div':
-    #                 div_classes = child.get('class', [])
-    #                 div_classes_str = ' '.join(str(c) for c in div_classes)
-    #
-    #                 if 'section-example-container' in div_classes_str:
-    #                     # Skip code container text - it's handled separately
-    #                     result_parts.append("[Code Example]")
-    #                 else:
-    #                     # Regular div - get its text recursively
-    #                     result_parts.append(self._get_text_without_code_containers(child))
-    #             elif child.name == 'pre':
-    #                 # Skip pre elements - they're handled as code blocks
-    #                 result_parts.append("[Code Block]")
-    #             else:
-    #                 # Recursive call for other elements
-    #                 result_parts.append(self._get_text_without_code_containers(child))
-    #
-    #     return ''.join(result_parts).strip()
+    def _process_patched_data_tree_element(self, element: Tag, section: Section, mixed_elements: List[ContentElement],
+                                           order: int) -> int:
+        """Process patched data-tree elements"""
+        data_tree_value = element.get('data-tree')
+        logger.info(f"🔥 ENTERING _process_patched_data_tree_element with: {data_tree_value}")
+
+        if not data_tree_value:
+            logger.warning("No data-tree value found")
+            return order
+
+        # Check if this is a patched element
+        content_container = element.find('div', class_='base-expandable-type')
+        logger.info(f"Content container found: {content_container is not None}")
+
+        if content_container:
+            logger.info(f"Processing PATCHED data-tree: {data_tree_value}")
+
+            # Extract Python content
+            python_div = element.find('div', class_='python')
+            logger.info(f"Python div found: {python_div is not None}")
+
+            if python_div:
+                python_content = self._extract_api_content_from_div(python_div, 'python')
+                logger.info(f"Python content length: {len(python_content) if python_content else 0}")
+
+                if python_content:
+                    mixed_elements.append(ContentElement(
+                        type="api_content",
+                        content=python_content,
+                        language="python",
+                        title=f"API: {data_tree_value}",
+                        context=f"Resolved from data-tree: {data_tree_value}",
+                        order=order
+                    ))
+                    logger.info(f"✅ Added Python API content for {data_tree_value}")
+                    order += 1
+
+            # Extract C# content
+            csharp_div = element.find('div', class_='csharp')
+            logger.info(f"C# div found: {csharp_div is not None}")
+
+            if csharp_div:
+                csharp_content = self._extract_api_content_from_div(csharp_div, 'csharp')
+                logger.info(f"C# content length: {len(csharp_content) if csharp_content else 0}")
+
+                if csharp_content:
+                    mixed_elements.append(ContentElement(
+                        type="api_content",
+                        content=csharp_content,
+                        language="csharp",
+                        title=f"API: {data_tree_value} (C#)",
+                        context=f"Resolved from data-tree: {data_tree_value}",
+                        order=order
+                    ))
+                    logger.info(f"✅ Added C# API content for {data_tree_value}")
+                    order += 1
+        else:
+            logger.warning(f"UNPATCHED data-tree element: {data_tree_value}")
+
+        logger.info(f"🔥 EXITING _process_patched_data_tree_element, returning order: {order}")
+        return order
+
+    def _extract_api_content_from_div(self, api_div: Tag, language: str) -> str:
+        """Extract API content from language-specific div"""
+        content_parts = []
+
+        # Find the content container
+        container = api_div.find('div', class_='inner-tree-container')
+        if not container:
+            return ""
+
+        # Extract all content recursively
+        for element in container.descendants:
+            if hasattr(element, 'name') and element.name:
+                if element.name == 'h4':
+                    content_parts.append(f"## {element.get_text(strip=True)}")
+                elif element.name == 'p':
+                    text = element.get_text(strip=True)
+                    if text:
+                        content_parts.append(text)
+                elif element.name == 'div' and 'code-snippet' in element.get('class', []):
+                    code_text = element.get_text(strip=True)
+                    if code_text:
+                        content_parts.append(f"`{code_text}`")
+
+        return '\n'.join(content_parts)
+
+    def _convert_api_html_to_text(self, html_content: str, data_tree_value: str) -> str:
+        """
+        Convert API HTML content to readable text format
+
+        Args:
+            html_content: HTML content from API
+            data_tree_value: Original data-tree value
+
+        Returns:
+            Text representation
+        """
+        # Parse HTML content
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(html_content, 'html.parser')
+
+        text_parts = [f"[API Reference: {data_tree_value}]"]
+
+        # Extract main content
+        for element in soup.find_all(['h4', 'p', 'div']):
+            if element.name == 'h4':
+                text_parts.append(f"\n{element.get_text(strip=True)}")
+            elif element.name == 'p':
+                text_parts.append(element.get_text(strip=True))
+            elif 'code-snippet' in element.get('class', []):
+                code_text = element.get_text(strip=True)
+                if code_text:
+                    text_parts.append(f"- {code_text}")
+
+        return '\n'.join(text_parts)
+
 
 # Test function
 def test_fixed_parser():

@@ -37,3 +37,5 @@ jupyter==1.0.0  # Để test từng phần code
 tqdm==4.66.2  # Progress bars
 httpx==0.27.0  # HTTP client cho API calls
 nltk==3.8.1
+PyYAML~=6.0.2
+requests~=2.32.3

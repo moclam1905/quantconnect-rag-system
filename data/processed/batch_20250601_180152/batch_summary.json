@@ -1,0 +1,27 @@
+{
+  "processed_files": 1,
+  "total_documents": 1,
+  "successful_documents": 1,
+  "failed_documents": 0,
+  "skipped_documents": 1,
+  "total_sections": 29,
+  "total_code_blocks": 64,
+  "total_tables": 16,
+  "details": [
+    {
+      "file": "Quantconnect-Lean-Engine.html",
+      "document_count": 2,
+      "documents_processed": 1,
+      "documents": [
+        {
+          "document_index": 1,
+          "sections": 29,
+          "code_blocks": 64,
+          "tables": 16,
+          "status": "success"
+        }
+      ]
+    }
+  ],
+  "processing_time_seconds": 0.344938
+}
