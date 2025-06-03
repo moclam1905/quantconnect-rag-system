@@ -44,20 +44,23 @@ class DataTreeResolver:
         Returns:
             Formatted HTML content or None if failed
         """
-        cache_key = f"{data_tree_value}_{language}"
+        # Normalize the data tree name first
+        normalized_name = self._normalize_data_tree_name(data_tree_value)
+
+        cache_key = f"{normalized_name}_{language}"
 
         # Check cache first
         if cache_key in self.cache:
-            logger.debug(f"Using cached result for {data_tree_value}")
+            logger.debug(f"Using cached result for {normalized_name}")
             return self.cache[cache_key]
 
         try:
-            # Call API
-            api_data = self._call_api(data_tree_value, language)
+            # Call API with normalized name
+            api_data = self._call_api(normalized_name, language)
 
             if not api_data or not api_data.get('success'):
                 error_msg = api_data.get('error', 'Unknown error') if api_data else 'No response'
-                logger.warning(f"API call failed for {data_tree_value}: {error_msg}")
+                logger.warning(f"API call failed for {normalized_name}: {error_msg}")
                 self.cache[cache_key] = None
                 return None
 
@@ -67,13 +70,25 @@ class DataTreeResolver:
             # Cache result
             self.cache[cache_key] = formatted_content
 
-            logger.info(f"Successfully resolved {data_tree_value} for {language}")
+            logger.info(f"Successfully resolved {normalized_name} for {language}")
             return formatted_content
 
         except Exception as e:
-            logger.error(f"Error resolving {data_tree_value}: {str(e)}")
+            logger.error(f"Error resolving {normalized_name}: {str(e)}")
             self.cache[cache_key] = None
             return None
+
+    def _normalize_data_tree_name(self, data_tree_value: str) -> str:
+        """
+        Fix known incorrect data-tree names.
+        """
+        # Handle the specific case
+        if data_tree_value == 'QuantConnect.Data.EODHD.MacroIndicators':
+            logger.debug(f"Mapping {data_tree_value} -> QuantConnect.DataSource.EODHDMacroIndicator")
+            return 'QuantConnect.DataSource.EODHDMacroIndicator'
+
+        # Return original if no mapping needed
+        return data_tree_value
 
     def _call_api(self, data_tree_value: str, language: str) -> Optional[Dict]:
         """Call QuantConnect inspector API"""

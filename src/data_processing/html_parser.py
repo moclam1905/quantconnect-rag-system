@@ -499,6 +499,12 @@ class QuantConnectHTMLParser:
         # Process siblings until we hit the next section or page break
         while current:
             if isinstance(current, Tag):
+                # Check if this is our target div
+                if current.get_text() and "Backtest Handled Error" in current.get_text():
+                    logger.info(f"🎯 FOUND TARGET DIV: {current.name}, classes: {current.get('class', [])}")
+
+                logger.debug(f"Processing: {current.name}, classes: {current.get('class', [])}")
+
                 # Stop conditions
                 logger.debug(f"Processing element: {current.name}, classes: {current.get('class')}, data-tree: {current.get('data-tree')}")
             
@@ -534,7 +540,7 @@ class QuantConnectHTMLParser:
 
                 # For direct data-tree, skip other processing of this element
                 if data_tree_processed and current.get('data-tree'):
-                    current = current.next_sibling  # ✅ Cuối while loop
+                    current = current.next_sibling
                     continue
 
                 # Process different content types
@@ -626,6 +632,56 @@ class QuantConnectHTMLParser:
                     current_order += 1
 
             elif isinstance(element, Tag):
+                # ✅ NEW: Special div handling
+                if element.name == 'div':
+                    div_classes = element.get('class', [])
+                    div_classes_str = ' '.join(str(c) for c in div_classes)
+
+                    # Handle error messages
+                    if 'error-messages' in div_classes_str:
+                        error_content = self._extract_error_message(element)
+                        if error_content:
+                            content_parts.append(error_content)
+                            mixed_elements.append(ContentElement(
+                                type="text",
+                                content=error_content,
+                                title="Error Message",
+                                order=current_order
+                            ))
+                            current_order += 1
+                            logger.debug(f"✅ Added error message in body: {error_content[:50]}...")
+                        continue  # Skip normal processing
+
+                    # Handle tutorial steps
+                    elif 'tutorial-step' in div_classes_str:
+                        tutorial_content = self._extract_tutorial_step(element)
+                        if tutorial_content:
+                            content_parts.append(tutorial_content)
+                            mixed_elements.append(ContentElement(
+                                type="text",
+                                content=tutorial_content,
+                                title="Tutorial Step",
+                                order=current_order
+                            ))
+                            current_order += 1
+                            logger.debug(f"✅ Added tutorial step in body: {tutorial_content[:50]}...")
+                        continue  # Skip normal processing
+
+                    # Handle example fieldsets
+                    elif 'example-fieldset' in div_classes_str:
+                        example_content = self._extract_example_fieldset(element)
+                        if example_content:
+                            content_parts.append(example_content)
+                            mixed_elements.append(ContentElement(
+                                type="text",
+                                content=example_content,
+                                title="Example Algorithms",
+                                order=current_order
+                            ))
+                            current_order += 1
+                            logger.debug(f"✅ Added example fieldset in body: {example_content[:50]}...")
+                        continue  # Skip normal processing
+
                 if element.name == 'pre':
                     # Code block
                     code_info = self._extract_code_block_improved_with_mixed_tracking(element, section)
@@ -770,8 +826,60 @@ class QuantConnectHTMLParser:
     ) -> str:
         """
         ENHANCED: Process text với mixed content tracking.
-        GIỮ NGUYÊN 100% logic xử lý text và inline code cũ.
+        ✅ UPDATED: Thêm special div search cho nested elements.
         """
+        special_content_found = []
+        order = current_order
+
+        # ✅ NEW: Search for special divs within this element using find_all
+        # Error messages
+        error_divs = element.find_all('div', class_='error-messages')
+        for error_div in error_divs:
+            error_content = self._extract_error_message(error_div)
+            if error_content:
+                mixed_elements.append(ContentElement(
+                    type="text",
+                    content=error_content,
+                    title="Error Message",
+                    order=order
+                ))
+                special_content_found.append(error_content)
+                order += 1
+                logger.debug(f"✅ Found nested error message: {error_content[:50]}...")
+
+        # Tutorial steps
+        tutorial_divs = element.find_all('div', class_='tutorial-step')
+        for tutorial_div in tutorial_divs:
+            tutorial_content = self._extract_tutorial_step(tutorial_div)
+            if tutorial_content:
+                mixed_elements.append(ContentElement(
+                    type="text",
+                    content=tutorial_content,
+                    title="Tutorial Step",
+                    order=order
+                ))
+                special_content_found.append(tutorial_content)
+                order += 1
+                logger.debug(f"✅ Found nested tutorial step: {tutorial_content[:50]}...")
+
+        # Example fieldsets
+        example_divs = element.find_all('div', class_='example-fieldset')
+        for example_div in example_divs:
+            example_content = self._extract_example_fieldset(example_div)
+            if example_content:
+                mixed_elements.append(ContentElement(
+                    type="text",
+                    content=example_content,
+                    title="Example Algorithms",
+                    order=order
+                ))
+                special_content_found.append(example_content)
+                order += 1
+                logger.debug(f"✅ Found nested example fieldset: {example_content[:50]}...")
+
+        # If we found special content, return it
+        if special_content_found:
+            return '\n\n'.join(special_content_found)
         # GIỮ NGUYÊN logic extract code containers
         self._extract_all_code_containers_recursive_with_mixed_tracking(element, section, mixed_elements, current_order)
 
@@ -1150,6 +1258,8 @@ class QuantConnectHTMLParser:
                 self._extract_all_code_containers_recursive(child, section)
 
     def _get_text_with_inline_code_formatting(self, element: Tag) -> str:
+        if element.get_text() and "Backtest Handled Error" in element.get_text():
+            logger.info(f"🎯 FOUND IN TEXT FORMATTING: {element.name}, classes: {element.get('class', [])}")
         """
         GIỮ NGUYÊN: Get text content và format inline code properly
         """
@@ -1333,6 +1443,59 @@ class QuantConnectHTMLParser:
 
         return '\n'.join(text_parts)
 
+    def _extract_error_message(self, element: Tag) -> str:
+        """Extract error message content with warning prefix"""
+        error_text = element.get_text(strip=True)
+        return f"⚠️ Error: {error_text}"
+
+    def _extract_tutorial_step(self, element: Tag) -> str:
+        """Extract tutorial step content from all paragraphs"""
+        content_parts = []
+
+        # Process all paragraphs in tutorial step
+        for p in element.find_all('p'):
+            text = p.get_text(strip=True)
+            if text:
+                content_parts.append(text)
+
+        # If no paragraphs found, get direct text
+        if not content_parts:
+            direct_text = element.get_text(strip=True)
+            if direct_text:
+                content_parts.append(direct_text)
+
+        return '\n\n'.join(content_parts)
+
+    def _extract_example_fieldset(self, element: Tag) -> str:
+        """Extract example algorithm links with clean filenames"""
+        content_parts = []
+
+        # Get legend/title
+        legend = element.find('div', class_='example-legend')
+        if legend:
+            legend_text = legend.get_text(strip=True)
+            content_parts.append(f"📚 {legend_text}:")
+
+        # Extract algorithm links
+        links = element.find_all('a', class_='example-algorithm-link')
+        if links:
+            for link in links:
+                # Extract filename from href or text
+                href = link.get('href', '')
+                if href:
+                    filename = href.split('/')[-1]
+                else:
+                    filename = link.get_text(strip=True)
+
+                # Get language badge
+                badge = link.find('span', class_=re.compile(r'badge.*'))
+                if badge:
+                    lang = badge.get_text(strip=True)
+                    content_parts.append(f"  - {filename} ({lang})")
+                else:
+                    content_parts.append(f"  - {filename}")
+
+        return '\n'.join(content_parts) if content_parts else ""
 
 # Test function
 def test_fixed_parser():
