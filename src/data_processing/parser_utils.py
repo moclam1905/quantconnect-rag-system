@@ -3,217 +3,19 @@ Utilities và helper functions cho QuantConnect HTML Parser
 Xử lý các edge cases và cung cấp các chức năng bổ sung
 """
 
-import re
-from typing import List, Dict, Optional, Tuple
-from bs4 import Tag, NavigableString
-import html
-from pathlib import Path
 import json
-from dataclasses import asdict
-
-# Import logger
+import re
 import sys
+from pathlib import Path
+from typing import List, Dict, Optional, Tuple
+
 sys.path.append(str(Path(__file__).parent.parent.parent))
+
+import hashlib
+from bs4 import BeautifulSoup, Tag
+
+from src.data_processing.html_parser import TableData
 from src.utils.logger import logger
-
-
-class CodeLanguageDetector:
-    """
-    Phát hiện ngôn ngữ lập trình của code blocks một cách thông minh hơn.
-    Sử dụng nhiều signals: class names, content patterns, syntax patterns.
-    """
-    
-    # Patterns để nhận diện Python code
-    PYTHON_PATTERNS = [
-        r'^\s*import\s+\w+',           # import statements
-        r'^\s*from\s+\w+\s+import',     # from X import Y
-        r'^\s*def\s+\w+\s*\(',         # function definitions
-        r'^\s*class\s+\w+',             # class definitions
-        r'^\s*if\s+__name__\s*==',     # if __name__ == "__main__"
-        r'^\s*#\s*\w+',                 # Python comments
-        r'self\.',                      # self reference
-        r'print\s*\(',                  # print function
-        r'\.append\(',                  # list append
-        r'\.items\(\)',                 # dict items
-        r'range\(',                     # range function
-        r'len\(',                       # len function
-    ]
-    
-    # Patterns để nhận diện C# code
-    CSHARP_PATTERNS = [
-        r'^\s*using\s+\w+;',            # using statements
-        r'^\s*namespace\s+\w+',         # namespace declarations
-        r'^\s*public\s+class',          # class declarations
-        r'^\s*private\s+\w+',           # private members
-        r'^\s*protected\s+\w+',         # protected members
-        r'^\s*static\s+void\s+Main',   # Main method
-        r'^\s*//\s*\w+',                # C# comments
-        r'var\s+\w+\s*=',               # var declarations
-        r'new\s+\w+\(',                 # object instantiation
-        r'\.ToString\(\)',              # ToString method
-        r'Console\.WriteLine',          # Console output
-        r'public\s+\w+\s+\w+\s*{',     # properties
-    ]
-    
-    # QuantConnect-specific patterns
-    QUANTCONNECT_PYTHON_PATTERNS = [
-        r'self\.Initialize',            # QC Initialize method
-        r'self\.SetStartDate',          # Setting dates
-        r'self\.SetCash',               # Setting cash
-        r'self\.AddEquity',             # Adding securities
-        r'self\.Debug',                 # Debug output
-        r'self\.Log',                   # Logging
-        r'Algorithm',                   # Base class
-        r'QCAlgorithm',                 # Full class name
-        r'OnData\s*\(',                 # OnData method
-        r'self\.Schedule',              # Scheduling
-    ]
-    
-    QUANTCONNECT_CSHARP_PATTERNS = [
-        r'Initialize\s*\(\)',           # Initialize method
-        r'SetStartDate',                # Setting dates
-        r'SetCash',                     # Setting cash
-        r'AddEquity',                   # Adding securities
-        r'Debug\s*\(',                  # Debug output
-        r'Log\s*\(',                    # Logging
-        r'QCAlgorithm',                 # Base class
-        r'OnData\s*\(',                 # OnData method
-        r'Schedule\.',                  # Scheduling
-        r'Securities\[',                # Securities access
-    ]
-    
-    @classmethod
-    def detect_language(cls, code_content: str, element_classes: List[str] = None) -> str:
-        """
-        Phát hiện ngôn ngữ của code block.
-        
-        Args:
-            code_content: Nội dung code
-            element_classes: CSS classes của element chứa code
-            
-        Returns:
-            'python', 'csharp', hoặc 'text'
-        """
-        # Kiểm tra classes trước (most reliable)
-        if element_classes:
-            classes_str = ' '.join(str(c).lower() for c in element_classes)
-            if any(py in classes_str for py in ['python', 'py', 'python3']):
-                return 'python'
-            elif any(cs in classes_str for cs in ['csharp', 'c#', 'cs', 'c-sharp']):
-                return 'csharp'
-        
-        # Nếu không có class rõ ràng, analyze content
-        python_score = 0
-        csharp_score = 0
-        
-        # Check generic patterns
-        for pattern in cls.PYTHON_PATTERNS:
-            if re.search(pattern, code_content, re.MULTILINE):
-                python_score += 1
-        
-        for pattern in cls.CSHARP_PATTERNS:
-            if re.search(pattern, code_content, re.MULTILINE):
-                csharp_score += 1
-        
-        # Check QuantConnect-specific patterns (higher weight)
-        for pattern in cls.QUANTCONNECT_PYTHON_PATTERNS:
-            if re.search(pattern, code_content, re.MULTILINE | re.IGNORECASE):
-                python_score += 2
-        
-        for pattern in cls.QUANTCONNECT_CSHARP_PATTERNS:
-            if re.search(pattern, code_content, re.MULTILINE | re.IGNORECASE):
-                csharp_score += 2
-        
-        # Make decision
-        if python_score > csharp_score:
-            return 'python'
-        elif csharp_score > python_score:
-            return 'csharp'
-        else:
-            # Default to text if can't determine
-            return 'text'
-
-
-class ContentCleaner:
-    """
-    Làm sạch và normalize content từ HTML.
-    Xử lý các vấn đề về encoding, whitespace, special characters.
-    """
-    
-    @staticmethod
-    def clean_text(text: str) -> str:
-        """
-        Làm sạch text content.
-        """
-        if not text:
-            return ""
-        
-        # Decode HTML entities
-        text = html.unescape(text)
-        
-        # Replace non-breaking spaces với regular spaces
-        text = text.replace('\u00A0', ' ')
-        text = text.replace('&nbsp;', ' ')
-        
-        # Remove zero-width characters
-        text = text.replace('\u200b', '')  # Zero-width space
-        text = text.replace('\u200c', '')  # Zero-width non-joiner
-        text = text.replace('\u200d', '')  # Zero-width joiner
-        text = text.replace('\ufeff', '')  # Zero-width no-break space
-        
-        # Normalize line breaks
-        text = text.replace('\r\n', '\n')
-        text = text.replace('\r', '\n')
-        
-        # Remove excessive whitespace while preserving paragraph structure
-        lines = text.split('\n')
-        cleaned_lines = []
-        
-        for line in lines:
-            # Strip whitespace from each line
-            cleaned_line = line.strip()
-            if cleaned_line:  # Keep non-empty lines
-                cleaned_lines.append(cleaned_line)
-            elif cleaned_lines and cleaned_lines[-1]:  # Keep one empty line between paragraphs
-                cleaned_lines.append('')
-        
-        # Join back and remove multiple consecutive empty lines
-        text = '\n'.join(cleaned_lines)
-        text = re.sub(r'\n{3,}', '\n\n', text)
-        
-        return text.strip()
-    
-    @staticmethod
-    def clean_code(code: str, language: str = 'text') -> str:
-        """
-        Làm sạch code content while preserving formatting.
-        """
-        if not code:
-            return ""
-        
-        # Decode HTML entities
-        code = html.unescape(code)
-        
-        # Replace non-breaking spaces in code (but preserve indentation)
-        code = code.replace('\u00A0', ' ')
-        code = code.replace('&nbsp;', ' ')
-        
-        # Normalize line endings
-        code = code.replace('\r\n', '\n')
-        code = code.replace('\r', '\n')
-        
-        # Remove trailing whitespace from each line but preserve indentation
-        lines = code.split('\n')
-        cleaned_lines = [line.rstrip() for line in lines]
-        
-        # Remove leading and trailing empty lines
-        while cleaned_lines and not cleaned_lines[0]:
-            cleaned_lines.pop(0)
-        while cleaned_lines and not cleaned_lines[-1]:
-            cleaned_lines.pop()
-        
-        return '\n'.join(cleaned_lines)
-
 
 class SectionHierarchyBuilder:
     """
@@ -316,144 +118,6 @@ class TableProcessor:
             lines.append("| " + " | ".join(row) + " |")
         
         return "\n".join(lines)
-    
-    @staticmethod
-    def table_to_text(table_data: 'TableData') -> str:
-        """
-        Convert table thành plain text format cho embedding.
-        """
-        lines = []
-        
-        if table_data.caption:
-            lines.append(f"Table: {table_data.caption}")
-        
-        if table_data.headers:
-            lines.append("Columns: " + ", ".join(table_data.headers))
-        
-        if table_data.rows:
-            lines.append(f"Data ({len(table_data.rows)} rows):")
-            for i, row in enumerate(table_data.rows[:5]):  # Limit to first 5 rows for embedding
-                row_text = []
-                for j, cell in enumerate(row):
-                    if table_data.headers and j < len(table_data.headers):
-                        row_text.append(f"{table_data.headers[j]}: {cell}")
-                    else:
-                        row_text.append(cell)
-                lines.append(f"  Row {i+1}: " + ", ".join(row_text))
-            
-            if len(table_data.rows) > 5:
-                lines.append(f"  ... and {len(table_data.rows) - 5} more rows")
-        
-        return "\n".join(lines)
-
-
-class ParsedDataValidator:
-    """
-    Validate và sửa các vấn đề trong parsed data.
-    """
-    
-    @staticmethod
-    def validate_sections(sections: List['Section']) -> Tuple[bool, List[str]]:
-        """
-        Validate danh sách sections và trả về các issues found.
-        
-        Returns:
-            (is_valid, list_of_issues)
-        """
-        issues = []
-        
-        if not sections:
-            issues.append("No sections found in document")
-            return False, issues
-        
-        # Check for duplicate IDs
-        section_ids = [s.id for s in sections]
-        if len(section_ids) != len(set(section_ids)):
-            issues.append("Duplicate section IDs found")
-        
-        # Check for empty sections
-        empty_sections = []
-        for section in sections:
-            if not section.content and not section.code_blocks and not section.tables:
-                empty_sections.append(section.title)
-        
-        if empty_sections:
-            issues.append(f"Found {len(empty_sections)} empty sections")
-        
-        # Check for sections without titles
-        untitled = [s for s in sections if not s.title or s.title.strip() == ""]
-        if untitled:
-            issues.append(f"Found {len(untitled)} sections without titles")
-        
-        # Check code blocks
-        for section in sections:
-            for code_block in section.code_blocks:
-                if not code_block.content:
-                    issues.append(f"Empty code block in section: {section.title}")
-                if code_block.language not in ['python', 'csharp', 'text']:
-                    issues.append(f"Unknown language '{code_block.language}' in section: {section.title}")
-        
-        is_valid = len(issues) == 0
-        return is_valid, issues
-    
-    @staticmethod
-    def fix_common_issues(sections: List['Section']) -> List['Section']:
-        """
-        Tự động sửa các issues phổ biến trong parsed data.
-        """
-        # Remove empty sections
-        sections = [s for s in sections if s.content or s.code_blocks or s.tables]
-        
-        # Fix duplicate IDs
-        seen_ids = set()
-        for section in sections:
-            if section.id in seen_ids:
-                # Generate new ID
-                base_id = section.id
-                counter = 1
-                while f"{base_id}-{counter}" in seen_ids:
-                    counter += 1
-                section.id = f"{base_id}-{counter}"
-            seen_ids.add(section.id)
-        
-        # Clean content
-        cleaner = ContentCleaner()
-        for section in sections:
-            section.content = cleaner.clean_text(section.content)
-            
-            for code_block in section.code_blocks:
-                code_block.content = cleaner.clean_code(code_block.content, code_block.language)
-        
-        return sections
-
-
-def create_section_summary(section: 'Section', max_length: int = 200) -> str:
-    """
-    Tạo summary ngắn gọn cho một section.
-    Useful cho indexing và preview.
-    """
-    summary_parts = []
-    
-    # Add title
-    summary_parts.append(f"[{section.title}]")
-    
-    # Add content preview
-    if section.content:
-        content_preview = section.content[:max_length]
-        if len(section.content) > max_length:
-            content_preview += "..."
-        summary_parts.append(content_preview)
-    
-    # Add code info
-    if section.code_blocks:
-        languages = set(cb.language for cb in section.code_blocks)
-        summary_parts.append(f"Contains {len(section.code_blocks)} code examples ({', '.join(languages)})")
-    
-    # Add table info
-    if section.tables:
-        summary_parts.append(f"Contains {len(section.tables)} tables")
-    
-    return " | ".join(summary_parts)
 
 
 def export_sections_for_rag(sections: List['Section'], output_file: Path, metadata: Dict = None):
@@ -583,53 +247,444 @@ def split_html_documents(file_path: Path) -> List[Tuple[int, str]]:
         return []
 
 
+# =============================================================================
+# Language Detection Utilities
+# =============================================================================
+
+def detect_code_language(code_content: str) -> str:
+    """
+    Detect programming language từ code content.
+
+    Args:
+        code_content: Source code content
+
+    Returns:
+        Detected language: 'python', 'csharp', 'cli', or 'text'
+    """
+    content_lower = code_content.lower()
+
+    # Python indicators
+    python_indicators = [
+        'import ', 'from ', 'def ', 'class ', 'self.', 'print(', '__init__',
+        'import numpy', 'import pandas', 'def ', 'elif', 'True', 'False', 'None'
+    ]
+
+    # C# indicators
+    csharp_indicators = [
+        'using ', 'namespace ', 'public class', 'private ', 'public ', 'void ',
+        'string ', 'int ', 'var ', 'new ', '();', 'Console.', 'public override'
+    ]
+
+    # CLI indicators
+    cli_indicators = [
+        '$ ', 'conda ', 'pip ', 'dotnet ', 'git ', 'cd ', 'ls ', 'mkdir',
+        '--', 'sudo ', 'chmod ', 'export '
+    ]
+
+    python_score = sum(1 for indicator in python_indicators if indicator in content_lower)
+    csharp_score = sum(1 for indicator in csharp_indicators if indicator in content_lower)
+    cli_score = sum(1 for indicator in cli_indicators if indicator in content_lower)
+
+    if cli_score > 0:
+        return 'cli'
+    elif python_score > csharp_score:
+        return 'python'
+    elif csharp_score > 0:
+        return 'csharp'
+    else:
+        return 'text'
+
+
+def generate_code_title(language: str) -> str:
+    """
+    Generate descriptive title for code blocks.
+
+    Args:
+        language: Programming language
+
+    Returns:
+        Descriptive title string
+    """
+    language_map = {
+        'python': 'Python Code Example',
+        'csharp': 'C# Code Example',
+        'cli': 'Command Line Example',
+        'text': 'Code Example'
+    }
+    return language_map.get(language, f"{language} Code Example")
+
+
+# =============================================================================
+# Content Extraction Utilities
+# =============================================================================
+
+def extract_error_message(element: Tag) -> str:
+    """
+    Extract error message content with warning prefix.
+
+    Args:
+        element: HTML element containing error message
+
+    Returns:
+        Formatted error message
+    """
+    error_text = element.get_text(strip=True)
+    return f"⚠️ Error: {error_text}"
+
+
+def extract_tutorial_step(element: Tag) -> str:
+    """
+    Extract tutorial step content from all paragraphs.
+
+    Args:
+        element: HTML element containing tutorial step
+
+    Returns:
+        Formatted tutorial step content
+    """
+    content_parts = []
+
+    # Process all paragraphs in tutorial step
+    for p in element.find_all('p'):
+        text = p.get_text(strip=True)
+        if text:
+            content_parts.append(text)
+
+    # If no paragraphs found, get direct text
+    if not content_parts:
+        direct_text = element.get_text(strip=True)
+        if direct_text:
+            content_parts.append(direct_text)
+
+    return '\n\n'.join(content_parts)
+
+
+def extract_example_fieldset(element: Tag) -> str:
+    """
+    Extract example algorithm links with clean filenames.
+
+    Args:
+        element: HTML element containing example fieldset
+
+    Returns:
+        Formatted example algorithms list
+    """
+    content_parts = []
+
+    # Get legend/title
+    legend = element.find('div', class_='example-legend')
+    if legend:
+        legend_text = legend.get_text(strip=True)
+        content_parts.append(f"📚 {legend_text}:")
+
+    # Extract algorithm links
+    links = element.find_all('a', class_='example-algorithm-link')
+    if links:
+        for link in links:
+            # Extract filename from href or text
+            href = link.get('href', '')
+            if href:
+                filename = href.split('/')[-1]
+            else:
+                filename = link.get_text(strip=True)
+
+            # Get language badge
+            badge = link.find('span', class_=re.compile(r'badge.*'))
+            if badge:
+                lang = badge.get_text(strip=True)
+                content_parts.append(f"  - {filename} ({lang})")
+            else:
+                content_parts.append(f"  - {filename}")
+
+    return '\n'.join(content_parts) if content_parts else ""
+
+
+def extract_api_content_from_div(api_div: Tag, language: str) -> str:
+    """
+    Extract API content from language-specific div.
+
+    Args:
+        api_div: HTML div containing API content
+        language: Programming language ('python' or 'csharp')
+
+    Returns:
+        Extracted API content as text
+    """
+    content_parts = []
+
+    # Find the content container
+    container = api_div.find('div', class_='inner-tree-container')
+    if not container:
+        return ""
+
+    # Extract all content recursively
+    for element in container.descendants:
+        if hasattr(element, 'name') and element.name:
+            if element.name == 'h4':
+                content_parts.append(f"## {element.get_text(strip=True)}")
+            elif element.name == 'p':
+                text = element.get_text(strip=True)
+                if text:
+                    content_parts.append(text)
+            elif element.name == 'div' and 'code-snippet' in element.get('class', []):
+                code_text = element.get_text(strip=True)
+                if code_text:
+                    content_parts.append(f"`{code_text}`")
+
+    return '\n'.join(content_parts)
+
+
+# =============================================================================
+# Table Processing Utilities
+# =============================================================================
+
+def extract_table_data(table_element: Tag, section_id: str) -> Optional[TableData]:
+    """
+    Extract table data from HTML table element.
+
+    Args:
+        table_element: HTML table element
+        section_id: ID of the section containing the table
+
+    Returns:
+        TableData object or None if no valid table data
+    """
+    headers = []
+    rows = []
+
+    # Extract headers
+    thead = table_element.find('thead')
+    if thead:
+        header_row = thead.find('tr')
+        if header_row:
+            headers = [th.get_text(strip=True) for th in header_row.find_all(['th', 'td'])]
+    else:
+        first_row = table_element.find('tr')
+        if first_row and first_row.find('th'):
+            headers = [th.get_text(strip=True) for th in first_row.find_all('th')]
+
+    # Extract rows
+    tbody = table_element.find('tbody') or table_element
+    for tr in tbody.find_all('tr'):
+        if tr.find('th') and not rows:
+            continue
+        row_data = [td.get_text(strip=True) for td in tr.find_all(['td', 'th'])]
+        if row_data:
+            rows.append(row_data)
+
+    # Extract caption
+    caption_element = table_element.find('caption')
+    caption = caption_element.get_text(strip=True) if caption_element else None
+
+    if headers or rows:
+        return TableData(
+            headers=headers,
+            rows=rows,
+            section_id=section_id,
+            caption=caption
+        )
+
+    return None
+
+
+# =============================================================================
+# Text Processing Utilities
+# =============================================================================
+
+def format_inline_code(code_element: Tag) -> str:
+    """
+    Format inline code element with language detection.
+
+    Args:
+        code_element: HTML code element
+
+    Returns:
+        Formatted inline code string
+    """
+    code_content = code_element.get_text(strip=True)
+    if not code_content:
+        return ""
+
+    # Determine language from class
+    language = None
+    code_classes = code_element.get('class', [])
+    for class_name in code_classes:
+        class_str = str(class_name).lower()
+        if 'python' in class_str:
+            language = 'python'
+            break
+        elif 'csharp' in class_str:
+            language = 'csharp'
+            break
+
+    # Format inline code
+    if language:
+        return f"{code_content}({language})"
+    else:
+        return f"{code_content}(code)"
+
+
+def clean_text_content(text: str) -> str:
+    """
+    Clean and normalize text content.
+
+    Args:
+        text: Raw text content
+
+    Returns:
+        Cleaned text content
+    """
+    if not text:
+        return ""
+
+    # Basic cleaning
+    text = re.sub(r'\s+', ' ', text).strip()
+    text = text.replace('\xa0', ' ')
+    return text
+
+
+# =============================================================================
+# ID Generation Utilities
+# =============================================================================
+
+def generate_section_id(title: str) -> str:
+    """
+    Generate unique section ID from title.
+
+    Args:
+        title: Section title
+
+    Returns:
+        Unique section ID
+    """
+    section_id = title.lower().replace(' ', '-')
+    section_id = re.sub(r'[^a-z0-9\-]', '', section_id)
+    section_id = re.sub(r'-+', '-', section_id)
+    hash_suffix = hashlib.md5(title.encode()).hexdigest()[:6]
+    return f"{section_id}-{hash_suffix}"
+
+
+# =============================================================================
+# HTML Document Utilities
+# =============================================================================
+
+def count_documents_in_html(file_path: Path) -> int:
+    """
+    Count số lượng documents trong HTML file dựa trên DOCTYPE declarations.
+
+    Args:
+        file_path: Path to HTML file
+
+    Returns:
+        Number of documents found
+    """
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        # Find DOCTYPE declarations
+        doctype_pattern = r'<!DOCTYPE\s+html[^>]*>'
+        matches = re.findall(doctype_pattern, content, flags=re.IGNORECASE)
+
+        count = len(matches)
+        logger.debug(f"Found {count} document(s) in {file_path.name}")
+        return count
+
+    except Exception as e:
+        logger.error(f"Error counting documents in {file_path}: {str(e)}")
+        return 0
+
+
+def convert_api_html_to_text(html_content: str, data_tree_value: str) -> str:
+    """
+    Convert API HTML content to readable text format.
+
+    Args:
+        html_content: HTML content from API
+        data_tree_value: Original data-tree value
+
+    Returns:
+        Text representation
+    """
+    # Parse HTML content
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    text_parts = [f"[API Reference: {data_tree_value}]"]
+
+    # Extract main content
+    for element in soup.find_all(['h4', 'p', 'div']):
+        if element.name == 'h4':
+            text_parts.append(f"\n{element.get_text(strip=True)}")
+        elif element.name == 'p':
+            text_parts.append(element.get_text(strip=True))
+        elif 'code-snippet' in element.get('class', []):
+            code_text = element.get_text(strip=True)
+            if code_text:
+                text_parts.append(f"- {code_text}")
+
+    return '\n'.join(text_parts)
+
+
+# =============================================================================
+# Export Functions for RAG
+# =============================================================================
+
+def export_sections_for_rag(sections: List, output_file: Path, metadata: Dict = None):
+    """
+    Export parsed sections in RAG-friendly format.
+
+    Args:
+        sections: List of Section objects
+        output_file: Output JSON file path
+        metadata: Additional metadata to include
+    """
+    import json
+    from datetime import datetime
+
+    # Prepare data for RAG
+    rag_data = {
+        'timestamp': datetime.now().isoformat(),
+        'metadata': metadata or {},
+        'sections': []
+    }
+
+    for section in sections:
+        section_data = {
+            'id': section.id,
+            'title': section.title,
+            'level': section.level,
+            'content': section.content,
+            'breadcrumb': section.breadcrumb,
+            'code_blocks': [
+                {
+                    'language': cb.language,
+                    'content': cb.content
+                } for cb in section.code_blocks
+            ],
+            'tables': [
+                {
+                    'headers': t.headers,
+                    'rows': t.rows[:10],  # Limit rows for RAG
+                    'caption': t.caption
+                } for t in section.tables
+            ]
+        }
+        rag_data['sections'].append(section_data)
+
+    # Save to file
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(rag_data, f, indent=2, ensure_ascii=False)
+
+    logger.info(f"Exported {len(sections)} sections for RAG to {output_file}")
+
+
 # Example usage function
 def demonstrate_utilities():
     """
     Demo các utilities đã tạo
     """
     # Test language detection
-    python_code = """
-import pandas as pd
-from QuantConnect import *
-
-class MyAlgorithm(QCAlgorithm):
-    def Initialize(self):
-        self.SetStartDate(2020, 1, 1)
-        self.SetCash(100000)
-    """
-    
-    csharp_code = """
-using System;
-using QuantConnect;
-
-namespace QuantConnect.Algorithm
-{
-    public class MyAlgorithm : QCAlgorithm
-    {
-        public override void Initialize()
-        {
-            SetStartDate(2020, 1, 1);
-            SetCash(100000);
-        }
-    }
-}
-    """
-    
-    detector = CodeLanguageDetector()
-    print(f"Python code detected as: {detector.detect_language(python_code)}")
-    print(f"C# code detected as: {detector.detect_language(csharp_code)}")
-    
-    # Test content cleaning
-    dirty_text = "This is   some\u00A0text with&nbsp;weird   spacing\n\n\n\nAnd multiple breaks"
-    cleaner = ContentCleaner()
-    print(f"Cleaned text: {cleaner.clean_text(dirty_text)}")
-    
-    # Test document counting (if you have a test file)
-    # test_file = Path("test.html")
-    # if test_file.exists():
-    #     doc_count = count_documents_in_html(test_file)
-    #     print(f"Found {doc_count} documents in {test_file}")
+    print('Test')
 
 
 if __name__ == "__main__":

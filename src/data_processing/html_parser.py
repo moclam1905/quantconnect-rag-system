@@ -1,25 +1,16 @@
-"""
-FIXED HTML Parser cho QuantConnect Documentation
-Sửa lại để xử lý đúng cấu trúc code blocks thực tế
-"""
-
-import os
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Union
-from dataclasses import dataclass, field
-from bs4 import BeautifulSoup, Tag, NavigableString
-import lxml
-import re
-from tqdm import tqdm
 import json
-import hashlib
-
-# Import config và logger từ modules đã tạo
+import re
 import sys
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Dict, List, Optional
+
+from bs4 import BeautifulSoup, Tag, NavigableString
+from tqdm import tqdm
+
 sys.path.append(str(Path(__file__).parent.parent.parent))
 from src.utils.logger import logger
-from config.config import settings
-
+from src.data_processing import parser_utils
 
 @dataclass
 class ContentElement:
@@ -809,13 +800,7 @@ class QuantConnectHTMLParser:
 
     def _generate_code_title_from_context(self, language: str) -> str:
         """Generate descriptive title for code blocks"""
-        language_map = {
-            'python': 'Python Code Example',
-            'csharp': 'C# Code Example',
-            'cli': 'Command Line Example',
-            'text': 'Code Example'
-        }
-        return language_map.get(language, f"{language} Code Example")
+        return parser_utils.generate_code_title(language)
 
     def _process_text_with_inline_code_and_extract_containers_with_mixed_tracking(
             self,
@@ -1015,75 +1000,12 @@ class QuantConnectHTMLParser:
 
     def _detect_language_from_content(self, code_content: str) -> str:
         """Detect programming language từ code content"""
-        content_lower = code_content.lower()
-        
-        # Python indicators
-        python_indicators = [
-            'import ', 'from ', 'def ', 'class ', 'self.', 'print(', '__init__',
-            'import numpy', 'import pandas', 'def ', 'elif', 'True', 'False', 'None'
-        ]
-        
-        # C# indicators  
-        csharp_indicators = [
-            'using ', 'namespace ', 'public class', 'private ', 'public ', 'void ',
-            'string ', 'int ', 'var ', 'new ', '();', 'Console.', 'public override'
-        ]
-        
-        # CLI indicators
-        cli_indicators = [
-            '$ ', 'conda ', 'pip ', 'dotnet ', 'git ', 'cd ', 'ls ', 'mkdir',
-            '--', 'sudo ', 'chmod ', 'export '
-        ]
-        
-        python_score = sum(1 for indicator in python_indicators if indicator in content_lower)
-        csharp_score = sum(1 for indicator in csharp_indicators if indicator in content_lower)
-        cli_score = sum(1 for indicator in cli_indicators if indicator in content_lower)
-        
-        if cli_score > 0:
-            return 'cli'
-        elif python_score > csharp_score:
-            return 'python'
-        elif csharp_score > 0:
-            return 'csharp'
-        else:
-            return 'text'
+        return parser_utils.detect_code_language(code_content)
 
     def _extract_table(self, table_element: Tag, section: Section):
         """Extract table data"""
-        headers = []
-        rows = []
-
-        # Extract headers
-        thead = table_element.find('thead')
-        if thead:
-            header_row = thead.find('tr')
-            if header_row:
-                headers = [th.get_text(strip=True) for th in header_row.find_all(['th', 'td'])]
-        else:
-            first_row = table_element.find('tr')
-            if first_row and first_row.find('th'):
-                headers = [th.get_text(strip=True) for th in first_row.find_all('th')]
-
-        # Extract rows
-        tbody = table_element.find('tbody') or table_element
-        for tr in tbody.find_all('tr'):
-            if tr.find('th') and not rows:
-                continue
-            row_data = [td.get_text(strip=True) for td in tr.find_all(['td', 'th'])]
-            if row_data:
-                rows.append(row_data)
-
-        # Extract caption
-        caption_element = table_element.find('caption')
-        caption = caption_element.get_text(strip=True) if caption_element else None
-
-        if headers or rows:
-            table_data = TableData(
-                headers=headers,
-                rows=rows,
-                section_id=section.id,
-                caption=caption
-            )
+        table_data = parser_utils.extract_table_data(table_element, section.id)
+        if table_data:
             section.tables.append(table_data)
 
     def _parse_sections_from_headings(self):
@@ -1166,11 +1088,7 @@ class QuantConnectHTMLParser:
 
     def _generate_section_id(self, title: str) -> str:
         """Generate unique section ID from title"""
-        section_id = title.lower().replace(' ', '-')
-        section_id = re.sub(r'[^a-z0-9\-]', '', section_id)
-        section_id = re.sub(r'-+', '-', section_id)
-        hash_suffix = hashlib.md5(title.encode()).hexdigest()[:6]
-        return f"{section_id}-{hash_suffix}"
+        return parser_utils.generate_section_id(title)
 
     def _post_process(self):
         """GIỮ NGUYÊN: Post-process sections"""
@@ -1188,9 +1106,7 @@ class QuantConnectHTMLParser:
         # Clean content
         for section in self.sections:
             if section._content:  # Only clean if we have stored content
-                # Basic cleaning
-                section._content = re.sub(r'\s+', ' ', section._content).strip()
-                section._content = section._content.replace('\xa0', ' ')
+                section._content = parser_utils.clean_text_content(section._content)
 
         logger.info(f"Post-processing complete. Final: {len(self.sections)} sections, "
                    f"{sum(len(s.code_blocks) for s in self.sections)} code blocks, "
@@ -1271,25 +1187,9 @@ class QuantConnectHTMLParser:
             elif isinstance(child, Tag):
                 if child.name == 'code':
                     # Đây là inline code - format theo yêu cầu
-                    code_content = child.get_text(strip=True)
-                    if code_content:
-                        # Determine language from class
-                        language = None
-                        code_classes = child.get('class', [])
-                        for class_name in code_classes:
-                            class_str = str(class_name).lower()
-                            if 'python' in class_str:
-                                language = 'python'
-                                break
-                            elif 'csharp' in class_str:
-                                language = 'csharp'
-                                break
-
-                        # Format inline code
-                        if language:
-                            result_parts.append(f"{code_content}({language})")
-                        else:
-                            result_parts.append(f"{code_content}(code)")
+                    formatted_code = parser_utils.format_inline_code(child)
+                    if formatted_code:
+                        result_parts.append(formatted_code)
 
                 elif child.name == 'div':
                     div_classes = child.get('class', [])
@@ -1390,174 +1290,28 @@ class QuantConnectHTMLParser:
 
     def _extract_api_content_from_div(self, api_div: Tag, language: str) -> str:
         """Extract API content from language-specific div"""
-        content_parts = []
-
-        # Find the content container
-        container = api_div.find('div', class_='inner-tree-container')
-        if not container:
-            return ""
-
-        # Extract all content recursively
-        for element in container.descendants:
-            if hasattr(element, 'name') and element.name:
-                if element.name == 'h4':
-                    content_parts.append(f"## {element.get_text(strip=True)}")
-                elif element.name == 'p':
-                    text = element.get_text(strip=True)
-                    if text:
-                        content_parts.append(text)
-                elif element.name == 'div' and 'code-snippet' in element.get('class', []):
-                    code_text = element.get_text(strip=True)
-                    if code_text:
-                        content_parts.append(f"`{code_text}`")
-
-        return '\n'.join(content_parts)
+        return parser_utils.extract_api_content_from_div(api_div, language)
 
     def _convert_api_html_to_text(self, html_content: str, data_tree_value: str) -> str:
-        """
-        Convert API HTML content to readable text format
-
-        Args:
-            html_content: HTML content from API
-            data_tree_value: Original data-tree value
-
-        Returns:
-            Text representation
-        """
-        # Parse HTML content
-        from bs4 import BeautifulSoup
-        soup = BeautifulSoup(html_content, 'html.parser')
-
-        text_parts = [f"[API Reference: {data_tree_value}]"]
-
-        # Extract main content
-        for element in soup.find_all(['h4', 'p', 'div']):
-            if element.name == 'h4':
-                text_parts.append(f"\n{element.get_text(strip=True)}")
-            elif element.name == 'p':
-                text_parts.append(element.get_text(strip=True))
-            elif 'code-snippet' in element.get('class', []):
-                code_text = element.get_text(strip=True)
-                if code_text:
-                    text_parts.append(f"- {code_text}")
-
-        return '\n'.join(text_parts)
+        """Convert API HTML content to readable text format"""
+        return parser_utils.convert_api_html_to_text(html_content, data_tree_value)
 
     def _extract_error_message(self, element: Tag) -> str:
         """Extract error message content with warning prefix"""
-        error_text = element.get_text(strip=True)
-        return f"⚠️ Error: {error_text}"
+        return parser_utils.extract_error_message(element)
 
     def _extract_tutorial_step(self, element: Tag) -> str:
         """Extract tutorial step content from all paragraphs"""
-        content_parts = []
-
-        # Process all paragraphs in tutorial step
-        for p in element.find_all('p'):
-            text = p.get_text(strip=True)
-            if text:
-                content_parts.append(text)
-
-        # If no paragraphs found, get direct text
-        if not content_parts:
-            direct_text = element.get_text(strip=True)
-            if direct_text:
-                content_parts.append(direct_text)
-
-        return '\n\n'.join(content_parts)
+        return parser_utils.extract_tutorial_step(element)
 
     def _extract_example_fieldset(self, element: Tag) -> str:
         """Extract example algorithm links with clean filenames"""
-        content_parts = []
-
-        # Get legend/title
-        legend = element.find('div', class_='example-legend')
-        if legend:
-            legend_text = legend.get_text(strip=True)
-            content_parts.append(f"📚 {legend_text}:")
-
-        # Extract algorithm links
-        links = element.find_all('a', class_='example-algorithm-link')
-        if links:
-            for link in links:
-                # Extract filename from href or text
-                href = link.get('href', '')
-                if href:
-                    filename = href.split('/')[-1]
-                else:
-                    filename = link.get_text(strip=True)
-
-                # Get language badge
-                badge = link.find('span', class_=re.compile(r'badge.*'))
-                if badge:
-                    lang = badge.get_text(strip=True)
-                    content_parts.append(f"  - {filename} ({lang})")
-                else:
-                    content_parts.append(f"  - {filename}")
-
-        return '\n'.join(content_parts) if content_parts else ""
+        return parser_utils.extract_example_fieldset(element)
 
 # Test function
 def test_fixed_parser():
     """Test the fixed parser"""
     print("Testing FIXED HTML Parser...")
     
-    # Test với file HTML thực tế
-    test_files = [
-        "Quantconnect-Lean-Engine.html",
-        "Quantconnect-Writing-Algorithms.html", 
-        "Quantconnect-Lean-Cli.html"
-    ]
-    
-    for file_name in test_files:
-        test_file = Path(settings.raw_html_path) / file_name
-        
-        if not test_file.exists():
-            print(f"❌ Test file not found: {test_file}")
-            continue
-            
-        print(f"\n🔍 Testing with: {file_name}")
-        
-        try:
-            parser = QuantConnectHTMLParser(test_file)
-            sections = parser.parse(target_document_index=1)
-            
-            # Statistics
-            total_sections = len(sections)
-            total_code_blocks = sum(len(s.code_blocks) for s in sections)
-            inline_code = sum(len([cb for cb in s.code_blocks if cb.is_inline]) for s in sections)
-            block_code = total_code_blocks - inline_code
-            languages = set()
-            for s in sections:
-                for cb in s.code_blocks:
-                    languages.add(cb.language)
-            
-            print(f"✅ Parsed {total_sections} sections")
-            print(f"📝 Found {total_code_blocks} total code blocks:")
-            print(f"   - {block_code} code blocks")  
-            print(f"   - {inline_code} inline code")
-            print(f"🗣️ Languages: {', '.join(languages)}")
-            
-            # Show sample with code
-            sections_with_code = [s for s in sections if s.code_blocks][:3]
-            if sections_with_code:
-                print(f"\n📋 Sample sections with code:")
-                for s in sections_with_code:
-                    print(f"   - {s.id}: {s.title} ({len(s.code_blocks)} code blocks)")
-                    for i, cb in enumerate(s.code_blocks[:2]):
-                        cb_type = "inline" if cb.is_inline else "block"
-                        preview = cb.content[:50].replace('\n', ' ') + "..." if len(cb.content) > 50 else cb.content
-                        print(f"     {i+1}. {cb.language} ({cb_type}): {preview}")
-            
-            # Save results
-            output_file = parser.save_parsed_data(settings.processed_data_path)
-            print(f"💾 Saved to: {output_file}")
-            
-        except Exception as e:
-            print(f"❌ Error parsing {file_name}: {e}")
-            import traceback
-            traceback.print_exc()
-
-
 if __name__ == "__main__":
     test_fixed_parser()

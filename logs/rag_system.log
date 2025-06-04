@@ -17209,3 +17209,228 @@
 2025-06-03 16:58:12 | INFO     | src.data_processing.html_parser:parse:225 - Found 64 total code blocks
 2025-06-03 16:58:12 | INFO     | src.data_processing.html_parser:parse:226 - Mixed content elements: 411
 2025-06-03 16:58:12 | INFO     | src.data_processing.parser_utils:export_sections_for_rag:519 - Exported 29 documents for RAG to data/processed/batch_20250603_165812/Quantconnect-Lean-Engine test_rag.json
+2025-06-03 18:02:15 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-06-03 18:02:15 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-06-03 18:02:15 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-06-03 18:02:15 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-06-03 18:02:15 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:__init__:197 - Initializing ENHANCED parser for: Quantconnect-Lean-Engine test.html
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:parse:204 - Starting to parse Quantconnect-Lean-Engine test.html
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_load_html:236 - Loading document at index 1 from data/raw_html/Quantconnect-Lean-Engine test.html
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_load_html:269 - Loaded HTML for document index 1
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:305 - Parsing Table of Contents...
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_table_of_contents:366 - Found 29 entries in Table of Contents
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:275 - Cleaning HTML while preserving code structures...
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_clean_html_preserve_code:301 - HTML cleaned while preserving code structures
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_content_sections:370 - Parsing content sections with mixed content tracking...
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_content_sections:374 - Total data-tree elements found in document: 12
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_content_sections:376 -   - data-tree: QuantConnect.Resolution
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_content_sections:376 -   - data-tree: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_content_sections:376 -   - data-tree: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_content_sections:376 -   - data-tree: QuantConnect.Resolution
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_content_sections:376 -   - data-tree: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_content_sections:376 -   - data-tree: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_content_sections:376 -   - data-tree: QuantConnect.Indicators.IndicatorStatus
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_content_sections:376 -   - data-tree: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_content_sections:376 -   - data-tree: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_content_sections:376 -   - data-tree: QuantConnect.Indicators.MovingAverageType
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_content_sections:376 -   - data-tree: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_content_sections:376 -   - data-tree: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 1: Getting Started ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 1 total siblings checked: 28
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 1 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2: Contributions ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2 total siblings checked: 2
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.1: Datasets ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.1 total siblings checked: 2
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.1 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.1.1: Key Concepts ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.1.1 total siblings checked: 24
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.1.1 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:504 - 🎯 FOUND TARGET DIV: html, classes: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.1.2: Defining Data Models ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:476 -   ✓ FOUND NESTED DATA-TREE: QuantConnect.Resolution
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:476 -   ✓ FOUND NESTED DATA-TREE: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:476 -   ✓ FOUND NESTED DATA-TREE: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:476 -   ✓ FOUND NESTED DATA-TREE: QuantConnect.Resolution
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:476 -   ✓ FOUND NESTED DATA-TREE: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:476 -   ✓ FOUND NESTED DATA-TREE: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.1.2 total siblings checked: 20
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.1.2 data-trees found: ['Nested: QuantConnect.Resolution', 'Nested: root', 'Nested: root', 'Nested: QuantConnect.Resolution', 'Nested: root', 'Nested: root']
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:536 - 🎯 PROCESSING NESTED DATA-TREE: QuantConnect.Resolution
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1333 - 🔥 ENTERING _process_patched_data_tree_element with: QuantConnect.Resolution
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1341 - Content container found: True
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1344 - Processing PATCHED data-tree: QuantConnect.Resolution
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1348 - Python div found: True
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1352 - Python content length: 255
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1363 - ✅ Added Python API content for QuantConnect.Resolution
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1368 - C# div found: True
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1372 - C# content length: 255
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1383 - ✅ Added C# API content for QuantConnect.Resolution
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1388 - 🔥 EXITING _process_patched_data_tree_element, returning order: 12
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:536 - 🎯 PROCESSING NESTED DATA-TREE: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1333 - 🔥 ENTERING _process_patched_data_tree_element with: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1341 - Content container found: False
+2025-06-03 18:02:18 | WARNING  | src.data_processing.html_parser:_process_patched_data_tree_element:1386 - UNPATCHED data-tree element: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1388 - 🔥 EXITING _process_patched_data_tree_element, returning order: 12
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:536 - 🎯 PROCESSING NESTED DATA-TREE: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1333 - 🔥 ENTERING _process_patched_data_tree_element with: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1341 - Content container found: False
+2025-06-03 18:02:18 | WARNING  | src.data_processing.html_parser:_process_patched_data_tree_element:1386 - UNPATCHED data-tree element: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1388 - 🔥 EXITING _process_patched_data_tree_element, returning order: 12
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:536 - 🎯 PROCESSING NESTED DATA-TREE: QuantConnect.Resolution
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1333 - 🔥 ENTERING _process_patched_data_tree_element with: QuantConnect.Resolution
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1341 - Content container found: True
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1344 - Processing PATCHED data-tree: QuantConnect.Resolution
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1348 - Python div found: True
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1352 - Python content length: 255
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1363 - ✅ Added Python API content for QuantConnect.Resolution
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1368 - C# div found: True
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1372 - C# content length: 255
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1383 - ✅ Added C# API content for QuantConnect.Resolution
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1388 - 🔥 EXITING _process_patched_data_tree_element, returning order: 29
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:536 - 🎯 PROCESSING NESTED DATA-TREE: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1333 - 🔥 ENTERING _process_patched_data_tree_element with: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1341 - Content container found: False
+2025-06-03 18:02:18 | WARNING  | src.data_processing.html_parser:_process_patched_data_tree_element:1386 - UNPATCHED data-tree element: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1388 - 🔥 EXITING _process_patched_data_tree_element, returning order: 29
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:536 - 🎯 PROCESSING NESTED DATA-TREE: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1333 - 🔥 ENTERING _process_patched_data_tree_element with: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1341 - Content container found: False
+2025-06-03 18:02:18 | WARNING  | src.data_processing.html_parser:_process_patched_data_tree_element:1386 - UNPATCHED data-tree element: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1388 - 🔥 EXITING _process_patched_data_tree_element, returning order: 29
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.1.3: Rendering Data ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.1.3 total siblings checked: 2
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.1.3 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.1.3.1: Rendering Data with Python ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.1.3.1 total siblings checked: 16
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.1.3.1 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.1.3.2: Rendering Data with CSharp ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.1.3.2 total siblings checked: 16
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.1.3.2 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.1.3.3: Rendering Data with Notebooks ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.1.3.3 total siblings checked: 16
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.1.3.3 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.1.4: Testing Data Models ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.1.4 total siblings checked: 16
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.1.4 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.1.5: Data Documentation ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.1.5 total siblings checked: 20
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.1.5 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.2: Brokerages ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.2 total siblings checked: 6
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.2 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.2.1: Setting Up Your Environment ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.2.1 total siblings checked: 16
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.2.1 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.2.2: Laying the Foundation ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.2.2 total siblings checked: 18
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.2.2 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.2.3: Creating the Brokerage ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.2.3 total siblings checked: 34
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.2.3 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.2.4: Translating Symbol Conventions ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.2.4 total siblings checked: 8
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.2.4 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.2.5: Describing Brokerage Limitations ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.2.5 total siblings checked: 8
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.2.5 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.2.6: Enabling Live Data Streaming ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.2.6 total siblings checked: 8
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.2.6 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.2.7: Enabling Historical Data ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.2.7 total siblings checked: 8
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.2.7 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.2.8: Downloading Data ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.2.8 total siblings checked: 8
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.2.8 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.2.9: Modeling Fee Structures ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.2.9 total siblings checked: 8
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.2.9 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.2.10: Updating the Algorithm API ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.2.10 total siblings checked: 8
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.2.10 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 2.3: Indicators ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:476 -   ✓ FOUND NESTED DATA-TREE: QuantConnect.Indicators.IndicatorStatus
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:476 -   ✓ FOUND NESTED DATA-TREE: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:476 -   ✓ FOUND NESTED DATA-TREE: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:476 -   ✓ FOUND NESTED DATA-TREE: QuantConnect.Indicators.MovingAverageType
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:476 -   ✓ FOUND NESTED DATA-TREE: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:476 -   ✓ FOUND NESTED DATA-TREE: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 2.3 total siblings checked: 32
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 2.3 data-trees found: ['Nested: QuantConnect.Indicators.IndicatorStatus', 'Nested: root', 'Nested: root', 'Nested: QuantConnect.Indicators.MovingAverageType', 'Nested: root', 'Nested: root']
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:536 - 🎯 PROCESSING NESTED DATA-TREE: QuantConnect.Indicators.IndicatorStatus
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1333 - 🔥 ENTERING _process_patched_data_tree_element with: QuantConnect.Indicators.IndicatorStatus
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1341 - Content container found: True
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1344 - Processing PATCHED data-tree: QuantConnect.Indicators.IndicatorStatus
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1348 - Python div found: True
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1352 - Python content length: 421
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1363 - ✅ Added Python API content for QuantConnect.Indicators.IndicatorStatus
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1368 - C# div found: True
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1372 - C# content length: 417
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1383 - ✅ Added C# API content for QuantConnect.Indicators.IndicatorStatus
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1388 - 🔥 EXITING _process_patched_data_tree_element, returning order: 12
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:536 - 🎯 PROCESSING NESTED DATA-TREE: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1333 - 🔥 ENTERING _process_patched_data_tree_element with: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1341 - Content container found: False
+2025-06-03 18:02:18 | WARNING  | src.data_processing.html_parser:_process_patched_data_tree_element:1386 - UNPATCHED data-tree element: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1388 - 🔥 EXITING _process_patched_data_tree_element, returning order: 12
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:536 - 🎯 PROCESSING NESTED DATA-TREE: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1333 - 🔥 ENTERING _process_patched_data_tree_element with: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1341 - Content container found: False
+2025-06-03 18:02:18 | WARNING  | src.data_processing.html_parser:_process_patched_data_tree_element:1386 - UNPATCHED data-tree element: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1388 - 🔥 EXITING _process_patched_data_tree_element, returning order: 12
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:536 - 🎯 PROCESSING NESTED DATA-TREE: QuantConnect.Indicators.MovingAverageType
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1333 - 🔥 ENTERING _process_patched_data_tree_element with: QuantConnect.Indicators.MovingAverageType
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1341 - Content container found: True
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1344 - Processing PATCHED data-tree: QuantConnect.Indicators.MovingAverageType
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1348 - Python div found: True
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1352 - Python content length: 945
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1363 - ✅ Added Python API content for QuantConnect.Indicators.MovingAverageType
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1368 - C# div found: True
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1372 - C# content length: 939
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1383 - ✅ Added C# API content for QuantConnect.Indicators.MovingAverageType
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1388 - 🔥 EXITING _process_patched_data_tree_element, returning order: 54
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:536 - 🎯 PROCESSING NESTED DATA-TREE: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1333 - 🔥 ENTERING _process_patched_data_tree_element with: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1341 - Content container found: False
+2025-06-03 18:02:18 | WARNING  | src.data_processing.html_parser:_process_patched_data_tree_element:1386 - UNPATCHED data-tree element: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1388 - 🔥 EXITING _process_patched_data_tree_element, returning order: 54
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:536 - 🎯 PROCESSING NESTED DATA-TREE: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1333 - 🔥 ENTERING _process_patched_data_tree_element with: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1341 - Content container found: False
+2025-06-03 18:02:18 | WARNING  | src.data_processing.html_parser:_process_patched_data_tree_element:1386 - UNPATCHED data-tree element: root
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_process_patched_data_tree_element:1388 - 🔥 EXITING _process_patched_data_tree_element, returning order: 54
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 3: Data Format ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 3 total siblings checked: 2
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 3 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 3.1: Key Concepts ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 3.1 total siblings checked: 16
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 3.1 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 3.2: Core Data Types ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 3.2 total siblings checked: 28
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 3.2 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 4: Statistics ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 4 total siblings checked: 2
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 4 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 4.1: Capacity ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 4.1 total siblings checked: 20
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 4.1 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:449 - === PARSING SECTION 5: Class Reference ===
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:493 - Section 5 total siblings checked: 4
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_section_content_with_mixed_tracking:494 - Section 5 data-trees found: []
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_parse_content_sections:428 - Parsed 29 content sections
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:1153 - Building section hierarchy...
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_build_section_hierarchy:1165 - Section hierarchy built successfully
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_post_process:1177 - Post-processing parsed sections...
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:_post_process:1195 - Post-processing complete. Final: 29 sections, 64 code blocks, 412 mixed content elements
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:parse:224 - Successfully parsed 29 sections from Quantconnect-Lean-Engine test.html
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:parse:225 - Found 64 total code blocks
+2025-06-03 18:02:18 | INFO     | src.data_processing.html_parser:parse:226 - Mixed content elements: 412
+2025-06-03 18:02:18 | INFO     | src.data_processing.parser_utils:export_sections_for_rag:519 - Exported 29 documents for RAG to data/processed/batch_20250603_180218/Quantconnect-Lean-Engine test_rag.json
+2025-06-03 22:50:27 | INFO     | src.utils.logger:setup_logger:59 - ==================================================
+2025-06-03 22:50:27 | INFO     | src.utils.logger:setup_logger:60 - QuantConnect RAG System Logger Initialized
+2025-06-03 22:50:27 | INFO     | src.utils.logger:setup_logger:61 - Log Level: INFO
+2025-06-03 22:50:27 | INFO     | src.utils.logger:setup_logger:62 - Log File: logs/rag_system.log
+2025-06-03 22:50:27 | INFO     | src.utils.logger:setup_logger:63 - ==================================================
