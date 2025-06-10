@@ -4,16 +4,15 @@ Chia text thành chunks với size và overlap có thể config.
 """
 
 import re
-from typing import List, Tuple, Optional, Dict
-from dataclasses import dataclass
+from typing import List, Tuple, Dict
 import nltk
 from pathlib import Path
 
 # Import models và config
 import sys
 sys.path.append(str(Path(__file__).parent.parent.parent))
-from src.data_processing.chunk_models import Chunk, ChunkMetadata, ChunkType, ChunkingConfig
-from src.data_processing.html_parser import Section
+from src.data_processing.old.chunk_models import Chunk, ChunkMetadata, ChunkType, ChunkingConfig
+from src.data_processing.old.html_parser import Section
 from src.utils.logger import logger
 
 # Try to download punkt tokenizer for sentence splitting
@@ -432,7 +431,7 @@ class AdvancedTextChunker(TextChunker):
 
 # Example usage and testing
 if __name__ == "__main__":
-    from src.data_processing.chunk_models import ChunkingPresets
+    from src.data_processing.old.chunk_models import ChunkingPresets
     
     # Create sample section
     sample_text = """

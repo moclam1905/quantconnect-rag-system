@@ -4,28 +4,27 @@ Kết hợp tất cả chunking strategies với smart routing và metadata enri
 Tự động chọn strategy tốt nhất cho từng loại content.
 """
 
-from typing import List, Dict, Optional, Tuple, Any, Union
-from dataclasses import dataclass, field
+from typing import List, Dict, Optional, Tuple
+from dataclasses import dataclass
 from enum import Enum
 import re
 from collections import Counter
-import math
 
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from src.data_processing.chunk_models import (
-    Chunk, ChunkMetadata, ChunkType, ChunkingConfig, ChunkingStrategy
+from src.data_processing.old.chunk_models import (
+    Chunk, ChunkType, ChunkingConfig, ChunkingStrategy
 )
-from src.data_processing.html_parser import Section, CodeBlock, TableData
-from src.data_processing.chunking_strategies import (
+from src.data_processing.old.html_parser import Section, TableData
+from src.data_processing.old.chunking_strategies import (
     BaseChunkingStrategy, FixedSizeChunker, SentenceBasedChunker, 
     ParagraphBasedChunker, SectionBasedChunker
 )
-from src.data_processing.code_aware_chunker import CodeAwareChunker
-from src.data_processing.section_based_chunker import (
-    SectionBasedChunker, SectionHierarchyAnalyzer, SectionMetricsCalculator
+from src.data_processing.old.code_aware_chunker import CodeAwareChunker
+from src.data_processing.old.section_based_chunker import (
+    SectionBasedChunker, SectionHierarchyAnalyzer
 )
 from src.utils.logger import logger
 
@@ -780,8 +779,8 @@ def get_hybrid_chunker(config: ChunkingConfig) -> HybridChunker:
 
 # Example usage
 if __name__ == "__main__":
-    from src.data_processing.chunk_models import ChunkingPresets
-    from src.data_processing.html_parser import Section, CodeBlock
+    from src.data_processing.old.chunk_models import ChunkingPresets
+    from src.data_processing.old.html_parser import Section, CodeBlock
     
     # Create complex test section
     complex_section = Section(

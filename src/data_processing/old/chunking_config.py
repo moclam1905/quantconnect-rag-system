@@ -6,9 +6,8 @@ Cung cấp các preset configurations cho QuantConnect documentation.
 from pathlib import Path
 from typing import Dict, Optional
 import json
-import yaml
 
-from src.data_processing.chunk_models import ChunkingConfig, ChunkingStrategy
+from src.data_processing.old.chunk_models import ChunkingConfig, ChunkingStrategy
 
 
 class QuantConnectChunkingConfig:

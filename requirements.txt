@@ -6,7 +6,9 @@ chromadb==0.4.24
 
 # HTML processing
 beautifulsoup4==4.12.3
-lxml==5.1.0
+lxml==5.1.0                    # Streaming HTML parsing
+trafilatura==1.8.0             # Content extraction
+selectolax==0.3.17             # High-speed parsing backup
 
 # Web framework cho API
 fastapi==0.110.0

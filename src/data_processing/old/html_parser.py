@@ -10,7 +10,8 @@ from tqdm import tqdm
 
 sys.path.append(str(Path(__file__).parent.parent.parent))
 from src.utils.logger import logger
-from src.data_processing import parser_utils
+from src.data_processing.old import parser_utils
+
 
 @dataclass
 class ContentElement:

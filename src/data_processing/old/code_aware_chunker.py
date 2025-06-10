@@ -5,7 +5,7 @@ Giữ nguyên code blocks nhỏ, split code blocks lớn theo logical boundaries
 """
 
 import re
-from typing import List, Tuple, Optional, Dict, Set
+from typing import List, Tuple, Optional, Dict
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
@@ -13,12 +13,11 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from src.data_processing.chunk_models import (
-    Chunk, ChunkMetadata, ChunkType, ChunkingConfig, ChunkingStrategy
+from src.data_processing.old.chunk_models import (
+    Chunk, ChunkType, ChunkingConfig, ChunkingStrategy
 )
-from src.data_processing.html_parser import Section, CodeBlock
-from src.data_processing.chunking_strategies import BaseChunkingStrategy
-from src.utils.logger import logger
+from src.data_processing.old.html_parser import Section
+from src.data_processing.old.chunking_strategies import BaseChunkingStrategy
 
 
 @dataclass
@@ -688,8 +687,8 @@ def get_code_aware_chunker(config: ChunkingConfig) -> CodeAwareChunker:
 
 # Example usage
 if __name__ == "__main__":
-    from src.data_processing.chunk_models import ChunkingPresets
-    from src.data_processing.html_parser import Section, CodeBlock
+    from src.data_processing.old.chunk_models import ChunkingPresets
+    from src.data_processing.old.html_parser import Section, CodeBlock
     
     # Create sample section với mixed content
     sample_content = """

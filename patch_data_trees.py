@@ -14,7 +14,7 @@ from datetime import datetime
 # Add project root to path
 sys.path.append(str(Path(__file__).parent))
 
-from src.data_processing.data_tree_patcher import DataTreePatcher
+from src.data_processing.fetch_data_tree.data_tree_patcher import DataTreePatcher
 from config.config import settings
 from rich.console import Console
 from rich.panel import Panel
@@ -106,7 +106,7 @@ def test_single_resolution():
     ))
 
     try:
-        from src.data_processing.data_tree_resolver import DataTreeResolver
+        from src.data_processing.fetch_data_tree.data_tree_resolver import DataTreeResolver
 
         resolver = DataTreeResolver()
 

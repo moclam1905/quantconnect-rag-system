@@ -10,10 +10,10 @@ from datetime import datetime
 import sys
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from src.data_processing.text_chunker import TextChunker, AdvancedTextChunker
-from src.data_processing.chunk_models import Chunk, ChunkingConfig
-from src.data_processing.html_parser import Section
-from src.data_processing.chunking_config import (
+from src.data_processing.old.text_chunker import TextChunker, AdvancedTextChunker
+from src.data_processing.old.chunk_models import Chunk, ChunkingConfig
+from src.data_processing.old.html_parser import Section
+from src.data_processing.old.chunking_config import (
     get_chunking_config_for_file,
     get_chunking_config_for_section
 )

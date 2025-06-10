@@ -4,7 +4,7 @@ Chunk dựa trên cấu trúc sections, respect boundaries và hierarchy.
 Đặc biệt phù hợp cho structured documentation với clear section organization.
 """
 
-from typing import List, Dict, Optional, Tuple, Set
+from typing import List, Dict, Optional, Set
 from dataclasses import dataclass
 from enum import Enum
 import re
@@ -13,12 +13,11 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from src.data_processing.chunk_models import (
-    Chunk, ChunkMetadata, ChunkType, ChunkingConfig, ChunkingStrategy
+from src.data_processing.old.chunk_models import (
+    Chunk, ChunkType, ChunkingConfig, ChunkingStrategy
 )
-from src.data_processing.html_parser import Section, CodeBlock, TableData
-from src.data_processing.chunking_strategies import BaseChunkingStrategy
-from src.utils.logger import logger
+from src.data_processing.old.html_parser import Section, TableData
+from src.data_processing.old.chunking_strategies import BaseChunkingStrategy
 
 
 class SectionChunkingStrategy(Enum):
@@ -898,8 +897,8 @@ def get_section_based_chunker(config: ChunkingConfig) -> SectionBasedChunker:
 
 # Example usage
 if __name__ == "__main__":
-    from src.data_processing.chunk_models import ChunkingPresets
-    from src.data_processing.html_parser import Section, CodeBlock
+    from src.data_processing.old.chunk_models import ChunkingPresets
+    from src.data_processing.old.html_parser import Section, CodeBlock
     
     # Create sample hierarchical sections
     parent_section = Section(

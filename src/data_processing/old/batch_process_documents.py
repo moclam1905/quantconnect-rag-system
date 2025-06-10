@@ -7,8 +7,8 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from src.data_processing.html_parser import QuantConnectHTMLParser
-from src.data_processing.parser_utils import count_documents_in_html, export_sections_for_rag
+from src.data_processing.old.html_parser import QuantConnectHTMLParser
+from src.data_processing.old.parser_utils import count_documents_in_html, export_sections_for_rag
 from src.utils.logger import logger
 from config.config import settings
 from rich.console import Console
@@ -17,7 +17,7 @@ from rich.table import Table
 from rich.panel import Panel
 import json
 from datetime import datetime
-from typing import List, Dict, Tuple
+from typing import List, Dict
 
 console = Console()
 

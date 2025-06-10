@@ -6,12 +6,11 @@ Pre-processes HTML files to replace data-tree placeholders with actual content
 import re
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple
-from bs4 import BeautifulSoup, Tag
 import sys
 
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from src.data_processing.data_tree_resolver import DataTreeResolver
+from src.data_processing.fetch_data_tree.data_tree_resolver import DataTreeResolver
 from src.utils.logger import logger
 from config.config import settings
 from rich.console import Console

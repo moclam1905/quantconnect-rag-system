@@ -8,8 +8,8 @@ from typing import List, Optional
 import sys
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from src.data_processing.html_parser import QuantConnectHTMLParser, Section
-from src.data_processing.parser_utils import count_documents_in_html
+from src.data_processing.old.html_parser import QuantConnectHTMLParser, Section
+from src.data_processing.old.parser_utils import count_documents_in_html
 from src.utils.logger import logger
 from config.config import settings
 

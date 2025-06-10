@@ -4,14 +4,13 @@ Mỗi strategy có approach riêng để chia content thành chunks.
 """
 
 from abc import ABC, abstractmethod
-from typing import List, Tuple, Optional, Dict
-from dataclasses import dataclass
+from typing import List, Tuple
 import re
 
-from src.data_processing.chunk_models import (
+from src.data_processing.old.chunk_models import (
     Chunk, ChunkMetadata, ChunkType, ChunkingConfig, ChunkingStrategy
 )
-from src.data_processing.html_parser import Section, CodeBlock, TableData
+from src.data_processing.old.html_parser import Section, CodeBlock, TableData
 
 
 class BaseChunkingStrategy(ABC):
@@ -639,7 +638,7 @@ def get_chunking_strategy(strategy: ChunkingStrategy, config: ChunkingConfig) ->
 
 # Example usage
 if __name__ == "__main__":
-    from src.data_processing.chunk_models import ChunkingPresets
+    from src.data_processing.old.chunk_models import ChunkingPresets
     
     # Create sample section
     section = Section(

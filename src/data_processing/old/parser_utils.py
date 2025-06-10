@@ -14,7 +14,7 @@ sys.path.append(str(Path(__file__).parent.parent.parent))
 import hashlib
 from bs4 import BeautifulSoup, Tag
 
-from src.data_processing.html_parser import TableData
+from src.data_processing.old.html_parser import TableData
 from src.utils.logger import logger
 
 class SectionHierarchyBuilder:
