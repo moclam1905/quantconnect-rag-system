@@ -345,17 +345,30 @@ class ContentClassifier:
             # Try using existing classify_content_type function
             try:
                 from production_ready_discovery import classify_content_type
-                # Right before calling classify_content_type:
-                logger.info(f"🔍 DEBUG: Calling classify_content_type with rules type: {type(self.rules)}")
-                logger.info(f"🔍 DEBUG: Rules is None: {self.rules is None}")
+                # DEBUG: Check rules before calling classify_content_type
+                logger.debug(f"🔍 DEBUG classify_element: rules type = {type(self.rules)}")
+                logger.debug(f"🔍 DEBUG classify_element: rules is None = {self.rules is None}")
+                if self.rules:
+                    logger.debug(f"🔍 DEBUG classify_element: rules keys = {list(self.rules.keys())}")
+                else:
+                    logger.debug(f"🔍 DEBUG classify_element: rules is empty/None")
 
-                if elem.name == 'img':
-                    logger.debug(f"🔍 DEBUG: About to classify IMG element")
-                    logger.debug(f"   Classes: {elem.get('class')}")
-                    logger.debug(f"   Attributes: {list(elem.attrs.keys())}")
+                # DEBUG: Check elem before calling
+                logger.debug(f"🔍 DEBUG classify_element: elem = {elem}")
+                logger.debug(f"🔍 DEBUG classify_element: elem.attrs = {elem.attrs}")
 
-                # Try using existing classify_content_type function
-                content_type = classify_content_type(elem, self.rules)
+                try:
+                    # TARGETED DEBUG: Check exact inputs
+                    if elem.name == 'img':  # Only debug for img elements
+                        logger.debug(
+                            f"🔍 BEFORE CRASH: rules type={type(self.rules)}, rules keys={list(self.rules.keys()) if self.rules else 'None'}")
+
+                    content_type = classify_content_type(elem, self.rules)
+
+                except Exception as e:
+                    logger.error(f"❌ CRASH DETAILS: elem={elem.name}, error='{e}', rules_type={type(self.rules)}")
+                    # Fallback
+                    content_type, confidence = self._fallback_classification(elem)
 
                 # ADD DEBUG AFTER:
                 if elem.name == 'img':
@@ -384,50 +397,15 @@ class ContentClassifier:
             return self._fallback_classification(elem)
 
     def _fallback_classification(self, elem: Tag) -> Tuple[str, float]:
-        try:
-            classes = elem.get('class', [])
-            tag = elem.name.lower()
+        """Simple fallback - rely on yaml rules as primary"""
+        logger.warning(f"⚠️ Using fallback classification for {elem.name}")
 
-            # QUICK FIX: Skip media elements and other unwanted tags
-            skip_tags = ['img', 'video', 'audio', 'iframe', 'embed', 'object', 'canvas',
-                        'script', 'style', 'link', 'meta']
-            if tag in skip_tags:
-                logger.debug(f"🚫 FALLBACK SKIP: {tag} element")
-                return None, 0.0
+        # Only basic skip logic, không duplicate yaml rules
+        if elem.name.lower() in ['img', 'video', 'audio', 'script', 'style']:
+            return None, 0.0
 
-            # Skip elements with media-related classes
-            if isinstance(classes, list):
-                classes_str = ' '.join(classes).lower()
-            else:
-                classes_str = str(classes).lower()
-
-            skip_class_indicators = ['image', 'img', 'video', 'audio', 'media', 'gif', 'animation',
-                                   'player', 'embed', 'cover-icon', 'cover-image', 'chart', 'graph', 'diagram']
-            if any(indicator in classes_str for indicator in skip_class_indicators):
-                logger.debug(f"🚫 FALLBACK SKIP: element with classes {classes}")
-                return None, 0.0
-
-            # Code content
-            if any(indicator in classes_str for indicator in ['code', 'highlight', 'python', 'csharp', 'example']):
-                return 'code_content', 0.8
-
-            # API reference
-            if 'data-tree' in elem.attrs or any(indicator in classes_str for indicator in ['api', 'reference', 'tree']):
-                return 'api_reference', 0.8
-
-            # Table content
-            if tag == 'table' or 'table' in classes_str:
-                return 'table_content', 0.8
-
-            # Navigation
-            if any(indicator in classes_str for indicator in ['toc', 'nav', 'breadcrumb']):
-                return 'navigation_content', 0.8
-
-            return 'documentation_text', 0.7
-
-        except Exception as e:
-            logger.warning(f"⚠️ Fallback classification failed: {e}")
-            return 'documentation_text', 0.5
+        # Default to documentation_text với low confidence
+        return 'documentation_text', 0.5
 
     def _calculate_confidence(self, elem: Tag, content_type: str) -> float:
         confidence = 0.8

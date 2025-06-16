@@ -659,15 +659,44 @@ def classify_content_type(elem, rules: dict = None) -> str:
     Dynamic content type classifier với comprehensive skip support
     Returns 'SKIP' for all media và unwanted content
     """
+    # DEBUG: Check inputs
+    logger.debug(f"🔍 DEBUG classify_content_type: elem = {elem}")
+    logger.debug(f"🔍 DEBUG classify_content_type: rules type = {type(rules)}")
+    logger.debug(f"🔍 DEBUG classify_content_type: rules is None = {rules is None}")
+
     if rules is None:
+        logger.debug("🔍 DEBUG: rules is None, loading default")
         rules = load_pattern_rules()
+        logger.debug(f"🔍 DEBUG: loaded rules type = {type(rules)}")
 
     if not rules:
+        logger.error("❌ DEBUG: rules is empty after loading")
         return 'documentation_text'
 
-    classes = elem.get('class', '').split()
-    attrs = elem.attrib.keys()
-    tag = elem.tag.lower()
+    # DEBUG: Check rules structure
+    logger.debug(f"🔍 DEBUG: rules keys = {list(rules.keys())}")
+
+    # DEBUG: Check elem attributes
+    logger.debug(f"🔍 DEBUG: elem.attrib = {elem.attrib}")
+    logger.debug(f"🔍 DEBUG: elem.get('class') = {elem.get('class')}")
+
+    try:
+        classes = elem.get('class', '').split()
+        logger.debug(f"🔍 DEBUG: classes after split = {classes}")
+
+        attrs = list(elem.attrib.keys()) if elem.attrib else []
+        logger.debug(f"🔍 DEBUG: attrs keys = {list(attrs)}")
+
+        tag = elem.tag.lower() if elem.tag else ""
+        logger.debug(f"🔍 DEBUG: tag = {tag}")
+
+    except Exception as e:
+        logger.error(f"❌ CRASH in variable assignment: {e}")
+        return 'documentation_text'
+
+    classes = (elem.get('class') or '').split()
+    attrs = list(elem.attrib.keys()) if elem.attrib else []
+    tag = elem.tag.lower() if elem.tag else ""
 
     # === PRIORITY 1: Check SKIP patterns first ===
     if 'skip_content' in rules:
@@ -681,7 +710,7 @@ def classify_content_type(elem, rules: dict = None) -> str:
                 return 'SKIP'
 
             # Attribute-based skip
-            if 'attr' in rule and rule['attr'] in attrs:
+            if 'attr' in rule and rule['attr'] in (attrs or []):
                 return 'SKIP'
 
     # === PRIORITY 2: Content classification ===
@@ -692,7 +721,7 @@ def classify_content_type(elem, rules: dict = None) -> str:
         for rule in type_rules:
             if 'class' in rule and rule['class'] in classes:
                 return content_type
-            if 'attr' in rule and rule['attr'] in attrs:
+            if 'attr' in rule and rule['attr'] in (attrs or []):
                 return content_type
             if 'tag' in rule and rule['tag'] == tag:
                 return content_type
