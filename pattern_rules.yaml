@@ -1,13 +1,9 @@
 skip_content:
-- class: clickable
 - class: lang-csharp
 - class: lang-python
-- class: col-md-6
-- class: col-sm-12
 - class: content
 - class: blue-text-action
 - class: language-buttons
-- class: testable
 - class: python-result
 - class: csharp-result
 - class: docs-image
@@ -34,10 +30,8 @@ skip_content:
 - class: pipe-separator
 - class: language-python
 - class: regression-test-results
-- class: to-be-tested
 - class: fa
 - class: img-thumbnail
-- class: centered
 - class: fa-external-link
 - class: icon-name
 - class: inline-icon
@@ -69,11 +63,18 @@ skip_content:
 - class: animation
 - class: player
 - class: embed
-- class: cover-icon
 - class: cover-image
 - class: chart
 - class: graph
 - class: diagram
+- class: html 
+- class: bottom-screenshot
+- class: row
+- class: tip
+- class: tip-title
+- class: videoWrapper
+- class: form-control
+- class: input-lg
 api_reference:
 - class: cli
 - attr: data-tree
@@ -92,12 +93,16 @@ api_reference:
 - class: py-obj
 - attr: data-fields
 - class: field-name
+- class: to-be-tested
+- class: testable
 navigation_content:
 - class: toc-h6
 - class: page-breadcrumb
 - class: docs-internal-link
 - class: docs-landing-link
 - class: docs-landing-link-wrap
+- class: col-md-6
+- class: col-sm-12
 - class: toc-h3
 - class: page-heading
 - class: toc-h2
@@ -107,6 +112,7 @@ navigation_content:
 - class: docs-landing-links
 - class: page-section-name
 - class: see-also
+- class: clickable
 code_content:
 - class: code-snippet
 - class: code-source
@@ -117,9 +123,10 @@ code_content:
 - class: Python
 - class: error-messages
 - class: live-url
-tutorial_content:
+- class: all
 - class: csharp
-- class: python
+- class: python 
+tutorial_content:
 - class: example-algorithm-link
 - class: example-fieldset
 - class: tutorial-step
@@ -152,3 +159,4 @@ documentation_text:
 - class: ul-option
 - class: latex-variable
 - class: sub-heading-content
+- class: qualifier

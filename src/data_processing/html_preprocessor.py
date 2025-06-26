@@ -4,11 +4,11 @@ HTML Preprocessor với Caching Support
 Tách logic preprocess từ production_ready_discovery.py và thêm caching layer
 """
 
+import argparse
 import logging
 import re
-from pathlib import Path
 from datetime import datetime
-from typing import Optional
+from pathlib import Path
 
 from cache_manager import CacheManager
 
@@ -121,6 +121,16 @@ class HTMLPreprocessor:
         content = re.sub(r'</html>', '', content, flags=re.IGNORECASE)
         content = re.sub(r'</body>', '', content, flags=re.IGNORECASE)
 
+        # NEW: Escape generic types với negative lookahead
+        def escape_generic_types(match):
+            full_match = match.group(0)
+            escaped = full_match.replace('<', '&lt;').replace('>', '&gt;')
+            return escaped
+
+        # Pattern với negative lookahead để tránh closing tags
+        generic_pattern = r'\b([A-Z]\w*)<(?!/)([^<>]*(?:<[^<>]+>[^<>]*)*)>'
+        content = re.sub(generic_pattern, escape_generic_types, content)
+
         # Step 5: Wrap everything in single HTML structure
         processed_content = f'''<!DOCTYPE html>
 <html lang="en">
@@ -187,52 +197,40 @@ class HTMLPreprocessor:
 
 
 def main():
-    """Test function cho HTMLPreprocessor"""
-
-    print("🧪 Testing HTMLPreprocessor")
-    print("=" * 50)
+    parser = argparse.ArgumentParser(
+        description="Preprocess HTML files with intelligent caching"
+    )
+    parser.add_argument(
+        "-i", "--input",
+        nargs="+",
+        required=True,
+        help="Đường dẫn tới file HTML (hoặc danh sách file), ví dụ: data/raw_html/Quanconnect-*.html"
+    )
+    parser.add_argument(
+        "-f", "--force-refresh",
+        action="store_true",
+        help="Bỏ qua cache, luôn preprocess lại"
+    )
+    args = parser.parse_args()
 
     preprocessor = HTMLPreprocessor()
 
-    # Test file
-    test_file = "Quantconnect-Writing-Algorithms.html"
-
-    try:
-        # First run - should preprocess
-        print(f"\n📝 First run với {test_file}:")
-        start_time = datetime.now()
-        processed_path = preprocessor.preprocess_file(test_file)
-        first_duration = (datetime.now() - start_time).total_seconds()
-        print(f"✅ Processed to: {processed_path}")
-        print(f"⏱️ Duration: {first_duration:.2f} seconds")
-
-        # Second run - should use cache
-        print(f"\n📝 Second run với {test_file} (should use cache):")
-        start_time = datetime.now()
-        cached_path = preprocessor.preprocess_file(test_file)
-        second_duration = (datetime.now() - start_time).total_seconds()
-        print(f"✅ Used cached: {cached_path}")
-        print(f"⏱️ Duration: {second_duration:.2f} seconds")
-
-        # Show cache stats
-        print(f"\n📊 Cache Statistics:")
-        stats = preprocessor.get_cache_stats()
-        for key, value in stats.items():
-            print(f"   {key}: {value}")
-
-        # Performance comparison
-        if second_duration > 0:
-            speedup = first_duration / second_duration
-            print(f"\n🚀 Cache speedup: {speedup:.1f}x faster")
-
-    except FileNotFoundError:
-        print(f"❌ Test file not found: {test_file}")
-        print(f"💡 Place test file in data/raw_html/ directory")
-
-    except Exception as e:
-        print(f"❌ Test failed: {e}")
-        import traceback
-        traceback.print_exc()
+    for path_str in args.input:
+        # lấy tên file, để phù hợp với logic self.input_dir
+        filename = Path(path_str).name
+        full_path = Path(path_str)
+        print("\n" + "="*50)
+        print(f"🔧 Xử lý file: {full_path}")
+        start = datetime.now()
+        try:
+            out_path = preprocessor.preprocess_file(
+                filename,
+                force_refresh=args.force_refresh
+            )
+            took = (datetime.now() - start).total_seconds()
+            print(f"✅ Hoàn thành trong {took:.2f}s → {out_path}")
+        except Exception as e:
+            print(f"❌ Lỗi khi xử lý {filename}: {e}")
 
 
 if __name__ == "__main__":

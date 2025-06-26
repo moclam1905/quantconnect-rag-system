@@ -76,12 +76,6 @@ def main():
         if resolver_stats:
             console.print(f"[cyan]🌐 API success rate: {resolver_stats.get('success_rate', 0):.1%}[/cyan]")
 
-        # Show next steps
-        console.print("\n[yellow]📋 Next Steps:[/yellow]")
-        console.print("1. Run batch_process_documents.py to parse enhanced HTML files")
-        console.print("2. Check backup files (.html.backup) if you need to restore originals")
-        console.print("3. Enhanced HTML files now contain resolved data-tree content")
-
         return True
 
     except KeyboardInterrupt:
@@ -142,13 +136,85 @@ def test_single_resolution():
         return False
 
 
+def test_safe_resolution():
+    """Test safe resolution with potential circular dependencies"""
+    console = Console()
+
+    console.print(Panel.fit(
+        "[bold cyan]Testing Safe DataTree Resolution[/bold cyan]\n"
+        "Testing cycle detection and depth limiting",
+        border_style="cyan"
+    ))
+
+    try:
+        from src.data_processing.fetch_data_tree.data_tree_resolver import DataTreeResolver
+
+        resolver = DataTreeResolver()
+
+        # Test basic resolution
+        console.print("[yellow]Testing basic safe resolution...[/yellow]")
+        result = resolver.resolve_data_tree_safe("QuantConnect.Resolution", "python")
+
+        if result:
+            console.print("[green]✅ Basic safe resolution successful![/green]")
+
+            # Check for placeholders indicating safety measures
+            if "[Circular Reference:" in result:
+                console.print("[blue]🔄 Circular reference detected and handled[/blue]")
+            if "[Depth Limit:" in result:
+                console.print("[blue]📏 Depth limit reached and handled[/blue]")
+            if "[API Limit:" in result:
+                console.print("[blue]⚠️ API limit reached[/blue]")
+
+        else:
+            console.print("[red]❌ Basic safe resolution failed[/red]")
+
+        # Show safe resolution stats
+        safe_stats = resolver.get_safe_resolution_stats()
+        console.print(f"\n[blue]Safe resolution stats:[/blue]")
+        console.print(f"  Global cache size: {safe_stats['global_cache_size']}")
+        console.print(f"  API calls made: {safe_stats['current_api_calls']}/{safe_stats['max_api_calls']}")
+        console.print(f"  Max depth: {safe_stats['max_depth']}")
+        console.print(f"  Active resolutions: {safe_stats['active_resolutions']}")
+
+        # Test multiple types to check cache behavior
+        console.print("\n[yellow]Testing cache behavior with multiple types...[/yellow]")
+        test_types = [
+            "QuantConnect.Resolution",
+            "QuantConnect.SecurityType",
+            "QuantConnect.OrderType"
+        ]
+
+        for test_type in test_types:
+            result = resolver.resolve_data_tree_safe(test_type, "python")
+            status = "✅" if result and not result.startswith("[") else "❌"
+            console.print(f"  {status} {test_type}")
+
+        # Final stats
+        final_stats = resolver.get_safe_resolution_stats()
+        console.print(f"\n[green]Final cache size: {final_stats['global_cache_size']} types[/green]")
+        console.print(f"[cyan]Total API calls: {final_stats['current_api_calls']}[/cyan]")
+
+        return True
+
+    except Exception as e:
+        console.print(f"[red]❌ Safe resolution test failed: {str(e)}[/red]")
+        import traceback
+        console.print(f"[red]{traceback.format_exc()}[/red]")
+        return False
+
+
 if __name__ == "__main__":
     console = Console()
 
-    # Check if this is a test run
-    if len(sys.argv) > 1 and sys.argv[1] == "test":
-        success = test_single_resolution()
-        sys.exit(0 if success else 1)
+    # Check command line arguments
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "test":
+            success = test_single_resolution()
+            sys.exit(0 if success else 1)
+        elif sys.argv[1] == "safe-test":  # NEW
+            success = test_safe_resolution()
+            sys.exit(0 if success else 1)
 
     # Normal operation
     try:

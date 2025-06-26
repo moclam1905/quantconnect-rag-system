@@ -139,10 +139,11 @@ class DataTreePatcher:
     def _create_language_aware_content(self, data_tree_value: str) -> Optional[str]:
         """
         Create content that supports both Python and C# with language switching
+        UPDATED: Use safe resolution to prevent infinite loops
         """
-        # Resolve for both languages
-        python_content = self.resolver.resolve_data_tree(data_tree_value, "python")
-        csharp_content = self.resolver.resolve_data_tree(data_tree_value, "csharp")
+        # Use safe resolution method instead of direct resolution
+        python_content = self.resolver.resolve_data_tree_safe(data_tree_value, "python")
+        csharp_content = self.resolver.resolve_data_tree_safe(data_tree_value, "csharp")
 
         if not python_content and not csharp_content:
             return None
@@ -300,9 +301,9 @@ class DataTreePatcher:
         }
 
     def _display_results(self, results: List[Dict]):
-        """Display processing results in a nice table"""
+        """Display processing results in a nice table - UPDATED with safe resolution stats"""
 
-        # Summary table
+        # Summary table (existing code remains same)
         table = Table(title="Processing Results", show_header=True)
         table.add_column("File", style="cyan")
         table.add_column("Data Trees", style="blue")
@@ -331,17 +332,43 @@ class DataTreePatcher:
 
         self.console.print(table)
 
-        # Summary stats
+        # Summary stats (existing code)
         self.console.print(f"\n[bold]Summary:[/bold]")
         self.console.print(f"[green]✅ Total patched: {self.patched_count}[/green]")
         self.console.print(f"[red]❌ Total failed: {self.failed_count}[/red]")
         self.console.print(f"[blue]📊 Total data-trees: {self.total_data_trees}[/blue]")
 
-        # Resolver stats
+        # Resolver stats (existing code)
         resolver_stats = self.resolver.get_cache_stats()
         self.console.print(f"[cyan]🔄 API calls: {resolver_stats['total_calls']} "
                            f"(Success rate: {resolver_stats['success_rate']:.1%})[/cyan]")
 
+        # NEW: Safe resolution stats
+        safe_stats = self.resolver.get_safe_resolution_stats()
+        self.console.print(f"[magenta]🛡️ Safe resolution stats:[/magenta]")
+        self.console.print(f"   Global cache: {safe_stats['global_cache_size']} types")
+        self.console.print(f"   API calls made: {safe_stats['current_api_calls']}/{safe_stats['max_api_calls']}")
+        self.console.print(f"   Max depth: {safe_stats['max_depth']}")
+
+        if safe_stats['currently_resolving']:
+            self.console.print(f"   [yellow]⚠️ Still resolving: {safe_stats['currently_resolving']}[/yellow]")
+
+    def get_detailed_stats(self) -> Dict:
+        """Get detailed statistics including safe resolution info"""
+        base_stats = {
+            'patched_count': self.patched_count,
+            'failed_count': self.failed_count,
+            'total_data_trees': self.total_data_trees
+        }
+
+        resolver_stats = self.resolver.get_cache_stats()
+        safe_stats = self.resolver.get_safe_resolution_stats()
+
+        return {
+            **base_stats,
+            'resolver_stats': resolver_stats,
+            'safe_resolution_stats': safe_stats
+        }
 
 # Main function
 def main():
