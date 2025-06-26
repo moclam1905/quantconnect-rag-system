@@ -770,7 +770,7 @@ class ContentProcessor:
 class FileManager:
     """Manage output files and directory structure"""
 
-    def __init__(self, base_output_dir: str = "data/parsed_content"):
+    def __init__(self, base_output_dir: str = "data/parsed_content_old"):
         self.base_output_dir = Path(base_output_dir)
 
     def setup_output_directory(self, document_name: str) -> Path:

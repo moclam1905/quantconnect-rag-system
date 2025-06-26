@@ -171,7 +171,8 @@ class DocumentStructureAnalyzer:
                 # flush current block
                 if current_block["nodes"]:
                     yield current_block
-                heading_text = (elem.text or "").strip()
+                # heading_text = (elem.text or "").strip()
+                heading_text = "".join(elem.itertext()).strip()
                 current_block = {
                     "nodes": [etree.tostring(elem, encoding="unicode")],
                     "label": f"heading_{tag[-1]}",
