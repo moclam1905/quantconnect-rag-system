@@ -101,15 +101,21 @@ class BlockClassifier:
 class SectionBuilder:
     """Build a nested section tree using a heading stack."""
 
-    def __init__(self) -> None:
+    def __init__(self, max_level: int = 3, min_chunks: int = 2):
         self._stack: deque[Dict[str, Any]] = deque()
         self.sections: List[Dict[str, Any]] = []
         self._serial = 0  # incremental section id & order
+        self.max_level  = max_level
+        self.min_chunks = min_chunks
+
 
     # ------------------------------------------------------------------ #
     def _push_heading(self, block: Dict[str, Any]) -> None:
         level: int = block["metadata"]["heading_level"]
         title: str = block["metadata"]["heading_text"]
+
+        if level > self.max_level:
+            level = self.max_level
 
         # pop until parent level found
         while self._stack and self._stack[-1]["level"] >= level:
@@ -161,11 +167,24 @@ class SectionBuilder:
 
     # ------------------------------------------------------------------ #
     def flush(self, out_dir: Path) -> None:
+        # ── gộp section có ít chunk ────────────────────────────────
+        id2sec = {s["id"]: s for s in self.sections}
+        for sec in reversed(self.sections):
+            if len(sec["chunks"]) < self.min_chunks:
+                parent = id2sec.get(sec["parent_id"])
+                if parent:
+                    parent["chunks"].extend(sec["chunks"])
+                    sec["chunks"].clear()
+
+        # ── ghi file ───────────────────────────────────────────────
         out_dir.mkdir(parents=True, exist_ok=True)
         for sec in self.sections:
+            if not sec["chunks"]:
+                continue            # bỏ section rỗng
             filename = f"{sec['order']:02d}_{slugify(sec['title']) or 'untitled'}.json"
             with open(out_dir / filename, "w", encoding="utf-8") as fh:
                 json.dump(sec, fh, ensure_ascii=False, indent=2)
+
 
 # ═════════════════════════════ Phase2Parser ══════════════════════════════ #
 class Phase2Parser:
@@ -175,7 +194,14 @@ class Phase2Parser:
         self.unclassified: List[Dict[str, Any]] = []
 
     # ------------------------------------------------------------------ #
-    def parse(self, structured_path: Path, debug: bool = False) -> Dict[str, Any]:
+    def parse(
+            self,
+            structured_path: Path,
+            max_level: int = 3,
+            min_chunks: int = 2,
+            debug: bool = False,
+    ) -> Dict[str, Any]:
+
         if not structured_path.exists():
             raise FileNotFoundError(structured_path)
 
@@ -187,7 +213,7 @@ class Phase2Parser:
         with open(structured_path, "r", encoding="utf-8") as fh:
             doc_json = json.load(fh)
 
-        builder = SectionBuilder()
+        builder = SectionBuilder(max_level=max_level, min_chunks=min_chunks)
 
         for block in doc_json.get("content_blocks", []):
             self.stats["total"] += 1
@@ -243,6 +269,11 @@ def _parse_args() -> argparse.Namespace:
     ap.add_argument("--input", required=True, help="Path to *_structured.json")
     ap.add_argument("--rules", default="pattern_rules.yaml", help="YAML rules file")
     ap.add_argument("--debug", action="store_true", help="Verbose debug")
+    ap.add_argument("--max-level", type=int, default=3,
+                    help="Chỉ tách heading tới cấp này (mặc định 3)")
+    ap.add_argument("--min-chunks", type=int, default=2,
+                    help="Gộp section có ít hơn N chunk (mặc định 2)")
+
     return ap.parse_args()
 
 
@@ -252,7 +283,12 @@ def main() -> None:
         logger.setLevel(logging.DEBUG)
 
     parser = Phase2Parser(args.rules)
-    result = parser.parse(Path(args.input), debug=args.debug)
+    result = parser.parse(
+        Path(args.input),
+        max_level=args.max_level,
+        min_chunks=args.min_chunks,
+        debug=args.debug,
+    )
 
     print("\n✔️  Phase 2 completed.")
     print(f"   Sections created : {result['section_count']}")
