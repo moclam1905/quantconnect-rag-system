@@ -160,7 +160,12 @@ class SectionBuilder:
     # ------------------------------------------------------------------ #
     def ingest(self, block: Dict[str, Any], semantic_type: Optional[str]) -> None:
         if block["content_type"].startswith("heading_"):
-            self._push_heading(block)
+            if block["metadata"]["heading_level"] <= self.max_level:
+                self._push_heading(block)  # giữ lại
+            else:
+                # coi heading sâu như đoạn văn, đổ vào section hiện tại
+                self._add_chunk(block, "documentation_text")
+            return
         elif semantic_type is not None:
             self._add_chunk(block, semantic_type)
         # else: skipped
