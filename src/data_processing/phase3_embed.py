@@ -1,40 +1,26 @@
 #!/usr/bin/env python
-"""Phase 3.2 – Embedding & Vector DB for QuantConnect RAG
+"""Phase 3.2 – Embedding & Vector DB for QuantConnect RAG (fixed ndarray upload bug)
 
-Usage (macOS / Linux / Windows):
-    python phase3_embed.py \
-        --input-parquet data/chunks_data/chunks.parquet \
-        --output-parquet data/embeddings_data/2025-07-02_embeddings.parquet
+Usage:
+  source .venv/bin/activate
+  python phase3_embed.py \\
+      --input-parquet data/chunks_data/chunks.parquet \\
+      --output-parquet data/embeddings_data/2025-07-03_embeddings.parquet
 
-Flags:
-    --batch-size N         : number of chunks per OpenAI request (default 256)
-    --qdrant-host HOST     : Qdrant host (default from env QDRANT_HOST or "localhost")
-    --qdrant-port PORT     : Qdrant port (default 6333)
-    --collection NAME      : Qdrant collection name (default "quantconnect_chunks")
-    --skip-upsert          : embed & write parquet only, do not upsert to Qdrant
-
-Environment variables (loaded from .env):
-    OPENAI_API_KEY         : required
-    QDRANT_HOST / PORT     : optional overrides for flags
-
-The script will:
- 1. Load chunks from Parquet.
- 2. Compute embeddings via OpenAI text-embedding-3-large in batches with retry.
- 3. Save vectors & metadata to Parquet (timestamped file).
- 4. Create‑or‑update a Qdrant collection and upsert vectors in batches of 1 000.
-
-Tested on macOS 13 (M1 Pro, Python 3.11).
+Notes:
+- Default model: text‑embedding‑3‑small (1536‑dim). Override with --model.
+- Batch size default 512; for "large" model recommend 256.
+- Fix: use list‑of‑list for `vectors` when calling `upload_collection` (numpy ndarray was not JSON‑serialisable in 1.14 qdrant‑client).
 """
 from __future__ import annotations
 
 import argparse
-import datetime as _dt
-import math
+import datetime as dt
 import os
 import sys
 import time
 from pathlib import Path
-from typing import Iterable, List
+from typing import List
 
 import numpy as np
 import pandas as pd
@@ -42,203 +28,168 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from dotenv import load_dotenv
 from tqdm import tqdm
-
-# --- Third‑party clients
 from openai import OpenAI, OpenAIError
 from qdrant_client import QdrantClient, models as qdr
 
-# --------------------------------------------------------------------------------------
-# Helper functions
-# --------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------
+# CLI
+# ----------------------------------------------------------------------------------
 
 def _parse_args() -> argparse.Namespace:
-    today_str = _dt.date.today().isoformat()
-    parser = argparse.ArgumentParser("Embed QuantConnect chunks & upload to Qdrant")
-    parser.add_argument(
-        "--input-parquet",
-        default="data/chunks_data/chunks.parquet",
-        help="Path to chunks.parquet produced by Phase 3.1",
-    )
-    parser.add_argument(
-        "--output-parquet",
-        default=f"data/embeddings_data/{today_str}_embeddings.parquet",
-        help="Path to save embeddings.parquet (default timestamped)",
-    )
-    parser.add_argument("--batch-size", type=int, default=256, help="Embedding batch size")
-    parser.add_argument("--collection", default="quantconnect_chunks", help="Qdrant collection name")
-    parser.add_argument(
-        "--qdrant-host",
-        default=os.getenv("QDRANT_HOST", "localhost"),
-        help="Qdrant host (env QDRANT_HOST)",
-    )
-    parser.add_argument(
-        "--qdrant-port",
-        type=int,
-        default=int(os.getenv("QDRANT_PORT", 6333)),
-        help="Qdrant port (env QDRANT_PORT)",
-    )
-    parser.add_argument("--skip-upsert", action="store_true", help="Do not upsert to Qdrant")
-    return parser.parse_args()
+    today = dt.date.today().isoformat()
+    p = argparse.ArgumentParser("Embed QuantConnect chunks & upload to Qdrant")
 
+    p.add_argument("--input-parquet", default="data/chunks_data/chunks.parquet")
+    p.add_argument("--output-parquet", default=f"data/embeddings_data/{today}_embeddings.parquet")
+    p.add_argument("--batch-size", type=int, default=512)
+    p.add_argument("--model", default="text-embedding-3-small")
+    p.add_argument("--collection", default="quantconnect_chunks")
+    p.add_argument("--qdrant-host", default=os.getenv("QDRANT_HOST", "localhost"))
+    p.add_argument("--qdrant-port", type=int, default=int(os.getenv("QDRANT_PORT", 6333)))
+    p.add_argument("--skip-upsert", action="store_true")
+    return p.parse_args()
 
-def _load_chunks(path: str | Path) -> pd.DataFrame:
-    """Load chunk metadata & text for embedding."""
-    if not Path(path).exists():
-        sys.exit(f"❌  Input parquet not found: {path}")
-    df = pd.read_parquet(path, engine="pyarrow")
-    required_cols = {"chunk_id", "text"}
-    if not required_cols.issubset(df.columns):
-        missing = required_cols - set(df.columns)
-        sys.exit(f"❌  Missing columns in chunks.parquet: {missing}")
+# ----------------------------------------------------------------------------------
+# Helpers
+# ----------------------------------------------------------------------------------
+
+def _load_chunks(parquet_path: str | Path) -> pd.DataFrame:
+    if not Path(parquet_path).exists():
+        sys.exit(f"❌  Parquet not found: {parquet_path}")
+    df = pd.read_parquet(parquet_path, engine="pyarrow")
+    if {"chunk_id", "text"} - set(df.columns):
+        sys.exit("❌  Parquet missing required columns 'chunk_id' & 'text'")
     return df
 
 
-def _embed_batch(texts: List[str], client: OpenAI, max_retries: int = 5) -> List[List[float]]:
-    """Return list of 3072‑dim embeddings for a batch of N texts."""
+def _embed_batch(texts: List[str], client: OpenAI, model: str, retries: int = 5) -> List[List[float]]:
     attempt = 0
     while True:
         try:
-            rsp = client.embeddings.create(
-                model="text-embedding-3-large",
-                input=texts,
-                encoding_format="float",
-            )
-            # OpenAI returns in the same order
-            return [d.embedding for d in rsp.data]
-        except OpenAIError as e:  # covers RateLimitError, APIError, etc.
-            if attempt >= max_retries - 1:
+            resp = client.embeddings.create(model=model, input=texts, encoding_format="float")
+            return [d.embedding for d in resp.data]
+        except OpenAIError as e:
+            if attempt >= retries - 1:
                 raise
             wait = 2 ** attempt
-            print(f"⚠️  OpenAI error: {e}. Retrying in {wait}s…", file=sys.stderr)
+            print(f"⚠️  OpenAI error: {e}. retry in {wait}s", file=sys.stderr)
             time.sleep(wait)
             attempt += 1
 
 
-def _write_embeddings_parquet(df: pd.DataFrame, out_path: str | Path):
-    """Write embeddings & metadata to Parquet efficiently using PyArrow."""
-    out_path = Path(out_path)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-
-    # Build Arrow columns
+def _write_parquet(df: pd.DataFrame, out_path: str | Path):
+    out = Path(out_path)
+    out.parent.mkdir(parents=True, exist_ok=True)
     arrays = {
         "vector_id": pa.array(df["vector_id"], type=pa.uint64()),
         "chunk_id": pa.array(df["chunk_id"], type=pa.string()),
         "vector": pa.array(df["vector"].tolist(), type=pa.list_(pa.float32())),
     }
-    # Include useful payload columns if present
-    for col in [
-        "doc",
-        "hierarchy_path",
-        "token_start",
-        "token_end",
-        "content_types",
-    ]:
+    for col in ["doc", "hierarchy_path", "token_start", "token_end", "content_types"]:
         if col in df.columns:
             if col == "content_types":
                 arrays[col] = pa.array(df[col].tolist(), type=pa.list_(pa.string()))
             else:
                 arrays[col] = pa.array(df[col].astype(str), type=pa.string())
+    pq.write_table(pa.Table.from_pydict(arrays), out, compression="zstd")
 
-    table = pa.Table.from_pydict(arrays)
-    pq.write_table(table, out_path, compression="zstd")
-
-
-# --------------------------------------------------------------------------------------
-# Main pipeline
-# --------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------
+# Main
+# ----------------------------------------------------------------------------------
 
 def main():
     load_dotenv()
     args = _parse_args()
 
     if not os.getenv("OPENAI_API_KEY"):
-        sys.exit("❌  OPENAI_API_KEY not set (check .env)")
+        sys.exit("❌  OPENAI_API_KEY missing (see .env)")
 
-    print("📥  Loading chunks parquet…")
-    df = _load_chunks(args.input_parquet)
-    n_chunks = len(df)
-    print(f"   → {n_chunks:,} chunks loaded")
-
-    # Assign uint64 ids once for consistency
-    df = df.reset_index(drop=True)
+    print("📥  Reading chunks…")
+    df = _load_chunks(args.input_parquet).reset_index(drop=True)
+    n = len(df)
     df["vector_id"] = df.index.astype(np.uint64)
+    print(f"   → {n:,} chunks")
 
     client = OpenAI()
-
     vectors: List[List[float]] = []
-    batch_size = args.batch_size
-
-    print("🧮  Computing embeddings…")
-    for start in tqdm(range(0, n_chunks, batch_size)):
-        batch_texts = df.loc[start : start + batch_size - 1, "text"].tolist()
-        embs = _embed_batch(batch_texts, client)
-        vectors.extend(embs)
-
-    if len(vectors) != n_chunks:
-        sys.exit("❌  Embedding count mismatch. Abort.")
-
-    df["vector"] = vectors  # list[float] 3072‑dim each
+    print("🧮  Embedding…")
+    for start in tqdm(range(0, n, args.batch_size)):
+        texts = df.loc[start : start + args.batch_size - 1, "text"].tolist()
+        vectors.extend(_embed_batch(texts, client, args.model))
+    if len(vectors) != n:
+        sys.exit("❌  Embedding count mismatch")
+    df["vector"] = vectors
 
     print("💾  Writing embeddings Parquet…")
-    _write_embeddings_parquet(df, args.output_parquet)
-    print(f"   → Saved to {args.output_parquet}")
+    _write_parquet(df, args.output_parquet)
+    print(f"   → {args.output_parquet}")
 
-    # ---------------------- Qdrant Upload ----------------------
     if args.skip_upsert:
-        print("⏭️  --skip-upsert set → Finished without uploading to Qdrant.")
+        print("⏭️  Skip-upsert done.")
         return
 
-    print("🚀  Uploading vectors to Qdrant…")
-    qclient = QdrantClient(host=args.qdrant_host, port=args.qdrant_port)
+    dim = 3072 if "large" in args.model else 1536
+    qc = QdrantClient(
+        host=args.qdrant_host,
+        port=args.qdrant_port,
+        timeout=60  # 60 s cho mỗi request
+    )
 
-    # Create‑or‑update collection
-    dim = 3072
-    coll = args.collection
-    if not qclient.collection_exists(coll):
-        print(f"   → Collection '{coll}' not found. Creating…")
-        qclient.recreate_collection(
-            collection_name=coll,
-            vectors_config=qdr.VectorParams(size=dim, distance=qdr.Distance.COSINE),
-        )
+    if not qc.collection_exists(args.collection):
+        print(f"   → Create collection '{args.collection}' ({dim}‑dim)…")
+        qc.create_collection(args.collection, vectors_config=qdr.VectorParams(size=dim, distance=qdr.Distance.COSINE))
     else:
-        info = qclient.get_collection(coll)
-        if info.vectors_config.size != dim:
-            sys.exit(
-                f"❌  Existing collection dimension {info.vectors_config.size} ≠ {dim}. Delete or rename collection."
-            )
+        if qc.get_collection(args.collection).vectors_config.size != dim:
+            sys.exit("❌  Collection dim mismatch")
 
-    batch_upsert = 1000
-    for start in tqdm(range(0, n_chunks, batch_upsert)):
-        sub = df.iloc[start : start + batch_upsert]
-        id_list = sub["vector_id"].tolist()
-        vecs_np = np.vstack(sub["vector"].to_numpy()).astype(np.float32)
-        payload_cols = [
-            c
-            for c in [
-                "chunk_id",
-                "doc",
-                "hierarchy_path",
-                "token_start",
-                "token_end",
-                "content_types",
-            ]
-            if c in sub.columns
-        ]
-        payloads = sub[payload_cols].to_dict(orient="records")
-        qclient.upload_collection(
-            collection_name=coll,
-            ids=id_list,
-            vectors=vecs_np,
+    print("🚀  Upserting to Qdrant…")
+    batch_upsert = 500
+
+    def ensure_python_type(x):
+        """Convert mọi numpy type → Python native (list / int / float / str)."""
+        if isinstance(x, np.ndarray):
+            return x.tolist()  # ndarray → list
+        if isinstance(x, np.generic):  # mọi scalar numpy (int32, float32…)
+            return x.item()  # → int / float Python
+        if isinstance(x, list):
+            # bảo đảm phần tử trong list cũng là python scalar
+            return [ensure_python_type(i) for i in x]
+        return x  # đã là python thuần
+
+    for start in tqdm(range(0, n, batch_upsert)):
+        sub = df.iloc[start: start + batch_upsert]
+
+        # ---------- ids & vectors ----------
+        ids = [int(i) for i in sub["vector_id"].values]
+        vectors = [ensure_python_type(v) for v in sub["vector"].values]
+
+        # ---------- payload ----------
+        payload_cols = ["chunk_id", "doc", "hierarchy_path",
+                        "token_start", "token_end", "content_types"]
+        payload_cols = [c for c in payload_cols if c in sub.columns]
+
+        payloads_df = sub[payload_cols].copy()
+        list_cols = ["hierarchy_path", "content_types"]
+        for col in list_cols:
+            if col in payloads_df.columns:
+                payloads_df[col] = payloads_df[col].map(ensure_python_type)
+
+        payloads = payloads_df.to_dict("records")
+
+        # ---------- upsert ----------
+        qc.upload_collection(
+            collection_name=args.collection,
+            ids=ids,
+            vectors=vectors,
             payload=payloads,
             batch_size=batch_upsert,
         )
 
-    print("✅  All done – embeddings stored & vectors upserted.")
+    print("✅  Done – vectors upserted.")
 
 
-# --------------------------------------------------------------------------------------
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        sys.exit("Interrupted by user")
+        sys.exit("Interrupted")
