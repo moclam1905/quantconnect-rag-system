@@ -1,0 +1,20 @@
+{"question":"What is the Lean CLI?","answers":["lean cli"]}
+{"question":"Which command runs a local backtest in Lean CLI?","answers":["lean backtest"]}
+{"question":"How do I upgrade the Lean CLI to the latest version?","answers":["pip install --upgrade lean"]}
+{"question":"List two workflows supported by the Lean CLI.","answers":["local workflow","cloud workflow"]}
+{"question":"Lean CLI installation steps?","answers":["pip install lean","docker"]}
+{"question":"How to log in to QuantConnect through Lean CLI?","answers":["lean login"]}
+{"question":"Steps to publish a research notebook from Lean CLI?","answers":["lean research","lean cloud research-upload"]}
+{"question":"How do you optimize parameters with Lean CLI?","answers":["lean optimize","optimization"]}
+{"question":"Code example: how to schedule a function daily in LEAN?","answers":["Schedule.On","EveryDay"]}
+{"question":"Explain what AddEquity does in Lean.","answers":["adds an equity security","resolution"]}
+{"question":"API reference: Parameter 'resolution' in AddForex.","answers":["resolution","bar size"]}
+{"question":"Where are object-store files kept in local Lean CLI?","answers":[".lean/object-store","object store"]}
+{"question":"Generate a markdown table comparing Resolution minute vs daily.","answers":["Minute","Daily","Time span"]}
+{"question":"How to initialize a Research Environment via CLI?","answers":["lean research","jupyter"]}
+{"question":"Edge case: what happens if Lean CLI can't find Docker?","answers":["docker not running","error"]}
+{"question":"Edge: max number of concurrent live algorithms per org?","answers":["10","ten"]}
+{"question":"Which Lean CLI command uploads local data to the cloud?","answers":["lean data push","data upload"]}
+{"question":"Describe the Lean Cloud optimization strategy 'GridSearch'.","answers":["grid search","parameter grid"]}
+{"question":"How to view available brokerage integrations via CLI?","answers":["lean brokerage list"]}
+{"question":"Lean CLI command to create a new project from template.","answers":["lean init","lean create-project"]}
