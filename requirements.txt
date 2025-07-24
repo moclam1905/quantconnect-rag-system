@@ -1,7 +1,6 @@
 # Core dependencies
 langchain~=0.3.26
 langchain-community~=0.3.27
-langchain-google-genai==1.0.1
 chromadb==0.4.24
 
 # HTML processing

@@ -1,0 +1,48 @@
+
+services:
+  # ---------- vector store ----------
+  qdrant:
+    image: qdrant/qdrant:latest
+    volumes:
+      - ./qdrant_storage:/qdrant/storage
+    ports: ["6333:6333"]
+
+  # ---------- semantic cache ----------
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+
+  # ---------- Phase‑3 Hybrid /search ----------
+  bm25_api:
+    build:
+      context: .
+      dockerfile: bm25_api/Dockerfile
+    environment:
+      API_KEY: ${API_KEY_HEADER}
+      QDRANT_HOST: http://qdrant:6333
+      BM25_INDEX_PATH: data/bm25_index.pkl.gz
+      BM25_META_PATH: data/bm25_meta.json
+      RRF_K: 60
+      QDRANT_EXPECTED_DIM: 3072
+      OPENAI_API_KEY: ${OPENAI_API_KEY}        # <-- THÊM DÒNG NÀY
+    volumes:
+      - ./data:/app/data
+    ports: [ "8000:8000" ]
+    depends_on: [ qdrant ]
+
+
+  # ---------- Phase‑4 /answer ----------
+  answer_api:
+    build:
+      context: .
+      dockerfile: answer_api/Dockerfile
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      API_KEY_HEADER: ${API_KEY_HEADER}
+      # ---- override cho network nội bộ ----
+      BM25_ENDPOINT: http://bm25_api:8000/search
+      QDRANT_URL: http://qdrant:6333
+      REDIS_URL: redis://redis:6379/0
+    ports: ["8001:8001"]
+    depends_on: [qdrant, redis, bm25_api]
+

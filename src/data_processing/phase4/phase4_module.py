@@ -268,7 +268,7 @@ def choose_template(query: str) -> str:
 
 
 # ---------------------------------------------------------
-# prompt_templates.md (in‑code fallback, will load external file if exists)
+# prompt_templates.md
 # ---------------------------------------------------------
 _DEFAULT_TEMPLATES = {
     "general": """You are a knowledgeable assistant. Answer the question briefly and cite sources like [Lean-Cli/00042].\n\nQuestion:\n{question}\n\nContext:\n{context}\n""",
