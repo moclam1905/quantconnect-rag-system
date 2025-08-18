@@ -4,6 +4,7 @@ import re
 _RULES = [
     (re.compile(r"\b(how|cách|steps?)\b", re.I), "how_to"),
     (re.compile(r"\b(code|ví dụ|example)\b", re.I), "code_explain"),
+    (re.compile(r"\b(schedule|rebalance|consolidator)\b", re.I), "code_explain"),
     (re.compile(r"\b(tham số|parameter|argument)\b", re.I), "api_reference"),
 ]
 

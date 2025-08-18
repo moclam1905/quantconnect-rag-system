@@ -23,25 +23,33 @@ _DEFAULT_TEMPLATES = {
 }
 
 # ---------- override templates from prompt_template.md ----------
+# answer_chain.py
 import pathlib, re, logging
 
-def _load_external_templates() -> None:
-    # giả sử file đặt cạnh answer_chain.py → src/phase4/prompt_template.md
-    md = pathlib.Path(__file__).parent / "prompt_template.md"
-    if not md.exists():
-        logging.info("prompt_template.md not found – dùng template mặc định")
+def _load_external_templates():
+    md_path = pathlib.Path(__file__).parent / "prompt_template.md"
+    if not md_path.exists():
+        logging.warning("prompt_template.md not found – dùng template mặc định")
         return
 
-    text = md.read_text(encoding="utf-8")
-    # Bóc theo định dạng --- name: template_id ---
-    blocks = re.split(r"^---\s*name:\s*(\w+)\s*---\s*$",
-                      text, flags=re.M)[1:]
-    for name, body in zip(blocks[0::2], blocks[1::2]):
-        _DEFAULT_TEMPLATES[name.strip()] = body.strip()
-    logging.info("Loaded %d templates from %s",
-                 len(blocks)//2, md.name)
+    text = md_path.read_text(encoding="utf-8")
+
+    pattern = re.compile(r"^---\s*name:\s*(\w+)\s*---\s*$", re.M)
+    matches = list(pattern.finditer(text))
+    if not matches:
+        logging.warning("Không tìm thấy marker '--- name: ... ---' trong %s", md_path)
+        return
+
+    for i, m in enumerate(matches):
+        name = m.group(1).strip()
+        start = m.end()
+        end = matches[i+1].start() if i+1 < len(matches) else len(text)
+        body = text[start:end].strip()
+        _DEFAULT_TEMPLATES[name] = body
+        logging.info("Loaded template: %s (len=%d)", name, len(body))
 
 _load_external_templates()
+
 
 class _LatencyTracer(BaseCallbackHandler):
     def __init__(self):
@@ -70,7 +78,7 @@ class AnswerChain:
             model=llm_name,
             temperature=0.1,
             timeout=settings.model_timeout,
-            max_tokens=512,
+            max_tokens=900,
             callbacks=[tracer],
         )
         res = llm.invoke(messages)
@@ -93,16 +101,19 @@ class AnswerChain:
 
         # 3) build chat‑prompt --------------------------------------------------
         template_name = choose_template(query)
-        template_text = _DEFAULT_TEMPLATES.get(template_name,
-                                               _DEFAULT_TEMPLATES["general"])
+        template_text = _DEFAULT_TEMPLATES.get(template_name, _DEFAULT_TEMPLATES["general"])
 
-        prompt_tpl = ChatPromptTemplate.from_messages(
-            [("system", template_text)]
-        )
-        messages = prompt_tpl.format_messages(
-            question=query,
-            context="\n\n".join(d.page_content for d in docs),
-        )
+        prompt_tpl = ChatPromptTemplate.from_messages([("system", template_text)])
+
+        # Các biến khác nhau giữa template – cung cấp mặc định rỗng
+        format_kwargs = {
+            "question": query,
+            "context": "\n\n".join(d.page_content for d in docs),
+            "table_summary": "",  # dùng cho table_query
+            "error_description": ""  # dùng cho debug_error
+        }
+
+        messages = prompt_tpl.format_messages(**format_kwargs)
 
         # 4) call LLM with fallback & tracer -----------------------------------
         tracer = _LatencyTracer()
