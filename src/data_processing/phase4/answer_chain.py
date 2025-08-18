@@ -127,10 +127,16 @@ class AnswerChain:
                 if level == 2:
                     raise
 
+        if "[chunk_id]" not in content.lower():
+            first_id = docs[0].metadata["chunk_id"] if docs else "UNKNOWN"
+            content += f" [{first_id}]"
+
+
         # 5) craft response & cache -------------------------------------------
         total_ms = retrieval_ms + int((tracer.total_time or 0) * 1000)
 
         response = {
+            "template_id": template_name,
             "answer": content,
             "citations": [
                 {

@@ -2,10 +2,13 @@
 import re
 
 _RULES = [
-    (re.compile(r"\b(how|cách|steps?)\b", re.I), "how_to"),
-    (re.compile(r"\b(code|ví dụ|example)\b", re.I), "code_explain"),
-    (re.compile(r"\b(schedule|rebalance|consolidator)\b", re.I), "code_explain"),
-    (re.compile(r"\b(tham số|parameter|argument)\b", re.I), "api_reference"),
+    (re.compile(r"\bhow to\b|\bsteps?\b", re.I), "how_to"),
+    (re.compile(r"\bexample\b|\bcode\b", re.I), "code_explain"),
+    (re.compile(r"\bparameter\b|\bargument\b|\bapi\b", re.I), "api_reference"),
+    (re.compile(r"\btable\b|\brow\b|\bcolumn\b", re.I), "table_query"),
+    (re.compile(r"\berror\b|\bexception\b", re.I), "debug_error"),
+    (re.compile(r"\bcompare\b|\bversus\b|\bvs\.?\b", re.I), "comparison"),
+    (re.compile(r"\bstep[- ]by[- ]step\b", re.I), "step_by_step"),
 ]
 
 
